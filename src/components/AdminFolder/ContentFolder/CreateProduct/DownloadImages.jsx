@@ -5,7 +5,6 @@ import { BsDownload } from 'react-icons/bs';
 const DownloadImages = () => {
     const [images, setImages] = useState(new Array(7).fill(null));
     const imageContainers = [1, 2, 3, 4, 5, 6, 7];
-    console.log("images", images);
     
     const handleImageDrop = (e, index) => {
         e.preventDefault();

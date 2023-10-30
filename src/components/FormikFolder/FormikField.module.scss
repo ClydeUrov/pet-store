@@ -1,0 +1,49 @@
+@import "../../variables.scss";
+
+.input__wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.14;
+  color: #494949;
+}
+
+.input {
+  display: block;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid #bababa;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.invalid{
+  border-color: $error-border-color;
+}
+
+.iconPassword {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  fill: $text-color;
+  cursor: pointer;
+  outline-color: transparent;
+  border: none;
+  background-color: transparent;
+}
+
+.iconPassword:hover{
+  color: $focus-color;
+}
+
+.iconPassword:focus{
+  color: $focus-color;
+}
