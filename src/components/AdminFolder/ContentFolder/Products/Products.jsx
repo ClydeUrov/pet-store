@@ -43,8 +43,6 @@ const Products = () => {
         return <div className={css.firstLine}>No data available.</div>;
     }
 
-    console.log(allCards.content);
-
     return (
         <div className={css.productContainer}>
             <div className={css.firstLine}>

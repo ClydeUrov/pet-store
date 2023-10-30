@@ -54,3 +54,90 @@
 .image-upload-area:hover {
     border-color: #007bff;
 }
+
+.product {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > div {
+        &:nth-child(1) {
+            flex-basis: 100%;
+        }
+    
+        &:nth-child(2),
+        &:nth-child(3),
+        &:nth-child(4) {
+            flex-basis: 50%;
+        }
+    
+        &:nth-child(5),
+        &:nth-child(6) {
+            flex-basis: 25%;
+        }
+        &:nth-child(7),
+        &:nth-child(8) {
+            flex-basis: 50%;
+        }
+        &:nth-child(9),
+        &:nth-child(10) {
+            flex-basis: 50%;
+        }
+        &:nth-child(11),
+        &:nth-child(12) {
+            flex-basis: 50%;
+        }
+    }
+}
+
+.additions {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > div {
+        &:nth-child(1),
+        &:nth-child(2) {
+            flex-basis: 50%;
+        }
+        &:nth-child(3),
+        &:nth-child(4) {
+            flex-basis: 100%;
+        }
+    }
+}
+
+.form {
+    width: 584px;
+
+    & > h3 {
+        font-size: 21px;
+        font-weight: 600;
+        line-height: 1.8;
+        margin: 40px 0 30px 0;
+    }
+    & > h4 {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+}
+
+.buttons {
+    display: flex;
+    margin-bottom: 80px;
+}
+
+.confirmButton {
+    padding: 9px 35px;
+}
+
+.cancelButton {
+    margin-left: 30px;
+    padding: 9px 30px;
+    background-color: #F4F6FA;
+}
+
+.cancel {
+    background-color: #F4F6FA;
+}
