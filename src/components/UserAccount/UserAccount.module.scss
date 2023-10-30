@@ -1,0 +1,75 @@
+@import "..//../variables.scss";
+
+.title {
+color: $text-color;
+font-size: 30px;
+font-weight: 600;
+line-height: 1.33;
+
+margin-bottom: 24px;
+}
+
+.list{
+
+padding: 24px 32px;
+
+border-radius: 24px;
+border: 1px solid #A3A3A3;
+background: #FEFEFE;
+
+margin-bottom: 64px;
+}
+
+.item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+color: $text-color;
+
+font-size: 18px;
+font-weight: 600;
+line-height: 1.77; 
+
+margin-bottom: 7px;
+
+}
+
+.item:first-child {
+    margin-bottom: 12px;
+}
+
+.user__info{
+font-weight: 400;
+}
+
+.user__name{
+color: $text-color;
+font-size: 21px;
+font-weight: 600;
+line-height: 1.33; 
+
+}
+
+
+.icon {
+ 
+ width: 24px;
+ height: 24px;
+
+ display: flex;
+ justify-content: center;
+ align-items: center;
+
+   border: none;
+   background-color: transparent;
+   outline-color: transparent;
+   cursor: pointer;
+}
+
+.icon:hover {
+   color: $hover-color; 
+}
+.icon:focus {
+   color: $focus-color; 
+}

@@ -1,0 +1,106 @@
+@import "..//..//../variables.scss";
+
+.slider_box {
+  display: flex;
+  margin-right: 32px;
+}
+
+.swiper_thumb {
+  width: 173px;
+  height: 551px;
+
+  margin-right: 32px;
+
+  .swiper_slide {
+    width: 173px;
+    height: 173px;
+  }
+
+  :global(.swiper-slide-thumb-active) {
+    border: 1px solid $main-color;
+  }
+}
+
+.inner_swiper_product {
+  position: relative;
+}
+
+.swiper_product {
+  width: 482px;
+  height: 551px;
+
+  .swiper_slide {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.swiper_prev,
+.swiper_next {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #fefefe;
+  color: $text-color;
+  cursor: pointer;
+  position: absolute;
+  border: none;
+  z-index: 10;
+}
+
+.swiper_prev {
+  top: 50%;
+  left: 16px;
+}
+
+.swiper_next {
+  top: 50%;
+  right: 16px;
+}
+
+.swiper_prev:hover,
+.swiper_next:hover {
+  color: $hover-color;
+}
+
+.swiper_prev:focus,
+.swiper_next:focus {
+  color: $focus-color;
+}
+
+.swiper_product_img_cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 482px;
+  height: 551px;
+  border-radius: 4px;
+  object-fit: cover;
+  overflow: hidden;
+  background-color: #f4f6fa;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.swiper_thumb_img_cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 173px;
+  height: 173px;
+  border-radius: 4px;
+  object-fit: cover;
+  overflow: hidden;
+  background-color: #f4f6fa;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

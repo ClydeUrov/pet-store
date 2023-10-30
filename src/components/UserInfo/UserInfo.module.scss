@@ -1,0 +1,177 @@
+@import "..//../variables.scss";
+
+.title {
+  color: $text-color;
+
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.33;
+
+  margin-bottom: 24px;
+}
+
+.form {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 32px;
+}
+
+.input__wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.14;
+  color: #494949;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #bababa;
+  background-color: #fefefe;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #8d8d8d;
+
+}
+
+.invalid{
+  border-color: $error-border-color;
+}
+
+// .error {
+//   position: absolute;
+//   bottom: 5px;
+//   right: 14px;
+//   color: $error-color;
+// }
+
+.error {
+  position: absolute;
+  bottom: -20px;
+  right: -40px;
+  color: $error-color;
+}
+
+.forgot_password {
+  color: #618499;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+
+  cursor: pointer;
+}
+
+.button {
+  padding: 8px 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 999px;
+
+  margin-left: auto;
+
+  cursor: pointer;
+
+  color: $main-color;
+  background-color: transparent;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.33;
+
+  outline-color: transparent;
+}
+
+.button:hover {
+  color: $hover-color;
+}
+.button:focus {
+  color: $focus-color;
+}
+
+.item__btn {
+  border-radius: 999px;
+  outline-color: transparent;
+}
+
+.item__btn:first-child {
+  width: 173px;
+
+  border: 1px solid transparent;
+  box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+}
+
+.item__btn:first-child .button:hover {
+  background-color: $hover-color;
+}
+.item__btn:first-child .button:focus {
+  background-color: $focus-color;
+}
+
+.item__btn:first-child > .button {
+  width: 100%;
+  color: $btn-text;
+  background-color: $main-color;
+}
+
+.item__btn:first-child > .button:disabled{
+  border: 1px solid transparent;
+  background-color: $outstock-btn;
+}
+
+.item__btn:last-child {
+  background-color: transparent;
+}
+
+.item__btn:last-child :hover {
+  color: $hover-color;
+}
+.item__btn:last-child :focus {
+  color: $focus-color;
+}
+
+.list__btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn__icon {
+  margin-left: 8px;
+}
+
+.iconPassword {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  fill: $text-color;
+  cursor: pointer;
+  outline-color: transparent;
+  border: none;
+  background-color: transparent;
+}
+
+.iconPassword:hover{
+  color: $focus-color;
+}
+
+.iconPassword:focus{
+  color: $focus-color;
+}

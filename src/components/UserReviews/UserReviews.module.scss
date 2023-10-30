@@ -1,0 +1,154 @@
+@import "..//../variables.scss";
+
+.title {
+  color: $text-color;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.33;
+
+  margin-bottom: 55px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+.table_header {
+  color: #a3a3a3;
+  padding: 0 0 8px 0;
+  text-align: left;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.table_header:first-child {
+  text-align: center;
+}
+
+.table_data {
+  color: $text-color;
+  border-top: 1px solid #a3a3a3;
+  padding: 8px 0 8px 0;
+}
+
+.img_cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  // border-radius: 8px;
+  object-fit: cover;
+  overflow: hidden;
+  background-color: #f4f6fa;
+  // margin-right: auto;
+  // margin-left: auto;
+  // margin-bottom: 20px;
+  // background-image: url(../../images/placeholder.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  margin-right: 20px;
+}
+
+.img {
+  display: block;
+  width: 100px;
+  min-height: 100px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.img_text {
+  color: $text-color;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.77;
+}
+
+.prod_name {
+  color: $text-color;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.77;
+
+  margin-right: 40px;
+}
+
+.table_data_review {
+  position: relative;
+}
+
+.review_data {
+  color: $text-color;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+
+  margin-bottom: 12px;
+}
+
+.review_rating {
+  margin-bottom: 12px;
+}
+
+.review_text {
+  margin-bottom: 12px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  color: #000000;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.icon {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  background-color: transparent;
+  outline-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: $hover-color;
+}
+.icon:focus {
+  color: $focus-color;
+}
+
+.link {
+  display: block;
+  text-align: right;
+  margin-bottom: 8px;
+  margin-right: 24px;
+  color: $main-color;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.33;
+
+  cursor: pointer;
+  outline-color: transparent;
+}
+
+.link:hover {
+  color: $hover-color;
+}
+.link:focus {
+  color: $focus-color;
+}

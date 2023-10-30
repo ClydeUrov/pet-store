@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/998.60fb2de5.chunk.js","mappings":"+HASA,UATe,WAEX,OACIA,EAAAA,EAAAA,KAAAC,EAAAA,SAAA,GAIR,C","sources":["components/AdminFolder/Orders/Orders.jsx"],"sourcesContent":["const Orders = () => {\r\n\r\n    return (\r\n        <>\r\n            \r\n        </>\r\n    )\r\n}\r\n\r\nexport default Orders;"],"names":["_jsx","_Fragment"],"sourceRoot":""}

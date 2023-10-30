@@ -1,0 +1,64 @@
+@import "..//../variables.scss";
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+padding: 40px 32px;
+    display: flex;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+
+    width: 25%;
+}
+
+.outlet{
+    width: 75%; 
+}
+
+.item{
+    cursor: pointer;
+}
+.item:not(:last-child){
+    margin-bottom: 4px;
+    
+}
+
+.link {
+    width: 100%;
+    display: block;
+
+    color: $text-color;
+     
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.77;
+    outline-color: transparent;
+
+}
+    
+:global(.active) {
+    color: $main-color;
+    }
+
+.link_btn {
+    border: none;
+    background-color: transparent;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'Lato';
+}
+
+.link:hover{
+   color: $hover-color;
+}
+
+.link:focus{
+    color: $focus-color;
+ }
+
+
+ 

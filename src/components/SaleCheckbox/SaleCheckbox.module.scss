@@ -1,0 +1,67 @@
+@import "../../../src/variables";
+
+.checkbox_label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-right: 32px;
+}
+
+.checkbox_title {
+  color: $text-color;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.77;
+  padding: 12px 0;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.checkbox_field {
+  position: relative;
+  background-color: #e8e8e8;
+  width: 44px;
+  height: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.checkbox_toggle {
+  position: absolute;
+  top: -50%;
+  left: 0;
+  display: block;
+  border: 1px solid #fefefe;
+  background-color: #bababa;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.checkbox_toggle_false {
+  position: absolute;
+  top: -50%;
+  left: 40%;
+  display: block;
+  border: 1px solid #fefefe;
+  background-color: $main-color;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.checkbox_input {
+  position: absolute;
+  top: 45%;
+  left: 80%;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}

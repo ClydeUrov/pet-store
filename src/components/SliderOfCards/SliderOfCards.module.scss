@@ -1,0 +1,51 @@
+@import "..//../variables.scss";
+
+.inner {
+  position: relative;
+}
+.swiper {
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper_btn_prev,
+.swiper_btn_next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  background-color: transparent;
+  color: $text-color;
+  border: none;
+  width: 56px;
+  height: 56px;
+}
+
+.swiper_btn_prev {
+  top: 50%;
+  left: -88px;
+}
+.swiper_btn_next {
+  top: 50%;
+  right: -88px;
+}
+
+.swiper_btn_prev:hover,
+.swiper_btn_next:hover {
+  color: $hover-color;
+}
+
+.swiper_btn_prev:focus,
+.swiper_btn_next:focus {
+  color: $focus-color;
+}
+
+.swiper_slide {
+  width: 276px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

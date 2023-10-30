@@ -1,0 +1,107 @@
+@import "..//../variables.scss";
+
+.footer {
+ padding: 56px 0;
+  .footer-all {
+    width: 1440px;
+    margin: 0 auto;
+    padding: 0 120px;
+   
+
+    .footer-info {
+      display: flex;
+      justify-content: space-between;
+
+      /* Налаштування для мобільних пристроїв */
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    .logo-container {
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .footer-column {
+
+      h4 {
+   
+        font-size: 16px;
+        line-height: 1.5;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+    }
+
+    /* Застосовуємо стилі для контенту в межах кожної колонки */
+    .logo-column li {
+ 
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .logo-column li:not(:last-child) {
+      margin-bottom: 16px;
+    
+    }
+
+    .footer-navigation li{
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      text-align: center;
+      text-decoration: none;
+cursor: pointer;
+      color: #1B1B1B;
+    }
+
+    .footer-navigation li a:hover{
+      color: $hover-color;
+    }
+    .footer-navigation li a:focus{
+      color: $focus-color;
+    }
+
+    .footer-navigation li:not(:last-child){
+      margin-bottom: 16px;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: flex-end;
+      margin: 0;
+    }
+
+    .footer-social-item:not(:last-child) {
+      margin-right: 16px; 
+      border: none;
+    }
+
+    .footer-social-link {
+      display: block;
+      width: 100%;
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .footer-social-link:hover {
+      color: $hover-color;
+    }
+
+    .footer-social-link:focus {
+      color: $focus-color;
+    }
+
+    .reserved {
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.33;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+}

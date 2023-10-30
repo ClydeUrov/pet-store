@@ -1,0 +1,48 @@
+@import "..//..//../variables.scss";
+
+.title {
+    color: #000;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.33;
+    text-transform: capitalize;  
+    
+}
+
+.text {
+    color: #000;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.77;
+}
+
+.review_form_box {
+    margin-top: 35px;
+    margin-bottom: 96px;
+}
+
+.review_user {
+display: flex;
+}
+
+.review_user_img {
+
+}
+
+.review_user_name {
+    color: #000;
+font-size: 18px;
+font-weight: 600;
+line-height: 1.77; 
+}
+
+.review_rate_box {
+    display: flex;
+}
+
+.review_rate_title {
+    color: #000;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.77; 
+}

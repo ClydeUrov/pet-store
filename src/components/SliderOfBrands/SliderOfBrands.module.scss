@@ -1,0 +1,87 @@
+@import "..//../variables.scss";
+
+.inner {
+  position: relative;
+}
+.swiper {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 64px;
+}
+
+.swiper_btn_prev,
+.swiper_btn_next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  background-color: transparent;
+  color: $text-color;
+  border: none;
+  width: 56px;
+  height: 56px;
+}
+
+.swiper_btn_prev {
+  top: 45%;
+  left: -88px;
+}
+.swiper_btn_next {
+  top: 45%;
+  right: -88px;
+}
+
+.swiper_btn_prev:hover,
+.swiper_btn_next:hover {
+  color: $hover-color;
+}
+
+.swiper_btn_prev:focus,
+.swiper_btn_next:focus {
+  color: $focus-color;
+}
+
+.swiper_slide {
+  width: 276px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline-color: transparent;
+}
+
+.img_cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 276px;
+  height: 276px;
+  border-radius: 4px;
+  object-fit: cover;
+  overflow: hidden;
+  background-color: #f4f6fa;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.img_cover:hover {
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+.img_cover:focus {
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+.slide_title {
+  color: $main-color;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.16;
+}
+
+.link {
+  cursor: pointer;
+}

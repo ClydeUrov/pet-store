@@ -1,0 +1,265 @@
+@import "..//../variables.scss";
+
+.list {
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.link_item:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.link_item_title {
+  display: block;
+  color: $second-text-color;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+  cursor: pointer;
+}
+
+.link_item_title:global(.active) {
+  color: $text-color;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.77;
+}
+
+.filters_title {
+  color: #000;
+
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.33;
+  margin-bottom: 16px;
+}
+
+.accordion_list {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s;
+}
+
+.accordion_list.open {
+  margin-top: 8px;
+  height: auto;
+}
+
+.accordion_item {
+  padding: 12px 0;
+}
+
+.accordion_item_price {
+  padding: 16px 0 12px 0;
+}
+
+.accordion_item:not(:first-child) {
+  border-top: 1px solid $outstock-btn;
+}
+
+.accordion_title {
+  display: flex;
+  align-items: center;
+
+  color: $second-text-color;
+  text-align: left;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.accordion_title.open {
+  color: #1b1b1b;
+  font-weight: 600;
+  border: none;
+}
+
+.item_title {
+  margin-bottom: 16px;
+}
+
+.slider {
+  width: 100%;
+  height: 10px;
+  background-color: #feddb7;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+:global(.track-0) {
+  height: 10px;
+  background-color: #feddb7;
+  border-radius: 5px;
+}
+
+:global(.track-1) {
+  height: 10px;
+  background-color: $main-color;
+  border-radius: 5px;
+}
+
+:global(.track-2) {
+  height: 10px;
+  background-color: #feddb7;
+  border-radius: 5px;
+}
+
+:global(.thumb) {
+  width: 24px;
+  height: 24px;
+  background-color: $main-color;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #fefefe;
+  outline-color: transparent;
+  top: -60%;
+}
+
+:global(.thumb):focus {
+  border: 4px solid #ffad4d33;
+}
+:global(.thumb):hover {
+  border: 4px solid #ffad4d33;
+}
+
+.slider_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider_input_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider_input {
+  width: 75px;
+  color: #767676;
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  background-color: transparent;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #767676;
+}
+
+.slider_item {
+  border-radius: 20px;
+}
+
+.slider_item:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.slider_item:first-child::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 1px;
+  background-color: #767676;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.slider_btn {
+  font-family: Lato;
+  text-align: center;
+  cursor: pointer;
+  color: #fefefe;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.14;
+  width: 70px;
+  padding: 12px;
+  border-radius: 999px;
+  border: 1px solid $main-color;
+  background-color: $main-color;
+  box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+}
+
+.slider_btn:hover {
+  border-color: $hover-color;
+  background-color: $hover-color;
+}
+
+.slider_btn:focus {
+  border-color: $focus-color;
+  background-color: $focus-color;
+}
+
+.checkbox_item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.checkbox_title {
+  color: $second-text-color;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+}
+
+.checkbox__field {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.checkbox__icon_true {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: $main-color;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.checkbox__icon_false {
+  background-color: transparent;
+  border: 1px solid #bababa;
+}
+
+.accordion_price_icon {
+  display: flex;
+  align-items: center;
+
+  transform: rotate(180deg);
+  margin-left: 8px;
+}
+
+.accordion_icon {
+  display: flex;
+  align-items: center;
+  transition: transform 250ms ease;
+  margin-left: 8px;
+}
+
+.accordion_icon.open_icon {
+  transform: rotate(180deg);
+}

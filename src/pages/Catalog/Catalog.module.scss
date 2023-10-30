@@ -1,0 +1,35 @@
+@import "..//../variables.scss";
+
+.title {
+  color: #000;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.33;
+  text-transform: capitalize;
+  margin-bottom: 16px;
+  text-transform: capitalize;
+}
+
+.sort_part {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.sort_quantity {
+  color: #404040;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+  margin-right: auto;
+}
+
+.box {
+  display: flex;
+  gap: 32px;
+}
+
+.filters {
+  width: 276px;
+  
+}

@@ -1,0 +1,96 @@
+@import "../../../src/variables";
+
+.sort {
+  display: flex;
+  align-items: center;
+}
+
+.sort_label {
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.77;
+  margin-right: 32px;
+}
+
+.sort_option {
+}
+
+.sort_btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  color: $text-color;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline-color: transparent;
+}
+
+.sort_btn:hover {
+  color: $hover-color;
+}
+.sort_btn:focus {
+  color: $focus-color;
+}
+
+.sort_select {
+  width: 276px;
+  color: $text-color;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 10px 14px;
+
+  border-radius: 8px;
+  border: 1px solid #a3a3a3;
+  background-color: $btn-text;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  outline-color: transparent;
+}
+
+.sort_select:hover {
+  color: $hover-color;
+}
+.sort_select:focus {
+  color: $focus-color;
+}
+
+.sort_list {
+  position: absolute;
+  top: 46px;
+  left: 0;
+  width: 276px;
+  border-radius: 8px;
+  border: 1px solid #f4f6fa;
+  background-color: #fefefe;
+  box-shadow: 0px 4px 6px -2px rgba(16, 24, 40, 0.03),
+    0px 12px 16px -4px rgba(16, 24, 40, 0.08);
+  z-index: 50;
+}
+
+.sort_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sort_box {
+  position: relative;
+}
+
+.check_icon {
+  color: #90c9ec;
+}

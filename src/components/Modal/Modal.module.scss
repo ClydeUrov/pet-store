@@ -1,0 +1,71 @@
+@import "..//../variables.scss";
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(27, 27, 27, 0.6);
+    z-index: 1200;
+    transition: transform 250ms linear;
+  }
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-height: 90vh;
+    transform: translate(-50%, -50%);
+    width: 496px;
+    border-radius: 32px;
+    background: #fdfdfd;
+    transition: transform 250ms linear;
+    overflow-y: auto;
+
+box-shadow: 0px 1px 2px 0px rgba(22, 41, 80, 1);
+  padding: 32px 40px;
+
+  overflow-y: auto;
+  }
+
+  
+//   @media screen and (min-width: 768px) {
+//     .container {
+//       width: 620px;
+//     }
+//   }
+
+  .title {
+    margin-bottom: 40px;
+  
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.33;
+    color: $text-color;
+  }
+  
+  .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    outline-color: transparent;
+    cursor: pointer;
+  }
+  
+  .icon:hover{
+    color: $hover-color;
+  }
+
+  .icon:focus {
+    color:$focus-color;
+ }

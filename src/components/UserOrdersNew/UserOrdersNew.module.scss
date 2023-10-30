@@ -1,0 +1,44 @@
+@import "..//../variables.scss";
+
+.title {
+    color: $text-color;
+    font-size: 21px;
+    font-weight: 700;
+    line-height:1.33;
+
+    margin-bottom: 24px;
+}
+
+.text {
+    color: $text-color;
+
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    margin-bottom: 32px;
+}
+
+.btn {
+display: inline-block;
+ padding: 16px 0;
+text-align: center;
+width: 276px;
+border-radius: 999px;
+background: $main-color;
+
+outline-color: transparent;
+box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+color: $btn-text;
+font-size: 21px;
+font-weight: 800;
+line-height:1.14;
+}
+
+.btn:hover {
+    background-color: $hover-color;
+}
+
+.btn:focus {
+background-color: $focus-color;
+}

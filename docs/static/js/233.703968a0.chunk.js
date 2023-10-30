@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkpet_store=self.webpackChunkpet_store||[]).push([[233],{3233:function(e,n,t){t.r(n);var r=t(184);n.default=function(){return(0,r.jsx)(r.Fragment,{children:(0,r.jsx)("p",{children:"Admin information"})})}}}]);
+//# sourceMappingURL=233.703968a0.chunk.js.map

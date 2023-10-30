@@ -1,0 +1,246 @@
+@import "..//../variables.scss";
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input__wrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.14;
+  color: #494949;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #bababa;
+  background: #fefefe;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.71;
+  color: #8d8d8d;
+}
+
+.invalid {
+  border-color: $error-border-color;
+}
+
+.error {
+  position: absolute;
+  bottom: 5px;
+  right: 14px;
+  color: $error-color;
+}
+
+.forgot_password {
+  color: #618499;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+  outline-color: transparent;
+  cursor: pointer;
+}
+
+.forgot_password:hover,
+.forgot_password:focus {
+  color: #234e69;
+  border-bottom: 1px solid #234e69;
+}
+
+.button {
+  padding: 16px 0;
+  margin-bottom: 16px;
+  text-align: center;
+  background-color: $main-color;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+
+  color: $btn-text;
+
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.14;
+
+  outline-color: transparent;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: $hover-color;
+}
+
+.button:focus {
+  background-color: $focus-color;
+}
+
+.link {
+  text-align: center;
+  color: $second-text-color;
+  outline-color: transparent;
+  background-color: transparent;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+  border: none;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: $hover-color;
+}
+
+.link:focus {
+  color: $focus-color;
+}
+
+.checkbox__wrapper {
+  margin-bottom: 32px;
+}
+
+.checkbox__wrapper_login {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.checkbox__field {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.checkbox__icon_true {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: $main-color;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.checkbox__icon_false {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid #bababa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  cursor: pointer;
+
+  position: relative;
+}
+.checkbox:last-child {
+  margin-bottom: 0;
+}
+
+.checkbox__text {
+  color: $second-text-color;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.77;
+}
+
+.checkbox__text:hover {
+  color: $focus-color;
+}
+
+.iconPassword {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  fill: $text-color;
+  cursor: pointer;
+  outline-color: transparent;
+  border: none;
+  background-color: transparent;
+}
+
+.iconPassword:hover {
+  color: $focus-color;
+}
+.iconPassword:focus {
+  color: $focus-color;
+}
+
+.logout__title {
+  margin-bottom: 24px;
+  text-align: center;
+  color: #000;
+
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.33;
+}
+
+.logout__text {
+  margin-bottom: 40px;
+  text-align: center;
+
+  color: #000;
+
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.33;
+}
+
+.logout__button {
+  padding: 16px 0;
+  width: 100%;
+  border-radius: 999px;
+  border: none;
+  background-color: $main-color;
+  box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+  cursor: pointer;
+
+  color: $btn-text;
+
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.14;
+  outline-color: transparent;
+}
+
+.logout__button:hover {
+  background-color: $hover-color;
+}
+
+.logout__button:focus {
+  background-color: $focus-color;
+}
