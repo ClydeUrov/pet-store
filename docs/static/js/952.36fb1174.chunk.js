@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkpet_store=self.webpackChunkpet_store||[]).push([[952],{3952:function(e,s,r){r.r(s),r.d(s,{default:function(){return i}});var n="Users_productContainer__mtJZv",t="Users_firstLine__QqZgJ",c=r(184),i=function(){return(0,c.jsx)("div",{className:n,children:(0,c.jsxs)("div",{className:t,children:[(0,c.jsx)("p",{children:"Users"}),(0,c.jsx)(c.Fragment,{})]})})}}}]);
-//# sourceMappingURL=952.36fb1174.chunk.js.map

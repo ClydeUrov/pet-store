@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pet-store/static/css/main.8a5e68ac.css",
-    "main.js": "/pet-store/static/js/main.f81a411d.js",
+    "main.css": "/pet-store/static/css/main.85dd5c32.css",
+    "main.js": "/pet-store/static/js/main.f3e3e7f5.js",
     "static/css/2.59447f01.chunk.css": "/pet-store/static/css/2.59447f01.chunk.css",
     "static/js/2.342d645c.chunk.js": "/pet-store/static/js/2.342d645c.chunk.js",
     "static/css/736.4e17532d.chunk.css": "/pet-store/static/css/736.4e17532d.chunk.css",
@@ -22,10 +22,8 @@
     "static/js/19.ec5e5418.chunk.js": "/pet-store/static/js/19.ec5e5418.chunk.js",
     "static/css/925.5b80af3c.chunk.css": "/pet-store/static/css/925.5b80af3c.chunk.css",
     "static/js/925.e79a1fa4.chunk.js": "/pet-store/static/js/925.e79a1fa4.chunk.js",
-    "static/css/952.e12e1b33.chunk.css": "/pet-store/static/css/952.e12e1b33.chunk.css",
-    "static/js/952.36fb1174.chunk.js": "/pet-store/static/js/952.36fb1174.chunk.js",
-    "static/css/180.ccd4cf37.chunk.css": "/pet-store/static/css/180.ccd4cf37.chunk.css",
-    "static/js/180.73ec0c1b.chunk.js": "/pet-store/static/js/180.73ec0c1b.chunk.js",
+    "static/css/180.f20078a4.chunk.css": "/pet-store/static/css/180.f20078a4.chunk.css",
+    "static/js/180.0942d1fe.chunk.js": "/pet-store/static/js/180.0942d1fe.chunk.js",
     "static/js/763.36cd7b39.chunk.js": "/pet-store/static/js/763.36cd7b39.chunk.js",
     "static/js/692.b5101568.chunk.js": "/pet-store/static/js/692.b5101568.chunk.js",
     "static/media/slick.svg": "/pet-store/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -33,8 +31,8 @@
     "static/media/slick.ttf": "/pet-store/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/pet-store/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/pet-store/index.html",
-    "main.8a5e68ac.css.map": "/pet-store/static/css/main.8a5e68ac.css.map",
-    "main.f81a411d.js.map": "/pet-store/static/js/main.f81a411d.js.map",
+    "main.85dd5c32.css.map": "/pet-store/static/css/main.85dd5c32.css.map",
+    "main.f3e3e7f5.js.map": "/pet-store/static/js/main.f3e3e7f5.js.map",
     "2.59447f01.chunk.css.map": "/pet-store/static/css/2.59447f01.chunk.css.map",
     "2.342d645c.chunk.js.map": "/pet-store/static/js/2.342d645c.chunk.js.map",
     "736.4e17532d.chunk.css.map": "/pet-store/static/css/736.4e17532d.chunk.css.map",
@@ -55,15 +53,13 @@
     "19.ec5e5418.chunk.js.map": "/pet-store/static/js/19.ec5e5418.chunk.js.map",
     "925.5b80af3c.chunk.css.map": "/pet-store/static/css/925.5b80af3c.chunk.css.map",
     "925.e79a1fa4.chunk.js.map": "/pet-store/static/js/925.e79a1fa4.chunk.js.map",
-    "952.e12e1b33.chunk.css.map": "/pet-store/static/css/952.e12e1b33.chunk.css.map",
-    "952.36fb1174.chunk.js.map": "/pet-store/static/js/952.36fb1174.chunk.js.map",
-    "180.ccd4cf37.chunk.css.map": "/pet-store/static/css/180.ccd4cf37.chunk.css.map",
-    "180.73ec0c1b.chunk.js.map": "/pet-store/static/js/180.73ec0c1b.chunk.js.map",
+    "180.f20078a4.chunk.css.map": "/pet-store/static/css/180.f20078a4.chunk.css.map",
+    "180.0942d1fe.chunk.js.map": "/pet-store/static/js/180.0942d1fe.chunk.js.map",
     "763.36cd7b39.chunk.js.map": "/pet-store/static/js/763.36cd7b39.chunk.js.map",
     "692.b5101568.chunk.js.map": "/pet-store/static/js/692.b5101568.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8a5e68ac.css",
-    "static/js/main.f81a411d.js"
+    "static/css/main.85dd5c32.css",
+    "static/js/main.f3e3e7f5.js"
   ]
 }
