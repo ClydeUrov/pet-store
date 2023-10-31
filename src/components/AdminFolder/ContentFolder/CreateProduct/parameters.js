@@ -110,7 +110,7 @@ export const additionalInformation = [
     required: false,
   },
   {
-    name: "Description",
+    name: "description",
     type: "text",
     label: "Description",
     width: "569px",

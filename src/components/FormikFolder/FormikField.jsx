@@ -2,9 +2,14 @@ import { ErrorMessage, Field} from "formik";
 import css from './FormikField.module.scss';
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { SaleCheckbox } from "../SaleCheckbox/SaleCheckbox";
+import { useState } from "react";
 
 const FormikField = (props) => {
-  const {name, type, value, disabled, width, handleBtnEnable, touched, errors, required, label, passwordShow, toggleVisibility} = props;
+  const {name, type, value, disabled, width, handleBtnEnable, touched, errors, required, label} = props;
+  const [passwordShow, setPasswordShow] = useState(false);
+  const toggleVisibility = () => {
+    setPasswordShow((prevPasswordShow) => !prevPasswordShow);
+  };
 
   return (
     <div className={css.additions}>
@@ -12,6 +17,13 @@ const FormikField = (props) => {
         {type === "checkout" ? (
           <div>
             <SaleCheckbox />
+          </div>
+        ) : type === "unstyled" ? (
+          <div>
+            <label htmlFor={name} className={css.label}>
+              {label}
+            </label>
+            <p style={{fontSize:"16px", lineHeight:"2.5"}}>{value}</p>
           </div>
         ) : (
           <>
@@ -21,7 +33,7 @@ const FormikField = (props) => {
             <Field
               name={name}
               id={name}
-              type={type}
+              type={type === 'password' ? (passwordShow ? 'text' : 'password') : type}
               value={value ? value : undefined}
               disabled={disabled}
               onClick={handleBtnEnable}

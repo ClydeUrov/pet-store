@@ -1,5 +1,5 @@
 
-.productContainer {
+.userContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -13,3 +13,29 @@
     width: 100%;
     margin: 40px 0 20px 0;
 }
+
+.userInformation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    & > div {
+        flex-basis: 35%;
+        margin: 15px 0;
+
+        &:nth-child(1),
+        &:nth-child(4),
+        &:nth-child(7) {
+            flex-basis: 20%;
+        }
+    }
+}
+
+.label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.14;
+    color: #494949;
+  }

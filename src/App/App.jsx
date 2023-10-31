@@ -13,8 +13,10 @@ import './App.module.scss'
 import { PrivateRoute } from '../helpers/routs/PrivateRoute'
 import AdminPage from '../pages/AdminPage/AdminPage';
 import ContentRouter from '../components/AdminFolder/ContentFolder/ContentRouter';
-import CreateProduct from '../components/AdminFolder/ContentFolder/CreateProduct/CreateProduct';
+// import CreateProduct from '../components/AdminFolder/ContentFolder/CreateProduct/CreateProduct';
 import Favorites from '../pages/Favorites/Favorites';
+import UserProfile from '../components/AdminFolder/Users/UserProfile';
+import Users from '../components/AdminFolder/Users/Users';
 
 const UserPage = lazy(() => import('../pages/UserPage/UserPage'));
 const UserAccount = lazy(() => import('../components/UserAccount/UserAccount'));
@@ -26,7 +28,7 @@ const ProductAbout = lazy(() => import('../components/ProductInfo/ProductAbout/P
 const ProductInstructions = lazy(() => import('../components/ProductInfo/ProductInstructions/ProductInstructions'));
 const ProductReviews = lazy(() => import('../components/ProductInfo/ProductReviews/ProductReviews'));
 const Orders = lazy(() => import('../components/AdminFolder/Orders/Orders'));
-const Users = lazy(() => import('../components/AdminFolder/Users/Users'));
+// const Users = lazy(() => import('../components/AdminFolder/Users/Users'));
 const AdminProfile = lazy(() => import('../components/AdminFolder/AdminProfile/AdminProfile'));
 
 
@@ -60,15 +62,13 @@ const App = () => {
 
           <Route path="/*" element={<Error />} />
         </Route>
-        <Route path="/admin" element={<PrivateRoute
-          redirectTo="/"
-          component={<AdminPage />}
-        />}>
-          <Route path="orders" element={<Orders />} ></Route>
-          <Route path=":contentId" element={<ContentRouter />} >
-            <Route path=":createId" element={<ContentRouter />} />
-          </Route>
-          <Route path="users" element={<Users />} ></Route>
+        <Route path="/admin" element={<PrivateRoute redirectTo="/" component={<AdminPage />} />}>
+          <Route path="orders" element={<Orders />} />
+          <Route path="users" element={<Users />} />
+          <Route path="users/:userId" element={<UserProfile />} />
+          <Route path=":contentName" element={<ContentRouter />} />
+          <Route path=":contentName/:create" element={<ContentRouter />} />
+
           <Route path="account" element={<AdminProfile />}></Route>
         </Route>
       </Routes>

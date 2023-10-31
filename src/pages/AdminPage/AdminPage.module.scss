@@ -2,11 +2,10 @@
 
 .container {
     width: 1440px;
-    height: 100vh;
     padding: 0 120px;
     margin: 0 auto;
     display: flex;
-    font-family: 'Lato';
+    font-family: 'Lato', sans-serif;
     color: $text-color;
 
     & > div:nth-child(1) {

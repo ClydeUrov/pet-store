@@ -90,6 +90,9 @@ export const Accordion = ({
 
   return (
     <>
+      {innerCategories.length === 0 ? (
+        <div>Data is empty</div>
+      ) : (
       <ul className={css.list}>
         {innerCategories.map((item) => {
           return (
@@ -104,6 +107,7 @@ export const Accordion = ({
           );
         })}
       </ul>
+      )}
 
       <p className={css.filters_title}>Narrow by</p>
 
