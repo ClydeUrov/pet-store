@@ -36,6 +36,9 @@ const Header = () => {
             <NavLink to="/catalogue/all" className={styles.catalogue}>
               Catalogue
             </NavLink>
+            <NavLink to="/admin/account" className={styles.catalogue}>
+              Admin
+            </NavLink>
             <div className={styles.search}>
               <input type="text" id="query" placeholder="Search the best in Pawsome " />
             </div>

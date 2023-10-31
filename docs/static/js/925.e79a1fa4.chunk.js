@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkpet_store=self.webpackChunkpet_store||[]).push([[925],{5925:function(e,r,s){s.r(r),s.d(r,{default:function(){return i}});var n="Orders_productContainer__5Dlxw",t="Orders_firstLine__bS-wD",c=s(184),i=function(){return(0,c.jsx)("div",{className:n,children:(0,c.jsx)("div",{className:t,children:(0,c.jsx)("p",{children:"Orders"})})})}}}]);
+//# sourceMappingURL=925.e79a1fa4.chunk.js.map
