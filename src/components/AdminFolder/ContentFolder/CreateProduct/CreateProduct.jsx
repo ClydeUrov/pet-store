@@ -5,17 +5,30 @@ import FormikField from "../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
 import Button from "../../../CustomButton/Button";
 
-const CreateProduct = () => {
+const CreateProduct = ({productId}) => {
 
   const handleSubmit = async (values) => {
     console.log("Відправлено дані: ", values);
   };
 
-  const initialValues = {};
-
-  [...productInformation, ...additionalInformation].forEach((field) => {
-    initialValues[field.name] = field.value || "";
-  });
+  const initialValues = {
+    description: "",
+    age: "",
+    availability: "",
+    brand: "",
+    category: "",
+    color: "",
+    contraindications: "",
+    instruction: "",
+    material: "",
+    name: "",
+    prescription: "",
+    price_discount: "",
+    price_unit: "",
+    size: "",
+    undefined: "",
+    weight: ""
+  };
 
   return (
     <div className={css.productContainer}>
@@ -34,14 +47,14 @@ const CreateProduct = () => {
           <h3>Product information</h3>
           <h4>Basic information</h4>
           <div className={css.product}>
-            {productInformation.map((field, index) => {
-              return <FormikField key={field.name} {...field} />
+            {productInformation.map(field => {
+              return <FormikField key={`product_${field.name}`} {...field} />
             })}
           </div>
           <h4>Additionsl information</h4>
           <div className={css.additions}>
-            {additionalInformation.map((field, index) => {
-              return <FormikField key={field.name} {...field} />
+            {additionalInformation.map(field => {
+              return <FormikField key={`additional_${field.name}`} {...field} />
             })}
           </div>
           <div className={css.buttons}>

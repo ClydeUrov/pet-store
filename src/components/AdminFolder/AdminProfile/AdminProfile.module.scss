@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 680px;
 }
 
 .firstLine {
@@ -10,5 +11,27 @@
     font-size: 30px;
     font-weight: 600;
     width: 100%;
-    margin: 40px 0 20px 0;
+    margin: 40px 0 40px 0;
+}
+
+.product {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > div {
+        &:nth-child(1) {
+            flex-basis: 40%;
+            margin-right: 30px;
+        }
+        &:nth-child(2) {
+            flex-basis: 55%;
+        }
+        &:nth-child(3) {
+            flex-basis: 40%;
+            margin-right: 30px;
+        }
+        &:nth-child(4) {
+            flex-basis: 50%;
+        }
+    }
 }
