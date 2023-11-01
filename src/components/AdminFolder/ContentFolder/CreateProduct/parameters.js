@@ -24,7 +24,7 @@ export const productInformation = [
     required: false,
   },
   {
-    name: "availability",
+    name: "notAvailable",
     type: "text",
     label: "Availability",
     width: "276px",
@@ -32,7 +32,7 @@ export const productInformation = [
     required: false,
   },
   {
-    name: "price_unit",
+    name: "price",
     type: "text",
     label: "Price per unit",
     width: "130px",
@@ -40,7 +40,7 @@ export const productInformation = [
     required: false,
   },
   {
-    name: "price_discount",
+    name: "priceWithDiscount",
     type: "text",
     label: "Price on discount",
     width: "130px",

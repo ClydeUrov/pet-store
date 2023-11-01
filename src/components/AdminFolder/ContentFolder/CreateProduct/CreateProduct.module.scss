@@ -8,6 +8,7 @@
         display: flex;
         justify-content: space-between;
         margin: 20px 0;
+        align-items: center;
 
         & > div:first-child > div {
             width: 120px;
@@ -36,20 +37,29 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    border-radius: 20px;
     background-color: #F4F6FA;
+    border-radius: 20px;
+
+    & > img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 20px;
+    }
+
+    & > svg {
+        text-align: center;
+        font-size: 32px;
+        color: #333;
+    }
 }
 
-.imageUploadArea img {
-    max-width: 100%;
-    max-height: 100%;
-}
+// .imageUploadArea 
 
-.imageUploadArea svg {
-    text-align: center;
-    font-size: 32px;
-    color: #333;
-}
+// .imageUploadArea svg {
+//     text-align: center;
+//     font-size: 32px;
+//     color: #333;
+// }
 
 .image-upload-area:hover {
     border-color: #007bff;
@@ -140,4 +150,14 @@
 
 .cancel {
     background-color: #F4F6FA;
+}
+
+.main {
+    margin-bottom: 120px;
+    padding: 0 8px;
+    border-radius: 4px;
+    background-color: orange;
+    color: white;
+    line-height: 1.5;
+    font-size: 14px;
 }

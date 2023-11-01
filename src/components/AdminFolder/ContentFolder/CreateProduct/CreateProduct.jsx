@@ -4,30 +4,36 @@ import DownloadImages from "./DownloadImages";
 import FormikField from "../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
 import Button from "../../../CustomButton/Button";
+// import { useDispatch } from "react-redux";
+// import { addCard } from "../../../../redux/cards/operations";
 
 const CreateProduct = ({productId}) => {
+  // const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
+    // dispatch(addCard(cardData));
     console.log("Відправлено дані: ", values);
   };
 
   const initialValues = {
     description: "",
     age: "",
-    availability: "",
+    notAvailable: false,
     brand: "",
-    category: "",
+    category: null,
     color: "",
     contraindications: "",
     instruction: "",
     material: "",
     name: "",
-    prescription: "",
-    price_discount: "",
-    price_unit: "",
+    prescription: 0,
+    priceWithDiscount: null,
+    price: 0,
     size: "",
     undefined: "",
-    weight: ""
+    weight: "",
+    mainImage: null,
+    images: [],
   };
 
   return (

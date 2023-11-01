@@ -67,8 +67,7 @@ const App = () => {
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path=":contentName" element={<ContentRouter />} />
-          <Route path=":contentName/:createId" element={<ContentRouter />} />
-
+          <Route path=":contentName/:create" element={<ContentRouter />} />
           <Route index path="account" element={<AdminProfile />}></Route>
         </Route>
       </Routes>
