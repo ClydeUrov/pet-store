@@ -33,7 +33,7 @@ const Products = () => {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         return allCards.content.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage, allCards.content]);
+    }, [currentPage, allCards]);
 
     if (isLoading) {
         return <Loader />;

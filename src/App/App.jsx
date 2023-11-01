@@ -68,8 +68,7 @@ const App = () => {
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path=":contentName" element={<ContentRouter />} />
           <Route path=":contentName/:create" element={<ContentRouter />} />
-
-          <Route path="account" element={<AdminProfile />}></Route>
+          <Route index path="account" element={<AdminProfile />}></Route>
         </Route>
       </Routes>
       <ToastContainer />

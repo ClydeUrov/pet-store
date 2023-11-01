@@ -54,7 +54,6 @@ const cardsSlice = createSlice({
       .addCase(getOnSale.pending, state => {
         state.isLoading = true;
       })
-     
       .addCase(addToFavorite.pending, state => {
         state.isLoading = true;
       })
@@ -115,7 +114,7 @@ const cardsSlice = createSlice({
         state.error = null;
         state.items = state.items.filter(item => item._id !== action.meta.arg);
       })
-       .addCase(getOnSale.fulfilled, (state, action) => {
+      .addCase(getOnSale.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
         state.onSale = action.payload;

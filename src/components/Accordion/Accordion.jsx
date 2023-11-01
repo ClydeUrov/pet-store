@@ -90,7 +90,7 @@ export const Accordion = ({
 
   return (
     <>
-      {innerCategories.length === 0 ? (
+      {!innerCategories ? (
         <div>Data is empty</div>
       ) : (
       <ul className={css.list}>
@@ -128,6 +128,10 @@ export const Accordion = ({
         </li>
 
         {flagList.map(({ title, href, content }) => {
+          if (!content) {
+            // Добавьте проверку на существование content и обработку случая, когда он не определен
+            return null;
+          }
           return (
             <li key={title} className={css.accordion_item}>
               <button
