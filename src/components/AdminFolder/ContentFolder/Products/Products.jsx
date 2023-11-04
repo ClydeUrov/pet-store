@@ -16,15 +16,16 @@ const Products = () => {
     const isLoading = useSelector(({ cards }) => cards.isLoading)
     const [currentPage, setCurrentPage] = useState(1);
     const PageSize = 10;
+    console.log(allCards);
 
     useEffect(() => {
-        dispatch(getAllCards())
-            .then()
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-                
-            });
-    }, [dispatch]);
+        if (!allCards || !allCards.content) {
+            dispatch(getAllCards())
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    }, [dispatch, allCards]);
 
     const currentTableData = useMemo(() => {
         if (!allCards || !allCards.content) {
@@ -42,6 +43,8 @@ const Products = () => {
     if (!allCards || !allCards.content || allCards.content.length === 0) {
         return <div className={css.firstLine}>No data available.</div>;
     }
+
+    // const sortedTableData = currentTableData.slice().sort((a, b) => b.price - a.price);
 
     return (
         <div className={css.productContainer}>

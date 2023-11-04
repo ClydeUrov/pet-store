@@ -4,7 +4,6 @@ import css from './AdminPage.module.scss';
 import { NavLink, Outlet } from 'react-router-dom';
 import Logo from '../../icons/logo';
 import { AiOutlineDown, AiOutlineRight } from 'react-icons/ai'
-import { useSelector } from 'react-redux';
 
 
 const AdminPage = () => {

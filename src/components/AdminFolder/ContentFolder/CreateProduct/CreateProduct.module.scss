@@ -1,3 +1,5 @@
+@import "../../../../variables.scss";
+
 .productContainer {
     display: flex;
     flex-direction: column;
@@ -37,7 +39,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    background-color: #F4F6FA;
+    background-color: $left-background;
     border-radius: 20px;
 
     & > img {
@@ -51,18 +53,6 @@
         font-size: 32px;
         color: #333;
     }
-}
-
-// .imageUploadArea 
-
-// .imageUploadArea svg {
-//     text-align: center;
-//     font-size: 32px;
-//     color: #333;
-// }
-
-.image-upload-area:hover {
-    border-color: #007bff;
 }
 
 .product {
@@ -136,6 +126,52 @@
 .buttons {
     display: flex;
     margin-bottom: 80px;
+
+    & > button {
+        &:nth-child(1) {
+            padding: 8px 38px;
+            border-radius: 999px;
+            border: none;
+            background-color: $main-color;
+            box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+            color: $btn-text;
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 1.14;
+            cursor: pointer;
+            outline-color: transparent;
+            text-align: center;
+            font-family: "Lato";
+            &:hover {
+                border-color: $hover-color;
+                background-color: $hover-color;
+            }
+        } 
+
+        &:nth-child(2) {
+            background-color: #fff;
+            margin-left: 15px;
+            padding: 8px 23px;
+            border-radius: 999px;
+            border-color: transparent;
+            box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
+            color: $main-color;
+            font-family: "Lato";
+            font-size: 21px;
+            font-style: normal;
+            font-weight: 800;
+            line-height: 24px;
+            outline-color: transparent;
+            cursor: pointer;
+            &:hover {
+                border-color: $hover-color;
+                color: $hover-color;
+            }
+        } 
+
+    }
+
+    
 }
 
 .confirmButton {

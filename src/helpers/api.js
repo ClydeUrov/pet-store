@@ -2,19 +2,25 @@ import axios from 'axios';
 
 //axios.defaults.baseURL = 'https://online-zoo-store-backend-web-service.onrender.com/';
 
-
-  export const fetchAllCategories = async () => {
+export const fetchProductCharacteristics = async () => {
   return await axios
-  .get(`/api/v1/product-categories`)
-  .then(response => response.data)
-  .catch(err => console.log(err));
+    .get(`/api/v1/product-characteristics`)
+    .then(response => response.data)
+    .catch(err => console.log(err));
 }
 
-  export const fetchMainCategories = async () => {
+export const fetchAllCategories = async () => {
   return await axios
-  .get(`/api/v1/product-categories/main`)
-  .then(response => response.data)
-  .catch(err => console.log(err));
+    .get(`/api/v1/product-categories`)
+    .then(response => response.data)
+    .catch(err => console.log(err));
+}
+
+export const fetchMainCategories = async () => {
+  return await axios
+    .get(`/api/v1/product-categories/main`)
+    .then(response => response.data)
+    .catch(err => console.log(err));
 }
 
 export const fetchImgFromOneCategory = async categoryId => {
@@ -25,6 +31,14 @@ export const fetchImgFromOneCategory = async categoryId => {
       console.error(error);
     }
   };
+
+export const addImagesToCard = async (productId, data) => {
+  try {
+    await axios.post(`/api/v1/products/${productId}/images`, data)
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // export const fetchProductsFromOneCategory = async categoryId => {
 //     try {

@@ -3,37 +3,80 @@ import { Form, Formik } from "formik";
 import DownloadImages from "./DownloadImages";
 import FormikField from "../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
-import Button from "../../../CustomButton/Button";
-// import { useDispatch } from "react-redux";
-// import { addCard } from "../../../../redux/cards/operations";
+import { useEffect, useState } from "react";
+import { addImagesToCard, fetchProductCharacteristics } from "../../../../helpers/api";
+import { addCard } from "../../../../redux/cards/operations";
+import { useDispatch } from "react-redux";
+import Loader from "../../../Loader/Loader";
+
+const formValues = {
+  name: "",
+  description: null,
+  instruction: null,
+  contraindications: null,
+  prescription: null,
+  priceWithDiscount: null,
+  price: 0,
+  age: null,
+  brand: null,
+  category: null,
+  color: null,
+  material: null,
+  size: null,
+  weight: null,
+  mainImage: null,
+  notAvailable: false,
+  newArrival: true
+};
 
 const CreateProduct = ({productId}) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const [characteristics, setCharacteristics] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchProductCharacteristics();
+        setCharacteristics(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const handleSubmit = async (values) => {
-    // dispatch(addCard(cardData));
-    console.log("Відправлено дані: ", values);
+    const fieldsToMap = ['brand', 'category', 'material', 'age', 'color', 'size', 'weight', 'prescription'];
+    fieldsToMap.forEach((field) => {
+      if (values[field]) {
+        values[field] = { "id": parseInt(values[field]) };
+      }
+    });
+
+    const card = await dispatch(addCard(values));
+
+    console.log(card.payload)
   };
 
-  const initialValues = {
-    description: "",
-    age: "",
-    notAvailable: false,
-    brand: "",
-    category: null,
-    color: "",
-    contraindications: "",
-    instruction: "",
-    material: "",
-    name: "",
-    prescription: 0,
-    priceWithDiscount: null,
-    price: 0,
-    size: "",
-    undefined: "",
-    weight: "",
-    mainImage: null,
-    images: [],
+  const handleCancel = () => {
+    console.log("cancel")
+  }
+
+  if (characteristics === null) {
+    return <Loader />;
+  }
+
+  const characteristicsMap = {
+    age: characteristics.ageDtoList,
+    color: characteristics.colorDtoList,
+    material: characteristics.materialDtoList,
+    brand: characteristics.brandDtoList,
+    prescription: characteristics.prescriptionDtoList,
+    category: characteristics.productCategoryDtoList,
+    size: characteristics.productSizeDtoList,
+    weight: characteristics.weightDtoList,
+    notAvailable: [{id: true, name: "True"}, {id: false, name: "False"}]
   };
 
   return (
@@ -45,7 +88,7 @@ const CreateProduct = ({productId}) => {
       <DownloadImages />
       
       <Formik
-        initialValues={initialValues}
+        initialValues={formValues}
         onSubmit={handleSubmit}
       >
         {() => (
@@ -54,7 +97,11 @@ const CreateProduct = ({productId}) => {
           <h4>Basic information</h4>
           <div className={css.product}>
             {productInformation.map(field => {
-              return <FormikField key={`product_${field.name}`} {...field} />
+              return <FormikField 
+                key={`product_${field.name}`} 
+                {...field} 
+                data={field.type === "select" ? characteristicsMap[field.name] : null}
+              />
             })}
           </div>
           <h4>Additionsl information</h4>
@@ -64,8 +111,8 @@ const CreateProduct = ({productId}) => {
             })}
           </div>
           <div className={css.buttons}>
-            <Button buttonSize={'padding'} text="Confirm" onClickHandler={handleSubmit}  />
-            <Button buttonSize={'cancel'} text="Cancel" onClickHandler={handleSubmit} />
+            <button type="submit" >Confirm</button> 
+            <button type="cancel" onClick={handleCancel} >Cancel</button>
           </div>
         </Form>
         )}
