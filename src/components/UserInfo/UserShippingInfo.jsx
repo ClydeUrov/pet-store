@@ -7,8 +7,9 @@ import { useState } from "react";
 // import { useDispatch } from "react-redux";
 //import { useSelector } from 'react-redux';
 
-import { ErrorMessage, Form, Formik, Field } from "formik";
+import { Form, Formik } from "formik";
 import { schemaUserShippingInfo } from "../../helpers/schemes";
+import FormikField from "../FormikFolder/FormikField";
 
 
 const initialValues = {
@@ -23,24 +24,14 @@ const initialValues = {
 
 export const UserShippingInfo = () => {
   const [disabled, setDisabled] = useState(true);
-  const [disabledBtn, setDisabledBtn] = useState(true);
 
   const toggleDisabled = () => {
     setDisabled(!disabled);
   };
 
-  const handleBtnDisable = (e) => {
-    setDisabledBtn(true);
-  };
-  const handleBtnEnable = (e) => {
-    setDisabledBtn(false);
-  };
-
   const handleCancel = (props) => {
     props.handleReset();
     toggleDisabled();
-    handleBtnDisable();
-    return;
   };
 
   const handleSubmit = async (formData) => {
@@ -56,10 +47,7 @@ export const UserShippingInfo = () => {
     console.log("newInfo", newInfo);
     // dispatch(addNewUser(newUser));
     toggleDisabled();
-    handleBtnDisable();
-    return;
   };
-
 
   return (
     <>
@@ -72,152 +60,83 @@ export const UserShippingInfo = () => {
       >
         {(props) => (
           <Form className={css.form}>
-            <div className={css.input__wrapper}>
-              <label htmlFor="country" className={css.label}>
-                Country
-              </label>
-              <Field
-                className={ (props.touched.country && props.errors.country) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                id="country"
-                name="country"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
-              <ErrorMessage
-                name="country"
-                component="p"
-                className={css.error}
-              />
-            </div>
+            <FormikField
+              name="country"
+              type="text"
+              label="Country"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-            <div className={css.input__wrapper}>
-              <label htmlFor="region" className={css.label}>
-                Region
-              </label>
-              <Field
-                className={ (props.touched.region && props.errors.region) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="region"
-                id="region"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
-              <ErrorMessage name="region" component="p" className={css.error} />
-            </div>
+            <FormikField
+              name="region"
+              type="text"
+              label="Region"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-            <div className={css.input__wrapper}>
-              <label htmlFor="city" className={css.label}>
-                City
-              </label>
-              <Field
-                className={ (props.touched.city && props.errors.city) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="city"
-                id="city"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
-              <ErrorMessage name="city" component="p" className={css.error} />
-            </div>
+            <FormikField
+              name="city"
+              type="text"
+              label="City"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-            <div className={css.input__wrapper}>
-              <label htmlFor="code" className={css.label}>
-                Postal Code
-              </label>
-              <Field
-                className={ (props.touched.code && props.errors.code) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="code"
-                id="code"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
+            <FormikField
+              name="code"
+              type="text"
+              label="Postal Code"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-              <ErrorMessage name="code" component="p" className={css.error} />
-            </div>
+            <FormikField
+              name="street"
+              type="text"
+              label="Street"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-            <div className={css.input__wrapper}>
-              <label htmlFor="street" className={css.label}>
-                Street
-              </label>
-              <Field
-                className={ (props.touched.street && props.errors.street) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="street"
-                id="street"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
+            <FormikField
+              name="building"
+              type="text"
+              label="Building Number"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
-              <ErrorMessage name="street" component="p" className={css.error} />
-            </div>
-
-            <div className={css.input__wrapper}>
-              <label htmlFor="building" className={css.label}>
-                Building Number
-              </label>
-              <Field
-                className={ (props.touched.building && props.errors.building) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="building"
-                id="building"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-                required
-              />
-
-              <ErrorMessage
-                name="building"
-                component="p"
-                className={css.error}
-              />
-            </div>
-
-            <div className={css.input__wrapper}>
-              <label htmlFor="flat" className={css.label}>
-                Flat Number (Optional)
-              </label>
-              <Field
-                className={ (props.touched.flat && props.errors.flat) ? `${css.invalid} ${css.input}` : `${css.input}` }
-                name="flat"
-                id="flat"
-                type="text"
-                disabled={disabled}
-                onClick={handleBtnEnable}
-              />
-
-              <ErrorMessage name="flat" component="p" className={css.error} />
-            </div>
+            <FormikField
+              name="flat"
+              type="text"
+              label="Flat Number (Optional)"
+              width="100%"
+              disabled={disabled}
+              required
+            />
 
             {disabled ? (
-              <button
-                type="button"
-                onClick={toggleDisabled}
-                className={css.button}
-              >
+              <button type="button" onClick={toggleDisabled} className={css.button}>
                 Edit
                 <GoPencil size={20} className={css.btn__icon}/>
               </button>
             ) : (
               <ul className={css.list__btn}>
                 <li className={css.item__btn}>
-                  <button type="submit" className={css.button}
-                  disabled={disabledBtn}>
+                  <button type="submit" className={css.button} >
                     Confirm
                   </button>
                 </li>
                 <li className={css.item__btn}>
-                  <button
-                    type="button"
-                    onClick={() => handleCancel(props)}
-                    className={css.button}
-                  >
+                  <button type="button" onClick={() => handleCancel(props)} className={css.button}>
                     Cancel
                   </button>
                 </li>
