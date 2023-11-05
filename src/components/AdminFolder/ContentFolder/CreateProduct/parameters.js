@@ -95,7 +95,7 @@ export const productInformation = [
 export const additionalInformation = [
   {
     name: "prescription",
-    type: "text",
+    type: "textarea",
     label: "Prescription",
     width: "276px",
     value: "",
@@ -103,7 +103,7 @@ export const additionalInformation = [
   },
   {
     name: "contraindications",
-    type: "text",
+    type: "textarea",
     label: "Contraindications",
     width: "276px",
     value: "",
@@ -111,7 +111,7 @@ export const additionalInformation = [
   },
   {
     name: "description",
-    type: "text",
+    type: "textarea",
     label: "Description",
     width: "569px",
     value: "",
@@ -119,7 +119,7 @@ export const additionalInformation = [
   },
   {
     name: "instruction",
-    type: "text",
+    type: "textarea",
     label: "Instruction",
     width: "569px",
     value: "",

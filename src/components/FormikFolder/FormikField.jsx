@@ -48,6 +48,27 @@ const FormikField = (props) => {
             </label>
             <p style={{fontSize:"16px", lineHeight:"2.5"}}>{value}</p>
           </div>
+        ) : type === "textarea" ? (
+          <>
+            <label htmlFor={name} className={css.label}>
+              {label}
+            </label>
+            <Field
+              as="textarea"
+              name={name}
+              type={type}
+              disabled={disabled}
+              style={{ width: width }}
+              className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
+              required={required ? "required" : undefined}
+            />
+            {type === "password" && (
+              <button type="button" className={css.iconPassword} onClick={toggleVisibility} disabled={disabled}>
+                {passwordShow ? <MdOutlineVisibility size={24} /> : <MdOutlineVisibilityOff size={24} />}
+              </button>
+            )}
+            <ErrorMessage name={name} component="p" className={css.error} />
+          </>
         ) : (
           <>
             <label htmlFor={name} className={css.label}>

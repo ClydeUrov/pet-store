@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import css from "./CreateProduct.module.scss";
-import { BsDownload } from "react-icons/bs";
+import { BsDownload, BsArchive } from "react-icons/bs";
+import { AiOutlineDelete } from "react-icons/ai";
 
-const ImageUploader = ({ id, onImageChange }) => {
+const ImageUploader = ({ id, onImageChange, action }) => {
   const fileInputRef = useRef(null);
   const [image, setImage] = useState(null);
 
@@ -34,15 +35,27 @@ const ImageUploader = ({ id, onImageChange }) => {
     }
   };
 
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    setImage(null);
+    onImageChange(null);
+  };
+
   return (
     <div className={css.imageUploadWindow}>
+      
       <div
         className={css.imageUploadArea}
         onDrop={handleImageDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={handleImageClick}
       >
+        {action === "main" ? <div className={css.main}>Main</div> : null}
         {image ? <img src={image} alt="Uploaded" /> : <BsDownload />}
+        {action === "delete" ? 
+          <div className={css.delete} onClick={handleDeleteClick}>
+            <AiOutlineDelete />
+          </div> : null}
       </div>
       <input
         ref={fileInputRef}
@@ -74,12 +87,13 @@ const DownloadImages = () => {
     <>
       <h3>Product photo</h3>
       <section className={css.firstSection}>
-        <ImageUploader id={mainImage} onImageChange={handleMainImageChange} />
+        <ImageUploader id={mainImage} onImageChange={handleMainImageChange} action="main" />
         {Array.from({ length: 6 }, (_, index) => (
           <ImageUploader
             key={index}
             id={`image${index}`}
             onImageChange={(newImage) => handleImageChange(index, newImage)}
+            action="delete"
           />
         ))}
       </section>
@@ -92,114 +106,3 @@ const DownloadImages = () => {
 };
 
 export default DownloadImages;
-
-// const DownloadImages = () => {
-//     const [mainImage, setMainImage] = useState(null);
-//     const fileInputRef = useRef(null);
-//     const [images, setImages] = useState(new Array(6).fill(null));
-//     const imageContainers = [1, 2, 3, 4, 5, 6];
-
-//     const handleImageDrop = (e, index) => {
-//         e.preventDefault();
-//         const file = e.dataTransfer.files[0];
-//         if (file) {
-//             const reader = new FileReader();
-//             reader.onload = (e) => {
-//                 const newImages = [...images];
-//                 newImages[index] = e.target.result;
-//                 setImages(newImages);
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     const handleImageClick = (index) => {
-//         const fileInput = document.getElementById(`fileInput-${index}`);
-//         fileInput.click();
-//     };
-
-//     const handleClick = () => {
-//         fileInputRef.current.click();
-//     };
-
-//     const handleMainImage = (e) => {
-//         const file = e.target.files[0];
-//         if (file) {
-//             const reader = new FileReader();
-//             reader.onload = (e) => {
-//                 setMainImage(e.target.result);
-//             };
-//             reader.readAsDataURL(file); // Здесь нужно прочитать файл и получить его содержимое в формате Data URL
-//         }
-//     };
-
-//     const handleImageChange = (e, index) => {
-//         const file = e.target.files[0];
-//         if (file) {
-//             const reader = new FileReader();
-//             reader.onload = (e) => {
-//                 const newImages = [...images];
-//                 newImages[index] = e.target.result;
-//                 setImages(newImages);
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     return (
-//         <>
-//             <h3>Product photo</h3>
-//             <section className={css.firstSection}>
-//                 <div className={css.imageUploadWindow}>
-//                     <div
-//                         className={css.imageUploadArea}
-//                         onDrop={(e) => handleImageDrop(e)}
-//                         onDragOver={(e) => e.preventDefault()}
-//                         onClick={() => handleClick()}
-//                     >
-//                         <p className={css.main}>Main</p>
-//                     {mainImage ? (
-//                         <img src={mainImage} alt="Uploaded" />
-//                     ) : (
-//                         <BsDownload />
-//                     )}
-//                     </div>
-//                     <input
-//                         ref={fileInputRef}
-//                         id="fileInput"
-//                         type="file"
-//                         accept="image/*"
-//                         style={{ display: 'none' }}
-//                         onChange={handleMainImage}
-//                     />
-//                 </div>
-//                 {imageContainers.map(index => (
-//                     <div key={index} className={css.imageUploadWindow}>
-//                         <div
-//                             className={css.imageUploadArea}
-//                             onDrop={(e) => handleImageDrop(e, index)}
-//                             onDragOver={(e) => e.preventDefault()}
-//                             onClick={() => handleImageClick(index)}
-//                         >
-//                             {images[index] ? (
-//                                 <img src={images[index]} alt="Uploaded" />
-//                             ) : (
-//                                 <BsDownload />
-//                             )}
-//                         </div>
-//                         <input
-//                             id={`fileInput-${index}`}
-//                             type="file"
-//                             accept="image/*"
-//                             style={{ display: 'none' }}
-//                             onChange={(e) => handleImageChange(e, index)}
-//                         />
-//                     </div>
-//                 ))}
-
-//             </section>
-//             <p>The size of the uploaded image must be under 10Mb (.png, .jpeg), max. 7 image </p>
-//         </>
-//     )
-// }
-// export default DownloadImages;

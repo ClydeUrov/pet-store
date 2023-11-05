@@ -13,28 +13,18 @@ import Loader from "../../../Loader/Loader";
 const Products = () => {
     const dispatch = useDispatch();
     const allCards = useSelector(selectCards);
-    const isLoading = useSelector(({ cards }) => cards.isLoading)
-    const [currentPage, setCurrentPage] = useState(1);
-    const PageSize = 10;
+    const isLoading = useSelector(({ cards }) => cards.isLoading);
+    const [page, setPage] = useState(1);
     console.log(allCards);
 
     useEffect(() => {
-        if (!allCards || !allCards.content) {
-            dispatch(getAllCards())
+        if (!allCards || !allCards.content || page !== allCards.pageable.pageNumber + 1) {
+            dispatch(getAllCards(page))
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [dispatch, allCards]);
-
-    const currentTableData = useMemo(() => {
-        if (!allCards || !allCards.content) {
-            return [];
-        }
-        const firstPageIndex = (currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
-        return allCards.content.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage, allCards]);
+    }, [dispatch, allCards, page]);
 
     if (isLoading) {
         return <Loader />;
@@ -43,6 +33,8 @@ const Products = () => {
     if (!allCards || !allCards.content || allCards.content.length === 0) {
         return <div className={css.firstLine}>No data available.</div>;
     }
+
+    console.log(allCards.pageable.pageNumber, allCards.totalElements, allCards.size)
 
     // const sortedTableData = currentTableData.slice().sort((a, b) => b.price - a.price);
 
@@ -69,7 +61,7 @@ const Products = () => {
                 <p>Available</p>
                 <p></p>
             </div>
-            {currentTableData.map(item => (
+            {allCards.content.map(item => (
                 <div key={item.id} className={item.notAvailable ? css.productRow : `${css.productRow} ${css.notAvailable}`}>
                     <div className={css.picture}>
                         {item.images && item.images.length > 0 && (
@@ -88,10 +80,10 @@ const Products = () => {
             ))}
             <Pagination
                 className="pagination-bar"
-                currentPage={currentPage}
-                totalCount={allCards.content.length}
-                pageSize={PageSize}
-                onPageChange={page => setCurrentPage(page)}
+                currentPage={allCards.pageable.pageNumber + 1}
+                totalCount={allCards.totalElements}
+                pageSize={allCards.size}
+                onPageChange={page => setPage(page)}
             />
         </div>
     );
