@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import css from "./CreateProduct.module.scss";
-import { BsDownload, BsArchive } from "react-icons/bs";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
 
 const ImageUploader = ({ id, onImageChange, action }) => {
   const fileInputRef = useRef(null);
@@ -51,7 +50,7 @@ const ImageUploader = ({ id, onImageChange, action }) => {
         onClick={handleImageClick}
       >
         {action === "main" ? <div className={css.main}>Main</div> : null}
-        {image ? <img src={image} alt="Uploaded" /> : <BsDownload />}
+        {image ? <img src={image} alt="Uploaded" /> : <AiOutlineDownload />}
         {action === "delete" ? 
           <div className={css.delete} onClick={handleDeleteClick}>
             <AiOutlineDelete />

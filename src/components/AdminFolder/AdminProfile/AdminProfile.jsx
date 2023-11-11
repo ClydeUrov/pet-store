@@ -58,7 +58,7 @@ const AdminProfile = () => {
                         return <FormikField key={field.name} {...field} />
                         })}
                     </div>
-                    <Button buttonSize={'padding'} text="Confirm" onClickHandler={handleSubmit}  />
+                    <Button className={css.btn} buttonSize={'padding'} text="Confirm" onClickHandler={handleSubmit}  />
                 </Form>
                 )}
             </Formik>

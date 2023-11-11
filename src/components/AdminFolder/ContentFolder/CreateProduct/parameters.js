@@ -4,7 +4,6 @@ export const productInformation = [
     type: "text",
     label: "Name",
     width: "411px",
-    value: "",
     required: true,
   },
   {
@@ -12,7 +11,6 @@ export const productInformation = [
     type: "select",
     label: "Category",
     width: "276px",
-    value: "",
     required: true,
   },
   {
@@ -20,7 +18,6 @@ export const productInformation = [
     type: "select",
     label: "Brand",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -28,7 +25,6 @@ export const productInformation = [
     type: "select",
     label: "Availability",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -36,7 +32,6 @@ export const productInformation = [
     type: "text",
     label: "Price per unit",
     width: "130px",
-    value: "",
     required: true,
   },
   {
@@ -44,7 +39,6 @@ export const productInformation = [
     type: "text",
     label: "Price on discount",
     width: "130px",
-    value: "",
     required: false,
   },
   {
@@ -52,7 +46,6 @@ export const productInformation = [
     type: "select",
     label: "Material",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -60,7 +53,6 @@ export const productInformation = [
     type: "select",
     label: "Color",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -68,7 +60,6 @@ export const productInformation = [
     type: "select",
     label: "Age",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -76,7 +67,6 @@ export const productInformation = [
     type: "select",
     label: "Size",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -84,7 +74,6 @@ export const productInformation = [
     type: "select",
     label: "Weight",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -98,15 +87,13 @@ export const additionalInformation = [
     type: "textarea",
     label: "Prescription",
     width: "276px",
-    value: "",
     required: false,
   },
   {
-    name: "contraindications",
+    name: "contraindication",
     type: "textarea",
     label: "Contraindications",
     width: "276px",
-    value: "",
     required: false,
   },
   {
@@ -114,7 +101,6 @@ export const additionalInformation = [
     type: "textarea",
     label: "Description",
     width: "569px",
-    value: "",
     required: false,
   },
   {
@@ -122,7 +108,6 @@ export const additionalInformation = [
     type: "textarea",
     label: "Instruction",
     width: "569px",
-    value: "",
     required: false,
   },
 ];

@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   getAllCards,
   getCardsFromOneCategory,
-  addCard,
+  createCard,
+  updateCard,
   deleteCard,
   getOnSale,
 
@@ -45,7 +46,10 @@ const cardsSlice = createSlice({
       .addCase(getCardsFromOneCategory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(addCard.pending, state => {
+      .addCase(createCard.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(updateCard.pending, state => {
         state.isLoading = true;
       })
       .addCase(deleteCard.pending, state => {
@@ -71,7 +75,11 @@ const cardsSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(addCard.rejected, (state, action) => {
+      .addCase(createCard.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateCard.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -104,15 +112,23 @@ const cardsSlice = createSlice({
         state.error = null;
         state.items = action.payload;
       })
-      .addCase(addCard.fulfilled, (state, action) => {
+      .addCase(createCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
         state.items.push(action.payload);
       })
+      .addCase(updateCard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const updatedCardIndex = state.items.findIndex(card => card.id === action.payload.id);
+        if (updatedCardIndex !== -1) {
+          state.items[updatedCardIndex] = action.payload; // Update the card in the items array
+        }
+      })
       .addCase(deleteCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.items = state.items.filter(item => item._id !== action.meta.arg);
+        state.items = state.items.filter(item => item.id !== action.meta.arg);
       })
       .addCase(getOnSale.fulfilled, (state, action) => {
         state.isLoading = false;

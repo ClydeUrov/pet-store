@@ -5,12 +5,15 @@ import { SaleCheckbox } from "../SaleCheckbox/SaleCheckbox";
 import { useState } from "react";
 
 const FormikField = (props) => {
-  const {name, type, value, disabled, width, touched, errors, required, label, data} = props;
+  const {name, type, value, disabled, width, touched, errors, required, label, optionList, values, setFieldValue} = props;
   const [passwordShow, setPasswordShow] = useState(false);
   const toggleVisibility = () => {
     setPasswordShow((prevPasswordShow) => !prevPasswordShow);
   };
-// item.id || ""
+  // if (touched) console.log(touched);
+  // if (name === "notAvailable") console.log("here", name);
+  // if(values && values[name]) console.log("val", name, values[name]);
+
   return (
     <div className={css.additions}>
         <div className={css.input__wrapper}>
@@ -24,12 +27,17 @@ const FormikField = (props) => {
               name={name}
               disabled={disabled}
               style={{ width: width }}
+              onChange={(e) => setFieldValue(name, e.target.value)}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
+              // value={values[name]?.id || ""}
             > 
-            
-              <option value=""></option>
-              {data.map((item) => (
-                <option key={item.id} value={item.id}>  
+              <option value={undefined}></option>
+              {optionList?.map((item) => (
+                <option
+                  key={item.id}
+                  value={item.id}
+                  defaultValue={values[name] && values[name].id === item.id}
+                >
                   {item.name}
                 </option>
               ))}
@@ -56,7 +64,6 @@ const FormikField = (props) => {
             <Field
               as="textarea"
               name={name}
-              type={type}
               disabled={disabled}
               style={{ width: width }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
@@ -78,6 +85,7 @@ const FormikField = (props) => {
               name={name}
               type={type === 'password' ? (passwordShow ? 'text' : 'password') : type}
               disabled={disabled}
+              // value={value}
               style={{ width: width }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
               required={required ? "required" : undefined}

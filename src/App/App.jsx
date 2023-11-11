@@ -12,11 +12,11 @@ import { Layout } from '../components/Layout/Layout'
 import './App.module.scss'
 import { PrivateRoute } from '../helpers/routs/PrivateRoute'
 import AdminPage from '../pages/AdminPage/AdminPage';
-import ContentRouter from '../components/AdminFolder/ContentFolder/ContentRouter';
-// import CreateProduct from '../components/AdminFolder/ContentFolder/CreateProduct/CreateProduct';
 import Favorites from '../pages/Favorites/Favorites';
 import UserProfile from '../components/AdminFolder/Users/UserProfile';
 import Users from '../components/AdminFolder/Users/Users';
+import AdminContentRoute from '../helpers/routs/AdminContentRoute';
+import AdminCreateRoute from '../helpers/routs/AdminCreateRoute';
 
 const UserPage = lazy(() => import('../pages/UserPage/UserPage'));
 const UserAccount = lazy(() => import('../components/UserAccount/UserAccount'));
@@ -28,7 +28,6 @@ const ProductAbout = lazy(() => import('../components/ProductInfo/ProductAbout/P
 const ProductInstructions = lazy(() => import('../components/ProductInfo/ProductInstructions/ProductInstructions'));
 const ProductReviews = lazy(() => import('../components/ProductInfo/ProductReviews/ProductReviews'));
 const Orders = lazy(() => import('../components/AdminFolder/Orders/Orders'));
-// const Users = lazy(() => import('../components/AdminFolder/Users/Users'));
 const AdminProfile = lazy(() => import('../components/AdminFolder/AdminProfile/AdminProfile'));
 
 
@@ -66,9 +65,9 @@ const App = () => {
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
-          <Route path=":contentName" element={<ContentRouter />} />
-          <Route path=":contentName/:create" element={<ContentRouter />} />
-          <Route index path="account" element={<AdminProfile />}></Route>
+          <Route index path="account" element={<AdminProfile />} />
+          <Route path=":contentName" element={<AdminContentRoute />} />
+          <Route path=":contentName/create" element={<AdminCreateRoute />} />
         </Route>
       </Routes>
       <ToastContainer />
