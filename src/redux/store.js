@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 import {
   persistStore,
@@ -10,32 +10,31 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import { authReducer } from './auth/authSlise';
-import { cardsReducer } from './cards/cardsSlice';
-import storage from 'redux-persist/lib/storage';
+} from "redux-persist";
+import { authReducer } from "./auth/authSlise";
+import { cardsReducer } from "./cards/cardsSlice";
+import storage from "redux-persist/lib/storage";
 
 const authPersistConfig = {
-  key: 'auth',
+  key: "auth",
   storage,
-  whitelist: ['token'],
+  whitelist: ["token"],
 };
 
 export const store = configureStore({
   reducer: {
-      user:persistReducer(authPersistConfig, authReducer),
+    user: persistReducer(authPersistConfig, authReducer),
     // user: authReducer,
-     cards: cardsReducer,
+    cards: cardsReducer,
     // favourites: favouritesReducer,
     // cardsInCart: cartReducer,
-
   },
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    })
+    }),
 });
 
 export const persistor = persistStore(store);

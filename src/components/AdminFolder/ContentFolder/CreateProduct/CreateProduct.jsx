@@ -3,69 +3,159 @@ import { Form, Formik } from "formik";
 import DownloadImages from "./DownloadImages";
 import FormikField from "../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
-import Button from "../../../CustomButton/Button";
-// import { useDispatch } from "react-redux";
-// import { addCard } from "../../../../redux/cards/operations";
+import { useEffect, useState } from "react";
+import { addImagesToCard, fetchProductCharacteristics } from "../../../../helpers/api";
+import { createCard, updateCard } from "../../../../redux/cards/operations";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { schemaAdminProducts } from "../../../../helpers/schemes";
 
-const CreateProduct = ({productId}) => {
-  // const dispatch = useDispatch();
+const CreateProduct = ({product, setEditProduct}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [characteristics, setCharacteristics] = useState({
+    age : [],
+    brand : [],
+    category : [],
+    color : [],
+    material : [],
+    prescription : [],
+    size : [],
+    weight : [],
+    notAvailable : [{id: true, name: 'Available'}, {id: false, name: 'Unavailable'}],
+  });
+
+  useEffect(() => {
+    async function loadCharacteristics() {
+      try {
+        const data = await toast.promise(fetchProductCharacteristics(), {
+          pending: "Fetching characteristics in progress",
+          error: "Characteristics were not loaded"
+        });
+        setCharacteristics(prevCharacteristics => ({
+          ...prevCharacteristics,
+          ...data,
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadCharacteristics();
+  }, []);
+
+  const formValue = (values) => {
+    const items = ["age", "brand", "color", "material", "category", "size", "weight"]
+
+    items.forEach((item) => {
+      if(values[item] && values[item].length !== 0) {
+        values[item] = {"id": parseInt(values[item])}
+      }
+      if(values.notAvailable && values.notAvailable.length !== 0) {
+        values.notAvailable === "false" ? values.notAvailable = false : values.notAvailable = true
+      }
+    })
+    return values
+  }
 
   const handleSubmit = async (values) => {
-    // dispatch(addCard(cardData));
-    console.log("Відправлено дані: ", values);
-  };
-
-  const initialValues = {
-    description: "",
-    age: "",
-    notAvailable: false,
-    brand: "",
-    category: null,
-    color: "",
-    contraindications: "",
-    instruction: "",
-    material: "",
-    name: "",
-    prescription: 0,
-    priceWithDiscount: null,
-    price: 0,
-    size: "",
-    undefined: "",
-    weight: "",
-    mainImage: null,
-    images: [],
+    const submitForm = formValue(values);
+  
+    if (product) {
+      try {
+        
+        const card = await toast.promise(dispatch(updateCard({ id: product.id, data: submitForm })), {
+          pending: "Request in progress",
+          success: "Product updated successfully",
+          error: "The product was not updated",
+        })
+        console.log(card);
+  
+        // await dispatch(addImagesToCard());
+      } catch (error) {
+        console.error(error);
+      } finally {
+        navigate(0)
+      }
+    } else {
+      try {
+        const card = await toast.promise(dispatch(createCard(submitForm)), {
+          pending: "Request in progress",
+          success: "Product created successfully!",
+          // error: "The product was not created",
+        })
+        console.log(card);
+        // await dispatch(addImagesToCard());
+      } catch (error) {
+        console.error(error);
+      } finally {
+        navigate(-1)
+      }
+    }
   };
 
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>
-        <p>Product information</p>
+        {product
+          ? (<p>Product information</p>)
+          : (<p>Create product</p>)
+        }
       </div>
 
       <DownloadImages />
       
       <Formik
-        initialValues={initialValues}
+        validationSchema={schemaAdminProducts}
+        initialValues={{
+          name: product?.name || "",
+          description: product?.description || undefined,
+          instruction: product?.instruction || undefined,
+          contraindications: product?.contraindications || undefined,
+          prescription: product?.prescription || undefined,
+          priceWithDiscount: product?.priceWithDiscount || undefined,
+          price: product?.price || 0,
+          age: product?.age?.id || undefined,
+          brand: product?.brand?.id || undefined,
+          category: product?.category?.id || undefined,
+          color: product?.color?.id || undefined,
+          material: product?.material?.id || undefined,
+          size: product?.size?.id || undefined,
+          weight: product?.weight?.id || undefined,
+          notAvailable: product?.notAvailable.id || false,
+          mainImage: product?.mainImage || undefined,
+          newArrival: product?.newArrival || true
+        }}
         onSubmit={handleSubmit}
       >
-        {() => (
+        {({ values, setFieldValue }) => (
         <Form className={css.form}>
           <h3>Product information</h3>
           <h4>Basic information</h4>
           <div className={css.product}>
-            {productInformation.map(field => {
-              return <FormikField key={`product_${field.name}`} {...field} />
-            })}
+            {productInformation.map(field => (
+              <div key={`product_${field.name}`}>
+                <FormikField 
+                  key={`product_${field.name}`} 
+                  {...field} 
+                  optionList={field.type === "select" && characteristics ? characteristics[field.name] : null}
+                  values={values}
+                  setFieldValue={setFieldValue}
+                />
+              </div>
+            ))}
           </div>
-          <h4>Additionsl information</h4>
+          <h4>Additions information</h4>
           <div className={css.additions}>
             {additionalInformation.map(field => {
               return <FormikField key={`additional_${field.name}`} {...field} />
             })}
           </div>
           <div className={css.buttons}>
-            <Button buttonSize={'padding'} text="Confirm" onClickHandler={handleSubmit}  />
-            <Button buttonSize={'cancel'} text="Cancel" onClickHandler={handleSubmit} />
+            <button type="submit" >Confirm</button> 
+            <button type="cancel" onClick={() => { navigate('/admin/products/'); setEditProduct(null); }} >Cancel</button>
           </div>
         </Form>
         )}
