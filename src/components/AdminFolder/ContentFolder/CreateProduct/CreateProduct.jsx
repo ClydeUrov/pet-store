@@ -8,14 +8,16 @@ import { addImagesToCard, fetchProductCharacteristics } from "../../../../helper
 import { createCard, updateCard } from "../../../../redux/cards/operations";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { schemaAdminProducts } from "../../../../helpers/schemes";
 
-const CreateProduct = ({product}) => {
+const CreateProduct = ({product, setEditProduct}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [characteristics, setCharacteristics] = useState({
-    age : [{ id: 2, name: '4-6' }, { id: 3, name: '6-9' }],
-    brand : [{ id: 1, name: 'Brandddd' },],
+    age : [],
+    brand : [],
     category : [],
     color : [],
     material : [],
@@ -28,7 +30,10 @@ const CreateProduct = ({product}) => {
   useEffect(() => {
     async function loadCharacteristics() {
       try {
-        const data = await fetchProductCharacteristics();
+        const data = await toast.promise(fetchProductCharacteristics(), {
+          pending: "Fetching characteristics in progress",
+          error: "Characteristics were not loaded"
+        });
         setCharacteristics(prevCharacteristics => ({
           ...prevCharacteristics,
           ...data,
@@ -41,14 +46,11 @@ const CreateProduct = ({product}) => {
     loadCharacteristics();
   }, []);
 
-  // console.log(characteristics);
-
   const formValue = (values) => {
     const items = ["age", "brand", "color", "material", "category", "size", "weight"]
 
     items.forEach((item) => {
       if(values[item] && values[item].length !== 0) {
-        // console.log("item", values[item]);
         values[item] = {"id": parseInt(values[item])}
       }
       if(values.notAvailable && values.notAvailable.length !== 0) {
@@ -59,40 +61,39 @@ const CreateProduct = ({product}) => {
   }
 
   const handleSubmit = async (values) => {
-    console.log(values);
     const submitForm = formValue(values);
   
     if (product) {
       try {
-        const card = await dispatch(updateCard({ id: product.id, data: submitForm }));
+        
+        const card = await toast.promise(dispatch(updateCard({ id: product.id, data: submitForm })), {
+          pending: "Request in progress",
+          success: "Product updated successfully",
+          error: "The product was not updated",
+        })
         console.log(card);
   
-        await dispatch(addImagesToCard());
+        // await dispatch(addImagesToCard());
       } catch (error) {
         console.error(error);
       } finally {
-        navigate(-1)
+        navigate(0)
       }
     } else {
-
       try {
-        const card = await dispatch(createCard(submitForm));
+        const card = await toast.promise(dispatch(createCard(submitForm)), {
+          pending: "Request in progress",
+          success: "Product created successfully!",
+          // error: "The product was not created",
+        })
         console.log(card);
-
-        await dispatch(addImagesToCard());
+        // await dispatch(addImagesToCard());
       } catch (error) {
         console.error(error);
       } finally {
         navigate(-1)
       }
     }
-  };
-
-  const prod = {
-    name: "My name",
-    age: { id: 2, name: '4-6' },
-    notAvailable: { id: true, name: 'Available' },
-    brand: { id: 1, name: 'Brandddd' }
   };
 
   return (
@@ -107,22 +108,23 @@ const CreateProduct = ({product}) => {
       <DownloadImages />
       
       <Formik
+        validationSchema={schemaAdminProducts}
         initialValues={{
-          name: prod?.name || "",
-          description: product?.description || "descriptionS",
+          name: product?.name || "",
+          description: product?.description || undefined,
           instruction: product?.instruction || undefined,
           contraindications: product?.contraindications || undefined,
           prescription: product?.prescription || undefined,
           priceWithDiscount: product?.priceWithDiscount || undefined,
           price: product?.price || 0,
-          age: prod?.age.id || undefined,
-          brand: product?.brand.id || undefined,
-          category: product?.category.id || undefined,
-          color: product?.color.id || undefined,
-          material: product?.material.id || undefined,
-          size: product?.size.id || undefined,
-          weight: product?.weight.id || undefined,
-          notAvailable: prod?.notAvailable.id || false,
+          age: product?.age?.id || undefined,
+          brand: product?.brand?.id || undefined,
+          category: product?.category?.id || undefined,
+          color: product?.color?.id || undefined,
+          material: product?.material?.id || undefined,
+          size: product?.size?.id || undefined,
+          weight: product?.weight?.id || undefined,
+          notAvailable: product?.notAvailable.id || false,
           mainImage: product?.mainImage || undefined,
           newArrival: product?.newArrival || true
         }}
@@ -153,7 +155,7 @@ const CreateProduct = ({product}) => {
           </div>
           <div className={css.buttons}>
             <button type="submit" >Confirm</button> 
-            <button type="cancel" onClick={() => navigate(-1)} >Cancel</button>
+            <button type="cancel" onClick={() => { navigate('/admin/products/'); setEditProduct(null); }} >Cancel</button>
           </div>
         </Form>
         )}

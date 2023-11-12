@@ -118,3 +118,44 @@ export const schemaUserShippingInfo = yup.object().shape({
     .matches(/^[1-9]\d*([,.]\d+)?$/, "Flat Number must be a number!")
     .max(120, "Maximum 12 digits!"),
 });
+
+export const schemaAdminProducts = yup.object().shape({
+  name: yup
+    .string()
+    .min(2, "Minimum 2 characters!")
+    .max(24, "Maximum 24 characters!")
+    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-']+$/, "Can only contain letters!")
+    .required("Required field!"),
+  price: yup
+    .number()
+    .positive("Price must be a positive number")
+    .test('is-positive', 'Price must be greater than zero', (value) => value > 0)
+    .required("Required field!"),
+  priceWithDiscount: yup
+    .number()
+    .positive("Price must be a positive number"),
+  category: yup
+    .string()
+    .required("Required field!"),
+  brand: yup.string(),
+
+  material: yup.string(),
+
+  color: yup.string(),
+
+  age: yup.string(),
+
+  size: yup.string(),
+
+  weight: yup.string(),
+
+  notAvailable: yup.string(),
+
+  prescription: yup.string(),
+
+  contraindication: yup.string(),
+
+  description: yup.string(),
+
+  instruction: yup.string(),
+});

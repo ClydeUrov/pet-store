@@ -120,7 +120,6 @@ export const UserShippingInfo = () => {
               label="Flat Number (Optional)"
               width="100%"
               disabled={disabled}
-              required
             />
 
             {disabled ? (

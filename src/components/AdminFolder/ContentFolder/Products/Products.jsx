@@ -10,27 +10,32 @@ import { Sort } from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import CreateProduct from "../CreateProduct/CreateProduct";
+import { toast } from "react-toastify";
 
-const ProductCards = ({ allCards, setPage, dispatch, setEditProduct }) => {
+const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
 
   const handleDelete = async (itemId) => {
-    console.log("delete", itemId);
-    const hasConfirmed = window.confirm("Are you sure you want to remove this product?");
-
-    if(hasConfirmed) {
-      try {
-        await dispatch(deleteCard(itemId)).catch((error) => {
+    try {
+      await toast.promise(dispatch(deleteCard(itemId))
+        .catch((error) => {
           console.error("Error fetching data:", error);
-        });
-        console.log("deleted");
-      } catch (error) {
-        console.log(error);
-      }
+        }), {
+          pending: "Promise is pending",
+          success: "Product removed successfully",
+          error: "The product was not deleted",
+        }
+      )
+
+      setPrevLength(allCards.content.length - 1);
+
+    } catch (error) {
+      console.log(error);
     }
+    
   }
 
   return (
-    <section>
+    <div style={{width:"100%"}}>
       <Sort />
       <div className={css.columnHeaders}>
         <p>Image</p>
@@ -53,8 +58,8 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct }) => {
           }
         >
           <div className={css.picture}>
-            {item.images && item.images.length > 0 && (
-              <img src={item.images[0].filePath} alt="" />
+            {item.mainImage && (
+              <img src={item.mainImage.filePath} alt="" />
             )}
           </div>
           <div>{item.name}</div>
@@ -77,7 +82,7 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct }) => {
         pageSize={allCards.size}
         onPageChange={(page) => setPage(page)}
       />
-    </section>
+    </div>
   );
 };
 
@@ -87,20 +92,27 @@ const Products = () => {
   const isLoading = useSelector(({ cards }) => cards.isLoading);
   const [page, setPage] = useState(1);
   const [editProduct, setEditProduct] = useState(null);
+  const [prevLength, setPrevLength] = useState(0);
 
   useEffect(() => {
-    if (
-      !allCards || !allCards.content || page !== allCards.pageable.pageNumber + 1
-    ) {
-      dispatch(getAllCards(page)).catch((error) => {
+    const fetchData = async () => {
+      try {
+        await dispatch(getAllCards(page));
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
+      } finally {
+        setPrevLength(allCards?.content?.length);
+      }
+    };
+
+    if (!allCards || allCards?.content?.length === 0 || page !== (allCards.pageable?.pageNumber + 1) || prevLength !== allCards?.content?.length) {
+      fetchData();
     }
-  }, [dispatch, allCards, page]);
+  }, [allCards, page, prevLength, dispatch]);
 
   if(editProduct)
     return (
-      <CreateProduct product={editProduct} />
+      <CreateProduct product={editProduct} setEditProduct={setEditProduct}/>
     )
   else
     return (
@@ -116,10 +128,10 @@ const Products = () => {
         </div>
         {isLoading ? (
           <Loader />
-        ) : !allCards || allCards.content || allCards.length === 0 ? (
+        ) : !allCards.content ? (
           <div className={css.firstLine}>No data available.</div>
         ) : (
-          <ProductCards allCards={allCards} setPage={setPage} dispatch={dispatch} setEditProduct={setEditProduct}/>
+          <ProductCards allCards={allCards} setPage={setPage} dispatch={dispatch} setEditProduct={setEditProduct} setPrevLength={setPrevLength}/>
         )}
       </div>
     );

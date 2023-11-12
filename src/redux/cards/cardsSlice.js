@@ -128,7 +128,10 @@ const cardsSlice = createSlice({
       .addCase(deleteCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.items = state.items.filter(item => item.id !== action.meta.arg);
+        if (state.items[action.meta.arg]) {
+          delete state.items[action.meta.arg];
+          console.log("deleteddd", state.items[action.meta.arg])
+        }
       })
       .addCase(getOnSale.fulfilled, (state, action) => {
         state.isLoading = false;

@@ -24,7 +24,7 @@ const UserPage = () => {
     { href: '/user/account', text: 'My account' },
     { href: 'info', text: 'Personal information' },
     { href: 'orders', text: 'My orders' },
-    { href: 'reviews', text: 'My Reviews' },
+    { href: 'reviews', text: 'My reviews' },
   ];
 
   return (

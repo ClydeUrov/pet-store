@@ -10,9 +10,6 @@ const FormikField = (props) => {
   const toggleVisibility = () => {
     setPasswordShow((prevPasswordShow) => !prevPasswordShow);
   };
-  // if (touched) console.log(touched);
-  // if (name === "notAvailable") console.log("here", name);
-  // if(values && values[name]) console.log("val", name, values[name]);
 
   return (
     <div className={css.additions}>
@@ -65,7 +62,7 @@ const FormikField = (props) => {
               as="textarea"
               name={name}
               disabled={disabled}
-              style={{ width: width }}
+              style={{ width: width, resize: "vertical" }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
               required={required ? "required" : undefined}
             />

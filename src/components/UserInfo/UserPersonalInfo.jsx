@@ -22,7 +22,7 @@ const initialValues = {
 
 export const UserPersonalInfo = () => {
   const [disabled, setDisabled] = useState(true);
-  const [disabledBtn, setDisabledBtn] = useState(true);
+  const [disabledBtn, setDisabledBtn] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
 
   const toggleDisabled = () => {
@@ -78,7 +78,7 @@ export const UserPersonalInfo = () => {
               type="text"
               label="Name"
               width="100%"
-              value={props.values.name}
+              // value={props.values.name}
               disabled={disabled}
               onClick={handleBtnEnable}
               onTogglePassword={togglePassword}
@@ -90,7 +90,7 @@ export const UserPersonalInfo = () => {
               type="text"
               label="Surname"
               width="100%"
-              value={props.values.surname}
+              // value={props.values.surname}
               disabled={disabled}
               onClick={handleBtnEnable}
               onTogglePassword={togglePassword}
@@ -102,7 +102,7 @@ export const UserPersonalInfo = () => {
               type="email"
               label="E-mail"
               width="100%"
-              value={props.values.email}
+              // value={props.values.email}
               disabled={disabled}
               onClick={handleBtnEnable}
               onTogglePassword={togglePassword}
@@ -114,24 +114,14 @@ export const UserPersonalInfo = () => {
               type="password"
               label="Password"
               width="100%"
-              value={props.values.password}
+              // value={props.values.password}
               disabled={disabled}
               onClick={handleBtnEnable}
               onTogglePassword={togglePassword}
               required
             />
 
-            <FormikField
-              name="confirm"
-              type="password"
-              label="Confirm password"
-              width="100%"
-              value={props.values.confirm}
-              disabled={disabled}
-              onClick={handleBtnEnable}
-              onTogglePassword={togglePassword}
-              required
-            />
+            
 
             {disabled ? (
               <button type="button" onClick={toggleDisabled} className={css.button}>
@@ -139,6 +129,18 @@ export const UserPersonalInfo = () => {
                 <GoPencil size={20} className={css.btn__icon} />
               </button>
             ) : (
+              <>
+              <FormikField
+                name="confirm"
+                type="password"
+                label="Confirm password"
+                width="100%"
+                // value={props.values.confirm}
+                disabled={disabled}
+                onClick={handleBtnEnable}
+                onTogglePassword={togglePassword}
+                required
+              />
               <ul className={css.list__btn}>
                 <li className={css.item__btn}>
                   <button type="submit" className={css.button} disabled={disabledBtn}>
@@ -151,6 +153,7 @@ export const UserPersonalInfo = () => {
                   </button>
                 </li>
               </ul>
+              </>
             )}
           </Form>
         )}}

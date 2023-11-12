@@ -1,30 +1,27 @@
-import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import css from './Modal.module.scss';
-import { RxCross1 } from 'react-icons/rx';
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
+import css from "./Modal.module.scss";
+import { RxCross1 } from "react-icons/rx";
 
-
-const modalRoot = document.querySelector('#modal-root');
+const modalRoot = document.querySelector("#modal-root");
 
 const Modal = ({ title, children, onClose }) => {
-
   //  const navigate = useNavigate();
 
-
   useEffect(() => {
-    const handleKeyDown = e => {
-      if (e.code === 'Escape') {
+    const handleKeyDown = (e) => {
+      if (e.code === "Escape") {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
 
-  const handleBackdropClick = event => {
+  const handleBackdropClick = (event) => {
     if (event.currentTarget === event.target) {
       onClose();
     }
@@ -43,27 +40,25 @@ const Modal = ({ title, children, onClose }) => {
     </div>,
     modalRoot
   );
-}
+};
 
 export default Modal;
 
-
 export const ModalFilter = ({ children, onClose }) => {
-
   useEffect(() => {
-    const handleKeyDown = e => {
-      if (e.code === 'Escape') {
+    const handleKeyDown = (e) => {
+      if (e.code === "Escape") {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
 
-  const handleBackdropClick = event => {
+  const handleBackdropClick = (event) => {
     if (event.currentTarget === event.target) {
       onClose();
     }
@@ -71,10 +66,7 @@ export const ModalFilter = ({ children, onClose }) => {
 
   return createPortal(
     <div className={css.overlay} onClick={handleBackdropClick}>
-
-
       {children}
-
     </div>,
     modalRoot
   );
