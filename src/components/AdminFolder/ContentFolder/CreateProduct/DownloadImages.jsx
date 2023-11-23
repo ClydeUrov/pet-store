@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import css from "./CreateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
 import { deleteImageFromCard } from "../../../../helpers/api";
@@ -33,8 +32,6 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
       setMainImage({ id: images[index].id, url: images[index].filePath });
     }
   }
-
-  console.log(images, mainImage);
 
   return (
     <>
