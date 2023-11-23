@@ -1,3 +1,5 @@
+@import "../../../variables.scss";
+
 .productContainer {
     display: flex;
     flex-direction: column;
@@ -11,4 +13,28 @@
     font-weight: 600;
     width: 100%;
     margin: 40px 0 20px 0;
+}
+
+.imageUploadArea {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: $left-background;
+    border-radius: 20px;
+
+    & > img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 20px;
+    }
+
+    & > svg {
+        text-align: center;
+        font-size: 32px;
+        color: #333;
+    }
 }

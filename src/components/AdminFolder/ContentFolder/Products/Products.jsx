@@ -11,31 +11,40 @@ import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import CreateProduct from "../CreateProduct/CreateProduct";
 import { toast } from "react-toastify";
+import Modal from "../../../Modal/Modal";
+import ConfirmDeletion from "./ConfirmDeletion";
 
 const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
-  const handleDelete = async (itemId) => {
+  const handleDelete = (itemId) => {
+    setDeleteItemId(itemId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDeletion = async () => {
     try {
-      await toast.promise(dispatch(deleteCard(itemId))
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        }), {
-          pending: "Promise is pending",
-          success: "Product removed successfully",
-          error: "The product was not deleted",
-        }
-      )
-
+      await toast.promise(
+        dispatch(deleteCard(deleteItemId)), 
+          {
+            pending: "Promise is pending",
+            error: "The product was not deleted",
+          }
+      );
       setPrevLength(allCards.content.length - 1);
-
+      setDeleteModalOpen(false);
     } catch (error) {
       console.log(error);
     }
-    
-  }
+  };
+
+  const handleCancelDeletion = () => {
+    setDeleteModalOpen(false);
+  };
 
   return (
-    <div style={{width:"100%"}}>
+    <div style={{width:"100%", marginBottom:"40px"}}>
       <Sort />
       <div className={css.columnHeaders}>
         <p>Image</p>
@@ -77,11 +86,19 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
       ))}
       <Pagination
         className="pagination-bar"
-        currentPage={allCards.pageable.pageNumber + 1}
+        currentPage={allCards.number + 1}
         totalCount={allCards.totalElements}
         pageSize={allCards.size}
         onPageChange={(page) => setPage(page)}
       />
+      {isDeleteModalOpen && (
+        <Modal title="Confirm Deletion" onClose={handleCancelDeletion}>
+          <ConfirmDeletion
+            onConfirm={handleConfirmDeletion}
+            onCancel={handleCancelDeletion}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

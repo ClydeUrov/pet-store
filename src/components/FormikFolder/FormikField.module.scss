@@ -47,3 +47,13 @@
 .iconPassword:focus{
   color: $focus-color;
 }
+
+.prescription {
+  display: flex;
+  justify-content: space-between;
+
+  & > span {
+    font-family:"system-ui"; 
+    font-size:"13px";
+  }
+}

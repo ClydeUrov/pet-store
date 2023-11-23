@@ -32,31 +32,26 @@ export const fetchImgFromOneCategory = async categoryId => {
     }
   };
 
-export const addImagesToCard = async (productId, data) => {
+export const addImagesToCard = async (productId, formData) => {
   try {
-    await axios.post(`/api/v1/products/${productId}/images`, data)
+    const response = await axios.post(`/api/v1/products/${productId}/images`, formData, {
+      headers: {"Content-Type": 'multipart/form-data'},
+    });
+    return response.data
   } catch (error) {
     console.error(error);
   }
 }
 
-// export const fetchProductsFromOneCategory = async categoryId => {
-//     try {
-//       const response = await axios.get(`api/v1/products?categoryId=${categoryId}`);
-//       return response.data;
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-// export const fetchAllProducts = async () => {
-//     try {
-//       const response = await axios.get(`api/v1/products`);
-//       return response.data;
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+export const deleteImageFromCard = async (productId, imageId) => {
+  console.log(11, productId, imageId);
+  try {
+    console.log(22);
+    await axios.delete(`/api/v1/products/${productId}/images/${imageId}`);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const fetchInnerCategoriesFromMainCategory = async categoryId => {
     try {
@@ -74,8 +69,16 @@ export const fetchIndicators = async indicator => {
     } catch (error) {
       console.error(error);
     }
-  };
+};
 
+export const deleteCategory = async (id) => {
+  return await axios
+    .delete(`/api/v1/product-categories/${id}`)
+    .then(response => response.data)
+    .catch(err => console.log(err));
+}
+
+// `api/v1/product-categories`
 // `api/v1/weights`
 // `api/v1/product-sizes`
 // `api/v1/prescriptions`

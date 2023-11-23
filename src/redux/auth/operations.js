@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-//axios.defaults.baseURL = 'https://online-zoo-store-backend-web-service.onrender.com/';
+axios.defaults.baseURL = 'https://online-zoo-store-backend-web-service.onrender.com/';
 
 // Utility to add JWT
 const setAuthHeader = token => {
@@ -82,10 +82,11 @@ export const refreshUser = createAsyncThunk(
     try {
       // If there is a token, add it to the HTTP header and perform the request
       setAuthHeader(persistedToken);
-      const res = await axios.get('/users/current');
+      const res = await axios.get('api/v1/users/current');
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+

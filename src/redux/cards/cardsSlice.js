@@ -25,7 +25,6 @@ const cardsSlice = createSlice({
     error: null,
   },
 
-
   reducers: {
     filterFavorites: (state, action) => {
       state.favorites = state.favorites.filter(favorite =>
@@ -91,7 +90,6 @@ const cardsSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-
       .addCase(addToFavorite.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
@@ -115,12 +113,12 @@ const cardsSlice = createSlice({
       .addCase(createCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.items.push(action.payload);
+        state.items.content.push(action.payload);
       })
       .addCase(updateCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const updatedCardIndex = state.items.findIndex(card => card.id === action.payload.id);
+        const updatedCardIndex = state.items.content.findIndex(card => card.id === action.payload.id);
         if (updatedCardIndex !== -1) {
           state.items[updatedCardIndex] = action.payload; // Update the card in the items array
         }
@@ -130,7 +128,6 @@ const cardsSlice = createSlice({
         state.error = null;
         if (state.items[action.meta.arg]) {
           delete state.items[action.meta.arg];
-          console.log("deleteddd", state.items[action.meta.arg])
         }
       })
       .addCase(getOnSale.fulfilled, (state, action) => {

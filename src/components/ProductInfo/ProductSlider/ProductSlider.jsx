@@ -25,7 +25,7 @@ export const ProductSlider = ({ items }) => {
         modules={[FreeMode, Navigation, Thumbs]}
         className={css.swiper_thumb}
       >
-        {images.map((item) => {
+        {images?.map((item) => {
           return (
             <SwiperSlide className={css.swiper_slide}>
               <div className={css.swiper_thumb_img_cover}>
@@ -57,7 +57,7 @@ export const ProductSlider = ({ items }) => {
           modules={[FreeMode, Navigation, Thumbs]}
           className={css.swiper_product}
         >
-          {images.map((item) => {
+          {images?.map((item) => {
             return (
               <SwiperSlide className={css.swiper_slide}>
                 <div className={css.swiper_product_img_cover}>

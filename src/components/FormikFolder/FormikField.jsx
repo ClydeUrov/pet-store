@@ -1,4 +1,4 @@
-import { ErrorMessage, Field} from "formik";
+import { ErrorMessage, Field, FieldArray} from "formik";
 import css from './FormikField.module.scss';
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { SaleCheckbox } from "../SaleCheckbox/SaleCheckbox";
@@ -7,9 +7,19 @@ import { useState } from "react";
 const FormikField = (props) => {
   const {name, type, value, disabled, width, touched, errors, required, label, optionList, values, setFieldValue} = props;
   const [passwordShow, setPasswordShow] = useState(false);
+
   const toggleVisibility = () => {
     setPasswordShow((prevPasswordShow) => !prevPasswordShow);
   };
+
+  const handleCheckbox = (isChecked) => {
+    setFieldValue('newArrival', isChecked);
+  }
+
+  // if (name === "notAvailable" && values[name]) {
+  //   console.log("values", values);
+  //   values[name] = { id:  values[name] === true ? 1 : 2 };
+  // }
 
   return (
     <div className={css.additions}>
@@ -24,16 +34,22 @@ const FormikField = (props) => {
               name={name}
               disabled={disabled}
               style={{ width: width }}
-              onChange={(e) => setFieldValue(name, e.target.value)}
+              onChange={(e) => {
+                const selectedId = parseInt(e.target.value, 10);
+                if (!isNaN(selectedId)) {
+                  const selected = optionList.find((item) => item.id === selectedId);
+                  setFieldValue(name, selected);
+                }
+              }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
-              // value={values[name]?.id || ""}
+              value={values[name]?.id || ""}
             > 
               <option value={undefined}></option>
               {optionList?.map((item) => (
                 <option
                   key={item.id}
                   value={item.id}
-                  defaultValue={values[name] && values[name].id === item.id}
+                  // defaultValue={values[name] && values[name].id === item.id}
                 >
                   {item.name}
                 </option>
@@ -41,10 +57,13 @@ const FormikField = (props) => {
             </Field>
             <ErrorMessage name={name} component="p" className={css.error} />
           </div>
-        ) :
-        type === "checkout" ? (
+        
+        ) : type === "checkout" ? (
           <div>
-            <SaleCheckbox />
+            <label className={css.label}>
+              {label}
+            </label>
+            <SaleCheckbox onChange={handleCheckbox} checked={values.newArrival}/>
           </div>
         ) : type === "unstyled" ? (
           <div>

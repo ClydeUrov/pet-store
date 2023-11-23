@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 import {
@@ -14,6 +14,7 @@ import {
 import { authReducer } from "./auth/authSlise";
 import { cardsReducer } from "./cards/cardsSlice";
 import storage from "redux-persist/lib/storage";
+import { usersReducer } from "./user/usersSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -21,14 +22,15 @@ const authPersistConfig = {
   whitelist: ["token"],
 };
 
+const rootReducer = combineReducers({
+  auth: persistReducer(authPersistConfig, authReducer),
+  users: usersReducer,
+  cards: cardsReducer,
+
+});
+
 export const store = configureStore({
-  reducer: {
-    user: persistReducer(authPersistConfig, authReducer),
-    // user: authReducer,
-    cards: cardsReducer,
-    // favourites: favouritesReducer,
-    // cardsInCart: cartReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -36,6 +38,22 @@ export const store = configureStore({
       },
     }),
 });
+
+// export const store = configureStore({
+//   reducer: {
+//     auth: persistReducer(authPersistConfig, authReducer),
+//     // user: authReducer,
+//     cards: cardsReducer,
+//     // favourites: favouritesReducer,
+//     // cardsInCart: cartReducer,
+//   },
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//       },
+//     }),
+// });
 
 export const persistor = persistStore(store);
 

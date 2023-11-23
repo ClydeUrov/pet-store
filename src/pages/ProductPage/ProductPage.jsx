@@ -77,9 +77,7 @@ const ProductPage = () => {
 
         <div className={css.product_info}>
 
-
           <ProductSlider items={product} />
-
 
           <div className={css.product_text}>
             {product.notAvailable ? (
@@ -140,9 +138,9 @@ const ProductPage = () => {
             ))}
           </ul>
 
-          <Suspense fallback={<Loader />}>
+          {/* <Suspense fallback={<Loader />}>
             <Outlet />
-          </Suspense>
+          </Suspense> */}
         </div>
 
         <h2 className={css.subtitle}>On Sale</h2>
