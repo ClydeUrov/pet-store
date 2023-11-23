@@ -1,28 +1,27 @@
 import css from "./SaleCheckbox.module.scss";
-import { useState } from "react";
 
-export const SaleCheckbox = () => {
-  const [checkbox, setCheckbox] = useState(false);
+export const SaleCheckbox = ({title, onChange, checked}) => {
 
   const toggleCheckbox = () => {
-    setCheckbox(!checkbox);
+    onChange(!checked);
   };
 
   return (
     <>
       <label htmlFor="sale" className={css.checkbox_label}>
-        <span className={css.checkbox_title}>On sale </span>
+        {title ? <span className={css.checkbox_title}>{title}</span> : null}
 
         <input
           className={css.checkbox_input}
           type="checkbox"
           name="sale"
           id="sale"
-          onClick={toggleCheckbox}
+          onChange={toggleCheckbox}
+          checked={checked}
         />
 
         <div className={css.checkbox_field}>
-          {!checkbox ? (
+          {!checked ? (
             <span className={css.checkbox_toggle}></span>
           ) : (
             <span className={css.checkbox_toggle_false}></span>

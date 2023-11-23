@@ -7,6 +7,12 @@ export const productInformation = [
     required: true,
   },
   {
+    name: "newArrival",
+    label: "New arrivals",
+    type: "checkout",
+    width: '100px',
+  },
+  {
     name: "category",
     type: "select",
     label: "Category",
@@ -77,23 +83,20 @@ export const productInformation = [
     required: false,
   },
   {
-    type: "checkout",
+    name: "prescription",
+    type: "select",
+    label: "Prescription",
+    width: "276px",
+    required: false,
   },
 ];
 
 export const additionalInformation = [
   {
-    name: "prescription",
-    type: "textarea",
-    label: "Prescription",
-    width: "276px",
-    required: false,
-  },
-  {
-    name: "contraindication",
+    name: "contraindications",
     type: "textarea",
     label: "Contraindications",
-    width: "276px",
+    width: "569px",
     required: false,
   },
   {
@@ -104,7 +107,7 @@ export const additionalInformation = [
     required: false,
   },
   {
-    name: "instruction",
+    name: "instructions",
     type: "textarea",
     label: "Instruction",
     width: "569px",

@@ -15,6 +15,9 @@ const CreateProduct = ({product, setEditProduct}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [mainImage, setMainImage] = useState(product?.mainImage ? { url: product.mainImage.filePath } : null);
+  const [images, setImages] = useState(product?.images || []);
+
   const [characteristics, setCharacteristics] = useState({
     age : [],
     brand : [],
@@ -24,7 +27,7 @@ const CreateProduct = ({product, setEditProduct}) => {
     prescription : [],
     size : [],
     weight : [],
-    notAvailable : [{id: true, name: 'Available'}, {id: false, name: 'Unavailable'}],
+    notAvailable : [{id: 1, name: 'Available'}, {id: 2, name: 'Unavailable'}],
   });
 
   useEffect(() => {
@@ -46,48 +49,93 @@ const CreateProduct = ({product, setEditProduct}) => {
     loadCharacteristics();
   }, []);
 
-  const formValue = (values) => {
-    const items = ["age", "brand", "color", "material", "category", "size", "weight"]
-
-    items.forEach((item) => {
-      if(values[item] && values[item].length !== 0) {
-        values[item] = {"id": parseInt(values[item])}
-      }
-      if(values.notAvailable && values.notAvailable.length !== 0) {
-        values.notAvailable === "false" ? values.notAvailable = false : values.notAvailable = true
-      }
-    })
-    return values
-  }
-
   const handleSubmit = async (values) => {
-    const submitForm = formValue(values);
+    if(values.notAvailable) {
+      values.notAvailable = values.notAvailable.id === 1 ? true : false
+    }
+    if(values.size) {
+      values.productSize = values.size
+    }
   
     if (product) {
       try {
+        let card
+        if(mainImage && mainImage.id >= 0) {
+          const updatedPayload = {
+            ...product,
+            mainImage: {id: mainImage.id}
+          };
+          card = await toast.promise(dispatch(updateCard({ id: product.id, data: updatedPayload })), {
+            pending: "Request in progress",
+            success: "Product updated successfully",
+            error: "The product was not updated",
+          })
+        } else {
+          card = await toast.promise(dispatch(updateCard({ id: product.id, data: values })), {
+            pending: "Request in progress",
+            success: "Product updated successfully",
+            error: "The product was not updated",
+          })
+        }
         
-        const card = await toast.promise(dispatch(updateCard({ id: product.id, data: submitForm })), {
-          pending: "Request in progress",
-          success: "Product updated successfully",
-          error: "The product was not updated",
-        })
-        console.log(card);
-  
-        // await dispatch(addImagesToCard());
+        if (images && images.length > 0 && images.some(element => element instanceof File)) {
+          const formData = new FormData();
+          images.forEach(element => {
+            if (element !== undefined && element instanceof File) {
+              formData.append("images", element);
+            }
+          });
+          const newImages = await addImagesToCard(product.id, formData);
+          
+          if(mainImage && mainImage.index >= 0){
+            const updatedPayload = {
+              ...card.payload,
+              images: [...newImages],
+              mainImage: newImages[mainImage.index]
+            };
+            dispatch(updateCard({ id: product.id, data: updatedPayload }))
+          }
+        }
       } catch (error) {
         console.error(error);
       } finally {
         navigate(0)
       }
     } else {
+      console.log("here in create")
       try {
-        const card = await toast.promise(dispatch(createCard(submitForm)), {
+        const card = await toast.promise(dispatch(createCard(values)), {
           pending: "Request in progress",
           success: "Product created successfully!",
           // error: "The product was not created",
         })
-        console.log(card);
-        // await dispatch(addImagesToCard());
+
+        if (images && images.length > 0) {
+          const formData = new FormData();
+          images.forEach(element => {
+            if (element !== undefined) {
+              formData.append("images", element);
+            }
+          });
+          const newImages = await addImagesToCard(card.payload.id, formData);
+          if(mainImage && mainImage.index >= 0){
+            const updatedPayload = {
+              ...card.payload,
+              images: newImages,
+              mainImage: newImages[mainImage.index]
+            };
+            dispatch(updateCard({ id: card.payload.id, data: updatedPayload }))
+          }
+          if(mainImage && mainImage.id >= 0) {
+            console.log(mainImage.id)
+            const updatedPayload = {
+              ...card.payload,
+              mainImage: card.payload.images.find(image => image.id === mainImage.id),
+              images: newImages,
+            };
+            dispatch(updateCard({ id: card.payload.id, data: updatedPayload }))
+          }
+        }
       } catch (error) {
         console.error(error);
       } finally {
@@ -95,6 +143,8 @@ const CreateProduct = ({product, setEditProduct}) => {
       }
     }
   };
+
+  if (product) console.log(product)
 
   return (
     <div className={css.productContainer}>
@@ -105,26 +155,28 @@ const CreateProduct = ({product, setEditProduct}) => {
         }
       </div>
 
-      <DownloadImages />
+      <DownloadImages 
+        images={images} setImages={setImages} productId={product?.id} mainImage={mainImage} setMainImage={setMainImage} 
+      />
       
       <Formik
         validationSchema={schemaAdminProducts}
         initialValues={{
           name: product?.name || "",
           description: product?.description || undefined,
-          instruction: product?.instruction || undefined,
+          instructions: product?.instructions || undefined,
           contraindications: product?.contraindications || undefined,
           prescription: product?.prescription || undefined,
           priceWithDiscount: product?.priceWithDiscount || undefined,
           price: product?.price || 0,
-          age: product?.age?.id || undefined,
-          brand: product?.brand?.id || undefined,
-          category: product?.category?.id || undefined,
-          color: product?.color?.id || undefined,
-          material: product?.material?.id || undefined,
-          size: product?.size?.id || undefined,
-          weight: product?.weight?.id || undefined,
-          notAvailable: product?.notAvailable.id || false,
+          age: product?.age || undefined,
+          brand: product?.brand || undefined,
+          category: product?.category || undefined,
+          color: product?.color || undefined,
+          material: product?.material || undefined,
+          size: product?.productSize || undefined,
+          weight: product?.weight || undefined,
+          notAvailable: { id: product?.notAvailable === true ? 1 : 2 } || undefined,
           mainImage: product?.mainImage || undefined,
           newArrival: product?.newArrival || true
         }}
@@ -136,26 +188,30 @@ const CreateProduct = ({product, setEditProduct}) => {
           <h4>Basic information</h4>
           <div className={css.product}>
             {productInformation.map(field => (
-              <div key={`product_${field.name}`}>
-                <FormikField 
-                  key={`product_${field.name}`} 
-                  {...field} 
-                  optionList={field.type === "select" && characteristics ? characteristics[field.name] : null}
-                  values={values}
-                  setFieldValue={setFieldValue}
-                />
-              </div>
+              <FormikField 
+                key={`product_${field.name}`} 
+                {...field} 
+                optionList={field.type === "select" && characteristics ? characteristics[field.name] : null}
+                values={values}
+                setFieldValue={setFieldValue}
+              />
             ))}
           </div>
           <h4>Additions information</h4>
           <div className={css.additions}>
-            {additionalInformation.map(field => {
-              return <FormikField key={`additional_${field.name}`} {...field} />
+            {additionalInformation.map((field) => {
+              return <FormikField
+                key={`additional_${field.name}`}
+                {...field}
+                optionList={field.type === "select" && characteristics ? characteristics[field.name] : null}
+                values={values}
+                setFieldValue={setFieldValue}
+              />
             })}
           </div>
           <div className={css.buttons}>
-            <button type="submit" >Confirm</button> 
-            <button type="cancel" onClick={() => { navigate('/admin/products/'); setEditProduct(null); }} >Cancel</button>
+            {product ? <button type="submit" >Update</button> : <button type="submit" >Confirm</button>} 
+            <button type="button" onClick={() => { navigate('/admin/products/'); product && setEditProduct(null); }} >Cancel</button>
           </div>
         </Form>
         )}

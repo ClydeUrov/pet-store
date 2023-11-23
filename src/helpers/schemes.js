@@ -124,34 +124,34 @@ export const schemaAdminProducts = yup.object().shape({
     .string()
     .min(2, "Minimum 2 characters!")
     .max(24, "Maximum 24 characters!")
-    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-']+$/, "Can only contain letters!")
+    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-.'",!@#$%^&*()_+=]+$/, "Can only contain letters!")
     .required("Required field!"),
   price: yup
     .number()
-    .positive("Price must be a positive number")
+    .positive("Price must be greater than zero")
     .test('is-positive', 'Price must be greater than zero', (value) => value > 0)
     .required("Required field!"),
   priceWithDiscount: yup
     .number()
-    .positive("Price must be a positive number"),
+    .positive("Price must be greater than zero"),
   category: yup
-    .string()
+    .object()
     .required("Required field!"),
-  brand: yup.string(),
+  brand: yup.object(),
 
-  material: yup.string(),
+  material: yup.object(),
 
-  color: yup.string(),
+  color: yup.object(),
 
-  age: yup.string(),
+  age: yup.object(),
 
-  size: yup.string(),
+  size: yup.object(),
 
-  weight: yup.string(),
+  weight: yup.object(),
 
-  notAvailable: yup.string(),
+  notAvailable: yup.mixed(),
 
-  prescription: yup.string(),
+  prescription: yup.object(),
 
   contraindication: yup.string(),
 

@@ -17,6 +17,7 @@ const Catalog = () => {
   const dispatch = useDispatch();
 
   const { totalElements } = useSelector(selectCards);
+  const [isOnSale, setIsOnSale] = useState(false);
 
   // const isLoading = useSelector(selectIsLoading);
   // const error = useSelector(selectError);
@@ -40,6 +41,7 @@ const Catalog = () => {
   const [materials, setMaterials] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
+
 
 
   useEffect(() => {
@@ -145,7 +147,7 @@ const Catalog = () => {
         <h2 className={css.title}>for {category}</h2>
         <div className={css.sort_part}>
           {totalElements ? (<p className={css.sort_quantity}>{totalElements} Products found</p>) : (<p className={css.sort_quantity}></p>)}
-          <SaleCheckbox />
+          <SaleCheckbox title="On sale" onChange={(isChecked) => setIsOnSale(isChecked)} checked={isOnSale} />
           <Sort onClose={toggleOpen} isOpen={isOpen} />
         </div>
         <div className={css.box}>

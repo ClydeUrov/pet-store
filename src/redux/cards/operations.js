@@ -11,6 +11,7 @@ const dataAction = async (url, options, thunkAPI) => {
     });
     return response.data;
   } catch (error) {
+    console.log(error);
     return thunkAPI.rejectWithValue(error.message);
   }
 };

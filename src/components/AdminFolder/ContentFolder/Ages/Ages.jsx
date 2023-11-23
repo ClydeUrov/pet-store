@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { fetchIndicators } from "../../../../helpers/api";
-import css from './Colors.module.scss';
+import css from './Ages.module.scss';
 import { MdOutlineEdit } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 
-const Colors = () => {
-  const [colors, setColors] = useState([]);
+const Ages = () => {
+  const [ages, setAges] = useState([]);
 
   useEffect(() => {
-    fetchIndicators('colors')
-      .then(setColors)
+    fetchIndicators('ages')
+      .then(setAges)
       .catch(error => {
         console.log('Error', error);
       })
@@ -21,18 +21,18 @@ const Colors = () => {
   const handleDelete = () => {
   }
 
-  console.log(colors);
+  console.log(ages);
 
   return (
     <div className={css.items}>
       <div className={css.firstLine}>
-        <p>Colors</p>
+        <p>Ages</p>
       </div>
       <div className={css.columnHeaders}>
         <p>Name</p>
       </div>
       <div>
-        {colors?.map(item => {
+        {ages?.map(item => {
           return (
             <div className={css.row}> 
               <p>{item.name}</p> 
@@ -48,4 +48,4 @@ const Colors = () => {
   );
 };
 
-export default Colors;
+export default Ages;

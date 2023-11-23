@@ -24,7 +24,7 @@ export const SliderOfCards = ({ items }) => {
           modules={[Navigation]}
           className={css.swiper}
         >
-          {items.map((item) => {
+          {items?.map((item) => {
             return (
               <SwiperSlide key={item.id} className={css.swiper_slide}>
                 <Card item={item} />

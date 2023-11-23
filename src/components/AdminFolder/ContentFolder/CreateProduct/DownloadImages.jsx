@@ -1,105 +1,97 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import css from "./CreateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
+import { deleteImageFromCard } from "../../../../helpers/api";
 
-const ImageUploader = ({ id, onImageChange, action }) => {
-  const fileInputRef = useRef(null);
-  const [image, setImage] = useState(null);
+const DownloadImages = ({images, setImages, productId, mainImage, setMainImage}) => {
 
-  const handleImageDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      readAndSetImage(file);
-    }
-  };
-
-  const handleImageClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const readAndSetImage = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImage(e.target.result);
-      onImageChange(e.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      readAndSetImage(file);
-    }
-  };
-
-  const handleDeleteClick = (e) => {
-    e.stopPropagation();
-    setImage(null);
-    onImageChange(null);
-  };
-
-  return (
-    <div className={css.imageUploadWindow}>
-      
-      <div
-        className={css.imageUploadArea}
-        onDrop={handleImageDrop}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={handleImageClick}
-      >
-        {action === "main" ? <div className={css.main}>Main</div> : null}
-        {image ? <img src={image} alt="Uploaded" /> : <AiOutlineDownload />}
-        {action === "delete" ? 
-          <div className={css.delete} onClick={handleDeleteClick}>
-            <AiOutlineDelete />
-          </div> : null}
-      </div>
-      <input
-        ref={fileInputRef}
-        id={id}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
-    </div>
-  );
-};
-
-const DownloadImages = () => {
-  const [mainImage, setMainImage] = useState(null);
-  const [images, setImages] = useState(Array(6).fill(null));
-
-  const handleMainImageChange = (newImage) => {
-    setMainImage(newImage);
-  };
-
-  const handleImageChange = (index, newImage) => {
+  const handleImageChange = (e, index) => {
     const newImages = [...images];
-    newImages[index] = newImage;
+    newImages[index] = e.target.files[0];
     setImages(newImages);
   };
+
+  const handleImageDrop = (e, index) => {
+    e.preventDefault();
+    const newImages = [...images];
+    newImages[index] = e.dataTransfer.files[0];
+    setImages(newImages);
+  };
+
+  const handleDeleteClick = (index) => {
+    if(productId && !(images[index] instanceof File)) deleteImageFromCard(productId, images[index].id)
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
+  const handleMainImage = (e, index) => {
+    console.log(e, images[index], index)
+    if (images[index] instanceof File) {
+      setMainImage({ index, url: URL.createObjectURL(images[index]) });
+    } else {
+      setMainImage({ id: images[index].id, url: images[index].filePath });
+    }
+  }
+
+  console.log(images, mainImage);
 
   return (
     <>
       <h3>Product photo</h3>
-      <section className={css.firstSection}>
-        <ImageUploader id={mainImage} onImageChange={handleMainImageChange} action="main" />
-        {Array.from({ length: 6 }, (_, index) => (
-          <ImageUploader
-            key={index}
-            id={`image${index}`}
-            onImageChange={(newImage) => handleImageChange(index, newImage)}
-            action="delete"
-          />
+      <div className={css.imagesArray}>
+        <section >
+          <div className={css.imageUploadWindow} >
+          <label htmlFor={`fileInput$`} className={css.imageUploadArea} style={{ width: "120px", height: "120px" }}>
+              {mainImage ? (
+                <img src={mainImage.url} alt="Uploaded" />
+              ) : (
+                <p style={{textAlign: "center", fontStyle:"italic"}}>Main image is empty</p>
+              )}
+            </label>
+          </div>
+        </section>
+        {[...Array(6)].map((_, index) => (
+        <section key={index}>
+          <div
+            className={css.imageUploadWindow}
+            onDrop={(e) => handleImageDrop(e, index)}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            {images[index] ? (
+              <button onClick={(e) => handleMainImage(e, index)}>Main Image</button>
+            ) : null}
+            <label htmlFor={`fileInput${index}`} className={css.imageUploadArea}>
+              {images[index] ? (
+                <img src={
+                  images[index].id
+                    ? images[index].filePath
+                    : URL.createObjectURL(images[index])
+                } alt="Uploaded" />
+              ) : (
+                <>
+                  <AiOutlineDownload />
+                </>
+              )}
+              
+            </label>
+            <input
+              id={`fileInput${index}`}
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageChange(e, index)}
+              style={{ display: "none" }}
+            />
+            {images[index] ? (
+            <div className={css.delete} onClick={() => handleDeleteClick(index)}>
+              <AiOutlineDelete />
+            </div>
+            ) : null }
+          </div>
+        </section>
         ))}
-      </section>
-      <p>
-        The size of the uploaded image must be under 10Mb (.png, .jpeg), max. 7
-        images
-      </p>
+      </div>
+      <p>The size of the uploaded image must be under 10Mb (.png, .jpeg)</p>
     </>
   );
 };
