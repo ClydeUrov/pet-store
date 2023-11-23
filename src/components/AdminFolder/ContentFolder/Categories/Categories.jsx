@@ -3,7 +3,6 @@ import { deleteCategory, fetchIndicators } from "../../../../helpers/api";
 import css from './Categories.module.scss';
 import { MdOutlineEdit } from "react-icons/md";
 import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai";
-import { toast } from "react-toastify";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import Loader from "../../../Loader/Loader";
 
