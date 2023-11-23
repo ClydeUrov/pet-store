@@ -144,8 +144,6 @@ const CreateProduct = ({product, setEditProduct}) => {
     }
   };
 
-  if (product) console.log(product)
-
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>
