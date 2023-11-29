@@ -9,7 +9,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { Sort } from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
-import CreateProduct from "../CreateProduct/CreateProduct";
+import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
 import { toast } from "react-toastify";
 import Modal from "../../../Modal/Modal";
 import ConfirmDeletion from "./ConfirmDeletion";
@@ -103,12 +103,12 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
   );
 };
 
-const Products = () => {
+const Products = ({product}) => {
   const dispatch = useDispatch();
   const allCards = useSelector(selectCards);
   const isLoading = useSelector(({ cards }) => cards.isLoading);
   const [page, setPage] = useState(1);
-  const [editProduct, setEditProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState(product);
   const [prevLength, setPrevLength] = useState(0);
 
   useEffect(() => {
@@ -127,11 +127,11 @@ const Products = () => {
     }
   }, [allCards, page, prevLength, dispatch]);
 
-  if(editProduct)
+  if (editProduct) {
     return (
-      <CreateProduct product={editProduct} setEditProduct={setEditProduct}/>
-    )
-  else
+      <CreateUpdateProduct product={editProduct} setEditProduct={setEditProduct} />
+    );
+  } else
     return (
       <div className={css.productContainer}>
         <div className={css.firstLine}>

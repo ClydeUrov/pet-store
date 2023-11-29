@@ -4,9 +4,10 @@ import css from "./AdminPage.module.scss";
 import { NavLink, Outlet } from "react-router-dom";
 import Logo from "../../icons/logo";
 import { AiOutlineDown, AiOutlineRight } from "react-icons/ai";
+import { FiLogOut } from "react-icons/fi";
 
 const AdminPage = () => {
-  const [activeItem, setActiveItem] = useState({href: "account", text: "My profile"});
+  const [activeItem, setActiveItem] = useState({href: "orders", text: "Orders"});
   const [isContentListOpen, setIsContentListOpen] = useState(false);
 
   const navItems = [
@@ -14,18 +15,20 @@ const AdminPage = () => {
     { href: "content", text: "Content" },
     { href: "users", text: "Users" },
     { href: "account", text: "My profile" },
+    { href: "logout", text: "Log out" },
   ];
 
   const contentItems = [
-    { href: "products", text: "Products" },
-    { href: "categories", text: "Categories" },
-    { href: "brands", text: "Brands" },
-    { href: "materials", text: "Materials" },
-    { href: "colors", text: "Colors" },
-    { href: "weights", text: "Weights" },
-    { href: "sizes", text: "Sizes" },
-    { href: "prescriptions", text: "Prescriptions" },
-    { href: "constants", text: "Constants" },
+    { href: "products", text: "Products", },
+    { href: "categories", text: "Categories"},
+    { href: "brands", text: "Brands"},
+    { href: "materials", text: "Materials"},
+    { href: "colors", text: "Colors"},
+    { href: "weights", text: "Weights"},
+    { href: "ages", text: "Ages"},
+    { href: "sizes", text: "Sizes"},
+    { href: "prescriptions", text: "Prescriptions"},
+    { href: "constants", text: "Constants"},
   ];
 
   return (
@@ -76,6 +79,8 @@ const AdminPage = () => {
                     </ul>
                   )}
                 </div>
+              ) : href === "logout" ? (
+                <a href={href} className={css.logout} ><FiLogOut style={{marginRight:"10px"}} /> {text}</a>
               ) : (
                 <NavLink
                   className={href === activeItem.href ? css.activeItem : ""}

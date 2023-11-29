@@ -1,13 +1,7 @@
 import { useParams } from "react-router-dom";
 import Products from "../../components/AdminFolder/ContentFolder/Products/Products.jsx";
-import Categories from "../../components/AdminFolder/ContentFolder/Categories/Categories.jsx";
-import Brands from "../../components/AdminFolder/ContentFolder/Brands/Brands.jsx";
-import Materials from "../../components/AdminFolder/ContentFolder/Materials/Materials.jsx";
-import Colors from "../../components/AdminFolder/ContentFolder/Colors/Colors.jsx";
-import Weights from "../../components/AdminFolder/ContentFolder/Weights/Weights.jsx";
-import Sizes from "../../components/AdminFolder/ContentFolder/Sizes/Sizes.jsx";
-import Prescriptions from "../../components/AdminFolder/ContentFolder/Prescriptions/Prescriptions.jsx";
 import Constants from "../../components/AdminFolder/ContentFolder/Constants/Constants.jsx";
+import Characteristics from "../../components/AdminFolder/ContentFolder/Characteristics/Characteristics.jsx";
 
 const AdminContentRoute = () => {
   const { contentName } = useParams();
@@ -16,57 +10,26 @@ const AdminContentRoute = () => {
       case "products":
         return <Products />;
       case "categories":
-        return <Categories />;
+        return <Characteristics action='product-categories' title='Categories' />;
       case "brands":
-        return <Brands />;
+        return <Characteristics action='brands' title='Brands' />;
+      case "ages":
+        return <Characteristics action='ages' title='Ages' />;
       case "materials":
-        return <Materials />;
+        return <Characteristics action='materials' title='Materials' />;
       case "colors":
-        return <Colors />;
+        return <Characteristics action='colors' title='Colors' />;
       case "weights":
-        return <Weights />;
+        return <Characteristics action='weights' title='Weights' />;
       case "sizes":
-        return <Sizes />;
+        return <Characteristics action='product-sizes' title='Sizes' />;
       case "prescriptions":
-        return <Prescriptions />;
+        return <Characteristics action='prescriptions' title='Prescriptions' />;
       case "constants":
         return <Constants />;
       default:
         return;
     }
-  // }
-
-  // if (create === "create") {
-  //   switch (contentName) {
-  //     case "products":
-  //       return <CreateProduct />;
-  //     // case 'categories':
-  //     //     return <CreateCategories />;
-  //     // case 'brands':
-  //     //     return <CreateBrands />;
-  //     // case 'materials':
-  //     //     return <CreateMaterials />;
-  //     // case 'colors':
-  //     //     return <CreateColors />;
-  //     // case 'weights':
-  //     //     return <CreateWeights />;
-  //     // case 'sizes':
-  //     //     return <CreateSizes />;
-  //     // case 'prescriptions':
-  //     //     return <CreatePrescriptions />;
-  //     // case 'constants':
-  //     //     return <CreateConstants />;
-  //     default:
-  //       return;
-  //   }
-  // } else {
-  //   switch (contentName) {
-  //     case "products":
-  //       return <CreateProduct productId={create} />;
-  //     default:
-  //       return;
-  //   }
-  // }
 };
 
 export default AdminContentRoute;

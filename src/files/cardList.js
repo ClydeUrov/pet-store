@@ -112,3 +112,10 @@ export const cardList = [
     imgSrc: "https://online-shop-react.vercel.app/img/vigvam14.jpeg"
   }
 ]
+
+const bucket = [
+  {
+    status: "",
+    customer: ""
+  },
+]

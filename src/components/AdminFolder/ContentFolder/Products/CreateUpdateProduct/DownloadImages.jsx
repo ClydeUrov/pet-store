@@ -1,19 +1,30 @@
-import css from "./CreateProduct.module.scss";
+import css from "./CreateUpdateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
-import { deleteImageFromCard } from "../../../../helpers/api";
+import { addImagesToCard, deleteImageFromCard } from "../../../../../helpers/api";
 
 const DownloadImages = ({images, setImages, productId, mainImage, setMainImage}) => {
 
-  const handleImageChange = (e, index) => {
+  const handleImageChange = async (e, index) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("images", e.target.files[0]);
+    const image = await addImagesToCard(productId, formData);
+
     const newImages = [...images];
-    newImages[index] = e.target.files[0];
+    newImages[index] = image[0];
     setImages(newImages);
   };
 
-  const handleImageDrop = (e, index) => {
+  const handleImageDrop = async (e, index) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("images", e.dataTransfer.files[0]);
+    const image = await addImagesToCard(productId, formData);
+
     const newImages = [...images];
-    newImages[index] = e.dataTransfer.files[0];
+    newImages[index] = image[0];
     setImages(newImages);
   };
 
@@ -24,29 +35,24 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
     setImages(newImages);
   };
 
-  const handleMainImage = (e, index) => {
-    console.log(e, images[index], index)
-    if (images[index] instanceof File) {
-      setMainImage({ index, url: URL.createObjectURL(images[index]) });
-    } else {
-      setMainImage({ id: images[index].id, url: images[index].filePath });
-    }
+  const handleMainImage = (index) => {
+    console.log(images, index);
+    setMainImage({ id: images[index].id, url: images[index].filePath });
   }
+
 
   return (
     <>
       <h3>Product photo</h3>
       <div className={css.imagesArray}>
         <section >
-          <div className={css.imageUploadWindow} >
           <label htmlFor={`fileInput$`} className={css.imageUploadArea} style={{ width: "120px", height: "120px" }}>
-              {mainImage ? (
-                <img src={mainImage.url} alt="Uploaded" />
-              ) : (
-                <p style={{textAlign: "center", fontStyle:"italic"}}>Main image is empty</p>
-              )}
-            </label>
-          </div>
+            {mainImage ? (
+              <img src={mainImage.url} alt="Uploaded" />
+            ) : (
+              <p style={{textAlign: "center", fontStyle:"italic"}}>Main image is empty</p>
+            )}
+          </label>
         </section>
         {[...Array(6)].map((_, index) => (
         <section key={index}>
@@ -56,7 +62,13 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
             onDragOver={(e) => e.preventDefault()}
           >
             {images[index] ? (
-              <button onClick={(e) => handleMainImage(e, index)}>Main Image</button>
+              
+              <button
+                className={`${css.mainImageButton} ${mainImage?.id === images[index].id ? css.activeImg : ""}`}
+                onClick={(e) => handleMainImage(index)}
+              >
+                Main Image
+              </button>
             ) : null}
             <label htmlFor={`fileInput${index}`} className={css.imageUploadArea}>
               {images[index] ? (
@@ -66,9 +78,7 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
                     : URL.createObjectURL(images[index])
                 } alt="Uploaded" />
               ) : (
-                <>
-                  <AiOutlineDownload />
-                </>
+                <AiOutlineDownload />
               )}
               
             </label>

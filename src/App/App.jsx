@@ -16,7 +16,8 @@ import Favorites from '../pages/Favorites/Favorites';
 import UserProfile from '../components/AdminFolder/Users/UserProfile';
 import Users from '../components/AdminFolder/Users/Users';
 import AdminContentRoute from '../helpers/routs/AdminContentRoute';
-import AdminCreateRoute from '../helpers/routs/AdminCreateRoute';
+import CreateUpdateProduct from '../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateUpdateProduct';
+// import UpdateProduct from '../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct';
 
 const UserPage = lazy(() => import('../pages/UserPage/UserPage'));
 const UserAccount = lazy(() => import('../components/UserAccount/UserAccount'));
@@ -65,9 +66,10 @@ const App = () => {
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
-          <Route index path="account" element={<AdminProfile />} />
+          <Route path="account" element={<AdminProfile />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
-          <Route path=":contentName/create" element={<AdminCreateRoute />} />
+          <Route path="products/create" element={<CreateUpdateProduct />} />
+          {/* <Route path="products/update" element={<UpdateProduct />} /> */}
         </Route>
       </Routes>
       <ToastContainer />
