@@ -1,97 +1,104 @@
 @import "..//../variables.scss";
 
 .container {
-    width: 1440px;
-    padding: 0 120px;
-    margin: 0 auto;
+  width: 1440px;
+  padding: 0 120px;
+  margin: 0 auto;
+  display: flex;
+  font-family: "Lato", sans-serif;
+  color: $text-color;
+
+  & > div:nth-child(1) {
+    width: 20%;
     display: flex;
-    font-family: 'Lato', sans-serif;
-    color: $text-color;
+    flex-direction: column;
+    align-items: center;
+    background-color: $left-background;
 
-    & > div:nth-child(1) {
-        width: 20%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: $left-background;
-
-        & > a {
-            display: inline-block;
-            margin: 40px auto;
-            align-items: center;
-            text-align: center;
-        }
-        
+    & > a {
+      display: inline-block;
+      margin: 40px auto;
+      align-items: center;
+      text-align: center;
     }
-    & > div:nth-child(2) {
-        width: 80%;
-        margin-inline: 20px;
-    }
+  }
+  & > div:nth-child(2) {
+    width: 80%;
+    margin-inline: 20px;
+  }
 }
 
 .content {
-    cursor: pointer;
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    transition: all 0.3s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  position: relative;
+  align-items: flex-start;
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
-    flex-wrap: nowrap;
+    padding: 10px 14px;
+  }
+
+  & > .contentList {
+    font-size: 18px;
+    font-weight: 400;
     overflow: hidden;
-    position: relative;
-    align-items: flex-start;
+    transition: max-height 0.3s;
 
-    & > div {
-        display:flex;
-        justify-content: space-between;
-        width: 100%;
-        padding: 10px 14px;
+    & > li {
+      padding: 10px 24px;
     }
-
-    & > .contentList {
-        font-size: 18px;
-        font-weight: 400;
-        overflow: hidden;
-        transition: max-height 0.3s;
-
-        & > li {
-            padding: 10px 24px;
-        }
-    }
+  }
 }
 
 .list {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  font-weight: 600;
+  transition: transform 0.3s ease;
+
+  & > div {
+    width: 194px;
     display: flex;
     flex-direction: column;
-    font-size: 18px;
-    font-weight: 600;
-    transition: transform 0.3s ease;
+    justify-content: center;
+    margin: 4px 0;
 
-    & > div {
-        width: 194px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: 4px 0;
-
-        :global(.active) {
-            color: $main-color;
-        }
-
-        &:not(:nth-child(2)) {
-            padding: 10px 14px;
-        }
+    & > a {
+      padding: 10px 14px;
     }
+    & > a.logout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffad4d;
+      color: white;
+      border-radius: 99px;
+      margin: 70px 10px 0;
+      padding: 6px 10px;
+    }
+    :global(.active) {
+      color: $main-color;
+    }
+  }
 }
 
 .activeItem {
-    color:$main-color;
-    transition: all 0.3s;
-    align-items: flex-start;
+  color: $main-color;
+  transition: all 0.3s;
+  align-items: flex-start;
 }
 
-
 .rotatedIcon {
-    transform: rotate(90deg);
-    transition: transform 0.5s ease;
+  transform: rotate(90deg);
+  transition: transform 0.5s ease;
 }

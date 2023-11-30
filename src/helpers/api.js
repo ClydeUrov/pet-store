@@ -37,6 +37,7 @@ export const addImagesToCard = async (productId, formData) => {
     const response = await axios.post(`/api/v1/products/${productId}/images`, formData, {
       headers: {"Content-Type": 'multipart/form-data'},
     });
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(error);
