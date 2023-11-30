@@ -3,8 +3,16 @@
 .productContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 680px;
+  align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: flex-start;
+  // width: 680px;
+}
+
+.formContainer {
+  display: flex;
+  gap: 20px; /* Расстояние между формами */
 }
 
 .firstLine {
@@ -18,52 +26,10 @@
 
 .form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 
   & > div {
-    &:nth-child(1),
-    &:nth-child(3) {
-      flex-basis: 40%;
-      margin-right: 30px;
-    }
-    &:nth-child(2),
-    &:nth-child(4) {
-      flex-basis: 50%;
-    }
-    &:nth-child(5) {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 646px;
-      justify-content: space-between;
-
-      & > div {
-        width: 340px;
-      }
-
-      & > ul {
-        display: flex;
-        gap: 10px;
-        justify-content: space-around;
-        width: 275px;
-
-        & > li {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 20px;
-          border: 2px solid $main-color; 
-        }
-
-        &:hover {
-          color: $hover-color;
-        }
-
-        & > li button {
-          margin-right: 0;
-        }
-      }
-    }
+    margin-right: 30px;
   }
 }
 
