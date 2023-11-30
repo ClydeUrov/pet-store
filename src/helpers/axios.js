@@ -2,9 +2,6 @@ import axios from "axios";
 
 const axiosService = axios.create({
     baseURL: 'https://online-zoo-store-backend-web-service.onrender.com/api/v1',
-    headers: {
-        "Content-Type": "application/json",
-    },
 });
 
 axiosService.interceptors.request.use(

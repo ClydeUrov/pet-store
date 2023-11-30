@@ -1,4 +1,4 @@
-import css from "./Products.module.scss";
+import css from "./ComfirmDeletion.module.scss";
 
 const ConfirmDeletion = ({ onConfirm, onCancel }) => {
 

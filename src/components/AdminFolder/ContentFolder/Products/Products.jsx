@@ -12,16 +12,11 @@ import Loader from "../../../Loader/Loader";
 import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
 import { toast } from "react-toastify";
 import Modal from "../../../Modal/Modal";
-import ConfirmDeletion from "./ConfirmDeletion";
+import ConfirmDeletion from "../../ContentFolder/ConfirmDeletion";
 
 const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-
-  const handleDelete = (itemId) => {
-    setDeleteItemId(itemId);
-    setDeleteModalOpen(true);
-  };
 
   const handleConfirmDeletion = async () => {
     try {
@@ -33,14 +28,10 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
           }
       );
       setPrevLength(allCards.content.length - 1);
-      setDeleteModalOpen(false);
+      setDeleteModal(false);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleCancelDeletion = () => {
-    setDeleteModalOpen(false);
   };
 
   return (
@@ -80,7 +71,7 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
           <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
           <div>
             <MdOutlineEdit onClick={() => setEditProduct(item)} /> 
-            <AiOutlineDelete onClick={() => handleDelete(item.id) } />
+            <AiOutlineDelete onClick={() => {setDeleteItemId(item.id); setDeleteModal(true);} } />
           </div>
         </div>
       ))}
@@ -91,11 +82,11 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
         pageSize={allCards.size}
         onPageChange={(page) => setPage(page)}
       />
-      {isDeleteModalOpen && (
-        <Modal title="Confirm Deletion" onClose={handleCancelDeletion}>
+      {isDeleteModal && (
+        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
           <ConfirmDeletion
             onConfirm={handleConfirmDeletion}
-            onCancel={handleCancelDeletion}
+            onCancel={() => setDeleteModal(false)}
           />
         </Modal>
       )}

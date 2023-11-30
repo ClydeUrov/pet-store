@@ -4,40 +4,44 @@ import { MdOutlineEdit } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BsChevronDown } from "react-icons/bs";
 
-const DropItems = ({characteristics, title, handleEdit, handleDelete}) => {
-  const [selectedItem, setSelectedItem] = useState(null);
+const DropItems = ({characteristics, title, handleEdit, setDeleteItemId, setDeleteModal}) => {
+  const [openItems, setOpenItems] = useState({});
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item.id === selectedItem?.id ? null : item);
+  const handleItemClick = (itemId) => {
+    setOpenItems((prevOpenItems) => ({
+      ...prevOpenItems,
+      [itemId]: !prevOpenItems[itemId],
+    }));
   };
 
-  console.log("asdfasas", characteristics);
-  
   const renderSubItems = (parentItem) => {
     return characteristics
       .filter((item) => item.parent?.id === parentItem.id)
       .map((subItem) => (
-        <div key={subItem.id} className={css.row} style={{marginLeft: "38px"}}>
-          <div>
-            {(title === "Brands" || title === "Categories") ? (
-              <img src={subItem.image?.filePath} alt={subItem.name} />
-            ) : null}
-            <p>{subItem.name}</p>
+        <div key={subItem.id} style={{ marginLeft: "38px" }}>
+          <div className={css.row} onClick={() => handleItemClick(subItem.id)}>
+            <div >
+              {(title === "Brands" || title === "Categories") ? (
+                <img src={subItem.image?.filePath ? subItem.image?.filePath : subItem.image} alt={subItem.name} />
+              ) : null}
+              <p>{subItem.name}</p>
+              <BsChevronDown style={{ marginLeft: "30px" }} />
+            </div>
+            <div>
+              <MdOutlineEdit onClick={() => handleEdit(subItem)} />
+              <AiOutlineDelete onClick={() => {setDeleteItemId(subItem.id); setDeleteModal(true)}} />
+            </div>
           </div>
-          <div>
-            <MdOutlineEdit onClick={() => handleEdit(subItem)} />
-            <AiOutlineDelete onClick={() => handleDelete(subItem.id)} />
-          </div>
+          {openItems[subItem.id] && renderSubItems(subItem)}
         </div>
       ));
   };
 
   const renderItems = (items) => {
-    console.log(title, items, characteristics)
     return items.map((item) => (
       title === "Categories" ? (
         <div key={item.id} className={css.firstRow}>
-          <div className={css.row} onClick={() => handleItemClick(item)} style={{margin:"0"}}>
+          <div className={css.row} onClick={() => handleItemClick(item.id)} style={{ margin: "0" }}>
             <div>
               {(title === "Brands" || title === "Categories") ? (
                 <img src={item.image?.filePath} alt={item.name} />
@@ -47,13 +51,13 @@ const DropItems = ({characteristics, title, handleEdit, handleDelete}) => {
             </div>
             <div>
               <MdOutlineEdit onClick={() => handleEdit(item)} />
-              <AiOutlineDelete onClick={() => handleDelete(item.id)} />
+              <AiOutlineDelete onClick={() => {setDeleteItemId(item.id); setDeleteModal(true)}} />
             </div>
           </div>
-          {selectedItem && selectedItem.id === item.id && renderSubItems(item)}
+          {openItems[item.id] && renderSubItems(item)}
         </div>
       ) : (
-        <div key={item.id} className={css.row} style={{border: "1px solid #a3a3a3"}}>
+        <div key={item.id} className={css.row} style={{ border: "1px solid #a3a3a3" }}>
           <div>
             {(title === "Brands" || title === "Categories") ? (
               <img src={item.image?.filePath} alt={item.name} />
@@ -62,7 +66,7 @@ const DropItems = ({characteristics, title, handleEdit, handleDelete}) => {
           </div>
           <div>
             <MdOutlineEdit onClick={() => handleEdit(item)} />
-            <AiOutlineDelete onClick={() => handleDelete(item.id)} />
+            <AiOutlineDelete onClick={() => {setDeleteItemId(item.id); setDeleteModal(true)}} />
           </div>
         </div>
       )
@@ -72,7 +76,7 @@ const DropItems = ({characteristics, title, handleEdit, handleDelete}) => {
   return (
     <>
       {title === "Categories" 
-        ? renderItems(characteristics.filter((item) => item.parent === null))
+        ? renderItems(characteristics?.filter((item) => item.parent === null))
         : renderItems(characteristics)
       }
     </>

@@ -11,7 +11,6 @@ const Constants = () => {
   useEffect(() => {
     axiosService.get(`/constants`)
       .then((resp) => {
-        console.log(resp);
         setLoading(false)
         setConstants(resp.data)
       })
