@@ -4,7 +4,7 @@ import css from './Catalog.module.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import CardsList from '../../components/CardsList/CardsList'
-import { Sort } from '../../components/Sort/Sort'
+import Sort from '../../components/Sort/Sort'
 import { SaleCheckbox } from '../../components/SaleCheckbox/SaleCheckbox'
 import { Accordion } from '../../components/Accordion/Accordion'
 import { useState } from 'react';

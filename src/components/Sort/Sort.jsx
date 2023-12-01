@@ -5,25 +5,20 @@ import { AiOutlineCheck } from "react-icons/ai";
 //import {handleSort} from '../CardsList/CardsList';
 import { useState, useEffect } from "react";
 
-export const Sort = ({ onClose, isOpen }) => {
+const Sort = ({setSortMethod, setIsOpen, isOpen }) => {
   const [sortName, setSortName] = useState("");
 
-
-
   const listBtn = [
-    { id: 0, sort: "price_desc", name: "Price (highest to lowest)" },
-    { id: 1, sort: "price_asc", name: "Price (lowest to highest)" },
-    { id: 2, sort: "rating_desc", name: "Rating (highest to lowest)" },
-    { id: 3, sort: "rating_asc", name: "Rating (lowest to highest)" },
+    { id: 0, sort: "price,desc", name: "Price (highest to lowest)" },
+    { id: 1, sort: "price,asc", name: "Price (lowest to highest)" },
+    { id: 2, sort: "rating,desc", name: "Rating (highest to lowest)" },
+    { id: 3, sort: "rating,asc", name: "Rating (lowest to highest)" },
   ];
 
-
-
   const handleSortName = (item) => {
-    // handleSort(item.sort)
-    onClose();
     setSortName(item.name);
-    return;
+    setSortMethod(item.sort);
+    setIsOpen(false);
   };
 
   const handleSelectedSortName = (name) => {
@@ -45,7 +40,7 @@ export const Sort = ({ onClose, isOpen }) => {
       <p className={css.sort_label}>Sort by</p>
 
       {!isOpen ? (
-        <button type="button" className={css.sort_select} onClick={onClose}>
+        <button type="button" className={css.sort_select} onClick={() => setIsOpen(!isOpen)}>
           {sortName ? `${sortName}` : "Default"}
           <span className={css.sort_icon}>
             <IoIosArrowDown size={20} />
@@ -53,7 +48,7 @@ export const Sort = ({ onClose, isOpen }) => {
         </button>
       ) : (
         <div className={css.sort_box}>
-          <button type="button" className={css.sort_select} onClick={onClose}>
+          <button type="button" className={css.sort_select} onClick={() => setIsOpen(!isOpen)}>
             Default{" "}
             <span className={css.sort_icon}>
               <IoIosArrowDown size={20} />
@@ -69,7 +64,6 @@ export const Sort = ({ onClose, isOpen }) => {
                 >
                   {handleSelectedSortName(item.name)}
                 </button>
-                {/* <button type='button' className={css.sort_btn} onClick={handleSortName} id={item.sort}>{item.name}</button> */}
               </li>
             ))}
           </ul>
@@ -78,3 +72,5 @@ export const Sort = ({ onClose, isOpen }) => {
     </div>
   );
 };
+
+export default Sort;
