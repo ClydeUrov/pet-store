@@ -6,7 +6,7 @@ import css from "./Products.module.scss";
 import Pagination from "../../../Pagination/Pagination";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
-import { Sort } from "../../../Sort/Sort";
+import Sort from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
@@ -36,7 +36,6 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
 
   return (
     <div style={{width:"100%", marginBottom:"40px"}}>
-      <Sort />
       <div className={css.columnHeaders}>
         <p>Image</p>
         <p>Name</p>
@@ -101,22 +100,45 @@ const Products = ({product}) => {
   const [page, setPage] = useState(1);
   const [editProduct, setEditProduct] = useState(product);
   const [prevLength, setPrevLength] = useState(0);
+  const [sortMethod, setSortMethod] = useState("");
+  const [prevSort, setPrevSort] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [nameLike, setNameLike] = useState('');
+  const [prevName, setPrevName] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = () => {
       try {
-        await dispatch(getAllCards(page));
+        dispatch(getAllCards({ page, sortMethod, nameLike }));
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setPrevLength(allCards?.content?.length);
+        setPrevSort(sortMethod || '');
+        setPrevName(nameLike || '');
       }
     };
 
-    if (!allCards || allCards?.content?.length === 0 || page !== (allCards.pageable?.pageNumber + 1) || prevLength !== allCards?.content?.length) {
-      fetchData();
-    }
-  }, [allCards, page, prevLength, dispatch]);
+    const delayTimer = setTimeout(() => {
+      if (
+        !allCards ||
+        allCards?.content?.length === 0 ||
+        page !== (allCards.pageable?.pageNumber + 1) ||
+        prevLength !== allCards?.content?.length ||
+        sortMethod !== prevSort ||
+        nameLike !== prevName
+      ) {
+        fetchData();
+      }
+    }, 2000);
+
+    return () => clearTimeout(delayTimer);
+  }, [allCards, page, prevLength, dispatch, sortMethod, nameLike]);
+
+  const handleInputChange = (e) => {
+    setNameLike(e.target.value);
+    setPage(1);
+  };
 
   if (editProduct) {
     return (
@@ -128,18 +150,30 @@ const Products = ({product}) => {
         <div className={css.firstLine}>
           <p>Products</p>
           <div className={css.search}>
-            <input type="text" placeholder="Quick search" />
+            <input
+              type="text"
+              placeholder="Quick search"
+              value={nameLike}
+              onChange={handleInputChange}
+            />
           </div>
           <NavLink to={"create"} type="button" className={css.topButton}>
             Create
           </NavLink>
         </div>
+        <Sort setSortMethod={setSortMethod} isOpen={isOpen} setIsOpen={setIsOpen}/>
         {isLoading ? (
           <Loader />
         ) : !allCards.content ? (
           <div className={css.firstLine}>No data available.</div>
         ) : (
-          <ProductCards allCards={allCards} setPage={setPage} dispatch={dispatch} setEditProduct={setEditProduct} setPrevLength={setPrevLength}/>
+          <ProductCards 
+            allCards={allCards} 
+            setPage={setPage} 
+            dispatch={dispatch} 
+            setEditProduct={setEditProduct} 
+            setPrevLength={setPrevLength}
+          />
         )}
       </div>
     );
