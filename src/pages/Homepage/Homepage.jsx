@@ -40,7 +40,6 @@ const Homepage = () => {
   }, [dispatch]);
 
   const cardsOnSale = useSelector(selectOnSale);
-
   if (cardsOnSale.length === 0 || mainCategories.length === 0) {
     return;
   }

@@ -12,6 +12,13 @@
 .wrapper {
   width: 30%;
   height: 100%;
+
+  &:hover {
+    .figcaptionLeft,
+    .figcaptionRight {
+      color: $hover-color;
+    }
+  }
 }
 .figureForImg {
   height: 20rem;
@@ -103,6 +110,10 @@
   position: absolute;
   top: 50%;
   left: -3%;
+  &:hover {
+    color: $hover-color;
+    cursor: pointer;
+  }
 }
 
 .arrowForward {
@@ -110,4 +121,9 @@
   position: absolute;
   top: 50%;
   right: -3%;
+
+  &:hover {
+    color: $hover-color;
+    cursor: pointer;
+  }
 }
