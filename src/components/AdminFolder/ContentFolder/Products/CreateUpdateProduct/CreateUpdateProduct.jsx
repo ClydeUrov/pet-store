@@ -81,8 +81,6 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
     }
   };
 
-  console.log("in create", images);
-
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>

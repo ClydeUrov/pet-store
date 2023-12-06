@@ -13,10 +13,12 @@ import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
 import { toast } from "react-toastify";
 import Modal from "../../../Modal/Modal";
 import ConfirmDeletion from "../../ContentFolder/ConfirmDeletion";
+import { useConstants } from "../../../../helpers/routs/ConstantsProvider";
 
 const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const { constants } = useConstants();
 
   const handleConfirmDeletion = async () => {
     try {
@@ -63,8 +65,8 @@ const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLeng
           </div>
           <div>{item.name}</div>
           <div>{item.category.name}</div>
-          <div>${item.price}</div>
-          <div>${item.priceWithDiscount ? item.priceWithDiscount : 0}</div>
+          <div>{constants[1].value}{' '}{item.price}</div>
+          <div>{constants[1].value}{' '}{item.priceWithDiscount ? item.priceWithDiscount : 0}</div>
           <div>{item.brand ? item.brand.name : "No brand"}</div>
           <div>{item.newArrival ? "Yes" : "No"}</div>
           <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
@@ -119,17 +121,16 @@ const Products = ({product}) => {
       }
     };
 
+    if (
+      !allCards ||
+      allCards?.content?.length === 0 ||
+      page !== (allCards.pageable?.pageNumber + 1) ||
+      prevLength !== allCards?.content?.length ||
+      sortMethod !== prevSort 
+    ) fetchData();
+
     const delayTimer = setTimeout(() => {
-      if (
-        !allCards ||
-        allCards?.content?.length === 0 ||
-        page !== (allCards.pageable?.pageNumber + 1) ||
-        prevLength !== allCards?.content?.length ||
-        sortMethod !== prevSort ||
-        nameLike !== prevName
-      ) {
-        fetchData();
-      }
+      if (nameLike !== prevName) fetchData();
     }, 2000);
 
     return () => clearTimeout(delayTimer);

@@ -4,14 +4,16 @@ import { FaRegHeart } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { FaRegUser } from 'react-icons/fa6';
 import { NavLink } from 'react-router-dom'
-import Logo from '../../icons/logo'
-import Modal from '../Modal/Modal'
-import RegisterForm from '../AuthForm/RegisterForm'
-import LogInForm from '../AuthForm/LoginForm'
+import Modal from '../../components/Modal/Modal'
+import RegisterForm from '../../components/AuthForm/RegisterForm'
+import LogInForm from '../../components/AuthForm/LoginForm'
 import { useState } from 'react';
+import { useConstants } from '../../helpers/routs/ConstantsProvider';
 
 
 const Header = () => {
+  const { constants } = useConstants();
+  console.log(constants);
   const isLoggedIn = false;
   const [showModal, setShowModal] = useState(false);
   const [registerOrLogInForms, setRegisterOrLogInForms] = useState(true);
@@ -31,12 +33,12 @@ const Header = () => {
         <div className={styles.navbar}>
           <div className={styles.menu}>
             <NavLink to="/" className={styles.logo}>
-              <Logo />
+              <img src={constants[0].value.filePath} alt={constants[0]?.key} />
             </NavLink>
             <NavLink to="/catalogue/all" className={styles.catalogue}>
               Catalogue
             </NavLink>
-            <NavLink to="/admin/account" className={styles.catalogue}>
+            <NavLink to="/admin/orders" className={styles.catalogue}>
               Admin
             </NavLink>
             <div className={styles.search}>

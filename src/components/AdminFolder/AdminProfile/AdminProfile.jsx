@@ -2,45 +2,44 @@ import { useState } from "react";
 import { Form, Formik } from "formik";
 import css from "./AdminProfile.module.scss";
 import FormikField from "../../FormikFolder/FormikField";
-import { schemaUserPersonalInfo } from "../../../helpers/schemes";
+import { schemaAdminInformation, schemaAdminPassword } from "../../../helpers/schemes";
 import { GoPencil } from "react-icons/go";
 
 const AdminProfile = () => {
-  const [disabled, setDisabled] = useState(true);
+  const [editState, setEditState] = useState({
+    personalInfo: true,
+    passwordInfo: true,
+  });
 
-  const toggleDisabled = () => {
-    setDisabled(!disabled);
+  const toggleEditState = (formName) => {
+    setEditState((prevEditState) => ({
+      ...prevEditState,
+      [formName]: !prevEditState[formName],
+    }));
   };
 
-  const handleCancel = (props) => {
-    props.handleReset();
-    toggleDisabled();
-    return;
+  const handleCancel = (form, formName) => {
+    form.handleReset();
+    toggleEditState(formName);
   };
 
-  const handleEditEnable = (props) => {
-    toggleDisabled();
-    props.setFieldValue('editEnabled', true);
-  };
-
-  const handleSubmit = async (formData) => {
-    if (formData.editEnabled) {
+  const handleSubmit = async (formData, formName) => {
+    if (!editState.personalInfo) {
       const userInfo = {
         name: formData.name,
         surname: formData.surname,
         email: formData.email,
       };
-      console.log("User Info", userInfo);
+      console.log(userInfo);
     } else {
       const passwordInfo = {
         password: formData.password,
         confirm: formData.confirm,
       };
-      console.log("Password Info", passwordInfo);
+      console.log(passwordInfo);
     }
 
-    toggleDisabled();
-    // props.setFieldValue('editEnabled', false);
+    toggleEditState(formName);
   };
 
   return (
@@ -50,24 +49,23 @@ const AdminProfile = () => {
       </div>
       <div className={css.formContainer}>
       <Formik
-        validationSchema={schemaUserPersonalInfo}
+        validationSchema={schemaAdminInformation}
         initialValues={{
           surname: "Olivi",
           email: "oliviarhye@gmail.com",
           name: "aArhye",
-          editEnabled: false,
         }}
         onSubmit={handleSubmit}
       >
-        {(props) => (
+        {(form) => (
           <Form className={css.form}>
             <FormikField
               name="name"
               type="text"
               label="Name"
               width="276px"
-              value={props.values.name}
-              disabled={disabled}
+              onChange={(e) => {form.handleChange(e)}}
+              disabled={editState.personalInfo}
               required
             />
             <FormikField
@@ -75,53 +73,54 @@ const AdminProfile = () => {
               type="text"
               label="Surname"
               width="276px"
-              value={props.values.surname}
-              disabled={disabled}
+              onChange={(e) => {form.handleChange(e)}}
+              disabled={editState.personalInfo}
               required
             />
             <FormikField
               name="email"
-              type="unstyled"
+              type="text"
               label="E-mail"
               width="276px"
-              value={props.values.email}
-              disabled={disabled}
+              onChange={(e) => {form.handleChange(e)}}
+              disabled={editState.personalInfo}
               required
             />
-            {disabled ? (
-              <button type="button" onClick={() => handleEditEnable(props)} className={css.button}>
-                Edit
-                <GoPencil size={20} className={css.btn__icon} />
+            {editState.personalInfo ? (
+              <button
+                type="button"
+                onClick={() => toggleEditState('personalInfo')}
+                className={css.button}
+              >
+                Edit <GoPencil size={20} style={{marginLeft: "5px"}} />
               </button>
             ) : (
-              <div className={css.editForm}>
-                <ul className={css.list__btn}>
-                  <li className={css.item__btn}>
-                    <button type="submit" className={css.button} disabled={props.isSubmitting}>
-                      Confirm
-                    </button>
-                  </li>
-                  <li className={css.item__btn}>
-                    <button type="button" onClick={() => handleCancel(props)} className={css.button}>
-                      Cancel
-                    </button>
-                  </li>
-                </ul>
+              <div className={css.submitForm}>
+                <button type="submit" className={css.button}>
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCancel(form, 'personalInfo')}
+                  className={css.button}
+                >
+                  Cancel
+                </button>
               </div>
-            )}            
+            )}
           </Form>
         )}
       </Formik>
       <Formik
-        validationSchema={schemaUserPersonalInfo}
+        validationSchema={schemaAdminPassword}
         initialValues={{
           password: "12345678",
           confirm: "12345678",
           editEnabled: false,
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(values, form) => handleSubmit(values, 'passwordInfo', form)}
       >
-        {(props) => (
+        {(form) => (
           <Form className={css.form}>
             <h3 style={{marginBottom:"20px"}}>Your password</h3>
             <FormikField
@@ -129,8 +128,8 @@ const AdminProfile = () => {
               type="password"
               label="Password"
               width="276px"
-              value={props.values.password}
-              disabled={disabled}
+              value={form.values.password}
+              disabled={editState.passwordInfo}
               required
             />
             <FormikField
@@ -138,30 +137,28 @@ const AdminProfile = () => {
               type="password"
               label="Confirm password"
               width="276px"
-              value={props.values.confirm}
-              disabled={disabled}
+              value={form.values.confirm}
+              disabled={editState.passwordInfo}
               required
             />
 
-            {disabled ? (
-              <button type="button" onClick={() => handleEditEnable(props)} className={css.button}>
+            {editState.passwordInfo ? (
+              <button 
+                type="button" 
+                onClick={() => toggleEditState('passwordInfo')} 
+                className={css.button}
+              >
                 Edit
-                <GoPencil size={20} className={css.btn__icon} />
+                <GoPencil size={20} style={{marginLeft: "5px"}} />
               </button>
             ) : (
-              <div className={css.editForm}>
-                <ul className={css.list__btn}>
-                  <li className={css.item__btn}>
-                    <button type="submit" className={css.button} disabled={props.isSubmitting}>
-                      Confirm
-                    </button>
-                  </li>
-                  <li className={css.item__btn}>
-                    <button type="button" onClick={() => handleCancel(props)} className={css.button}>
-                      Cancel
-                    </button>
-                  </li>
-                </ul>
+              <div className={css.submitForm}>
+                <button type="submit" className={css.button} disabled={form.isSubmitting}>
+                  Confirm
+                </button>
+                <button type="button" onClick={() => handleCancel(form, 'passwordInfo')} className={css.button}>
+                  Cancel
+                </button>
               </div>
             )}
           </Form>

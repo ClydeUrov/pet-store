@@ -1,12 +1,11 @@
 @import "..//../variables.scss";
 
 .footer {
- padding: 56px 0;
+  padding: 56px 0;
   .footer-all {
     width: 1440px;
     margin: 0 auto;
     padding: 0 120px;
-   
 
     .footer-info {
       display: flex;
@@ -21,12 +20,11 @@
     .logo-container {
       display: block;
       margin-bottom: 24px;
+      width: 160px;
     }
 
     .footer-column {
-
       h4 {
-   
         font-size: 16px;
         line-height: 1.5;
         font-weight: 700;
@@ -37,34 +35,32 @@
 
     /* Застосовуємо стилі для контенту в межах кожної колонки */
     .logo-column li {
- 
       font-size: 16px;
       font-weight: 400;
       line-height: 1.5;
     }
     .logo-column li:not(:last-child) {
       margin-bottom: 16px;
-    
     }
 
-    .footer-navigation li{
+    .footer-navigation li {
       font-size: 16px;
       font-weight: 400;
       line-height: 1.5;
       text-align: center;
       text-decoration: none;
-cursor: pointer;
-      color: #1B1B1B;
+      cursor: pointer;
+      color: #1b1b1b;
     }
 
-    .footer-navigation li a:hover{
+    .footer-navigation li a:hover {
       color: $hover-color;
     }
-    .footer-navigation li a:focus{
+    .footer-navigation li a:focus {
       color: $focus-color;
     }
 
-    .footer-navigation li:not(:last-child){
+    .footer-navigation li:not(:last-child) {
       margin-bottom: 16px;
     }
 
@@ -75,7 +71,7 @@ cursor: pointer;
     }
 
     .footer-social-item:not(:last-child) {
-      margin-right: 16px; 
+      margin-right: 16px;
       border: none;
     }
 

@@ -37,7 +37,6 @@ export const addImagesToCard = async (productId, formData) => {
     const response = await axios.post(`/api/v1/products/${productId}/images`, formData, {
       headers: {"Content-Type": 'multipart/form-data'},
     });
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(error);
@@ -45,9 +44,7 @@ export const addImagesToCard = async (productId, formData) => {
 }
 
 export const deleteImageFromCard = async (productId, imageId) => {
-  console.log(11, productId, imageId);
   try {
-    console.log(22);
     await axios.delete(`/api/v1/products/${productId}/images/${imageId}`);
   } catch (error) {
     console.error(error);

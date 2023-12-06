@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, FieldArray} from "formik";
+import { ErrorMessage, Field } from "formik";
 import css from './FormikField.module.scss';
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { SaleCheckbox } from "../SaleCheckbox/SaleCheckbox";
@@ -15,11 +15,6 @@ const FormikField = (props) => {
   const handleCheckbox = (isChecked) => {
     setFieldValue('newArrival', isChecked);
   }
-
-  // if (name === "notAvailable" && values[name]) {
-  //   console.log("values", values);
-  //   values[name] = { id:  values[name] === true ? 1 : 2 };
-  // }
 
   return (
     <div className={css.additions}>
@@ -100,11 +95,11 @@ const FormikField = (props) => {
             <Field
               name={name}
               type={type === 'password' ? (passwordShow ? 'text' : 'password') : type}
-              disabled={disabled}
+              // disabled={disabled}
               // value={value}
               style={{ width: width }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
-              required={required ? "required" : undefined}
+              // required={required ? "required" : undefined}
             />
             {type === "password" && (
               <button type="button" className={css.iconPassword} onClick={toggleVisibility} disabled={disabled}>

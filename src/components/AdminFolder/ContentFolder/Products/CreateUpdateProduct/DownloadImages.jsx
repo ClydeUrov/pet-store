@@ -1,42 +1,59 @@
 import css from "./CreateUpdateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
-import { addImagesToCard, deleteImageFromCard } from "../../../../../helpers/api";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import axiosService from '../../../../../helpers/axios'
+import Modal from "../../../../Modal/Modal";
+import ConfirmDeletion from "../../ConfirmDeletion";
 
 const DownloadImages = ({images, setImages, productId, mainImage, setMainImage}) => {
+  const [error, setError] = useState(null);
+  const [isDeleteModal, setDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
-  const handleImageChange = async (e, index) => {
+  const handleImageChangeOrDrop = async (e, index) => {
     e.preventDefault();
+  
+    const file = e.target.files[0] || e.dataTransfer.files[0];
 
-    const formData = new FormData();
-    formData.append("images", e.target.files[0]);
-    const image = await addImagesToCard(productId, formData);
+    if (file) {
+      if (file.size > 10485760) {
+        setError("Image size exceeds 10 MB limit");
+        return;
+      }
 
-    const newImages = [...images];
-    newImages[index] = image[0];
-    setImages(newImages);
+      const formData = new FormData();
+      formData.append("images", file);
+  
+      try {
+        const image = await toast.promise(
+          axiosService.post(`products/${productId}/images`, formData), {
+          pending: "Image loading in progress",
+          error: "Image was not loaded"
+        });
+  
+        const newImages = [...images];
+        newImages[index] = image.data[0];
+        setImages(newImages);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
   };
 
-  const handleImageDrop = async (e, index) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("images", e.dataTransfer.files[0]);
-    const image = await addImagesToCard(productId, formData);
-
+  const handleConfirmDeletion = () => {
+    if(productId) {
+      axiosService
+        .delete(`/products/${productId}/images/${images[deleteItemId].id}`)
+        .catch((error) => setError(error.message))
+    }
     const newImages = [...images];
-    newImages[index] = image[0];
+    newImages.splice(deleteItemId, 1);
     setImages(newImages);
-  };
-
-  const handleDeleteClick = (index) => {
-    if(productId && !(images[index] instanceof File)) deleteImageFromCard(productId, images[index].id)
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
+    setDeleteModal(false);
   };
 
   const handleMainImage = (index) => {
-    console.log(images, index);
     setMainImage({ id: images[index].id, url: images[index].filePath });
   }
 
@@ -58,7 +75,7 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
         <section key={index}>
           <div
             className={css.imageUploadWindow}
-            onDrop={(e) => handleImageDrop(e, index)}
+            onDrop={(e) => handleImageChangeOrDrop(e, index)}
             onDragOver={(e) => e.preventDefault()}
           >
             {images[index] ? (
@@ -86,11 +103,11 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
               id={`fileInput${index}`}
               type="file"
               accept="image/*"
-              onChange={(e) => handleImageChange(e, index)}
+              onChange={(e) => handleImageChangeOrDrop(e, index)}
               style={{ display: "none" }}
             />
             {images[index] ? (
-            <div className={css.delete} onClick={() => handleDeleteClick(index)}>
+            <div className={css.delete} onClick={() => {setDeleteItemId(index); setDeleteModal(true);}}>
               <AiOutlineDelete />
             </div>
             ) : null }
@@ -99,6 +116,15 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
         ))}
       </div>
       <p>The size of the uploaded image must be under 10Mb (.png, .jpeg)</p>
+      {error && <p>{error}</p>}
+      {isDeleteModal && (
+        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
+          <ConfirmDeletion
+            onConfirm={handleConfirmDeletion}
+            onCancel={() => setDeleteModal(false)}
+          />
+        </Modal>
+      )}
     </>
   );
 };

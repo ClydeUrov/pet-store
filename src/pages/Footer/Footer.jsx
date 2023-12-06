@@ -1,19 +1,20 @@
 import React from 'react'
 import './Footer.scss'
 import { Link } from 'react-router-dom'
-import Logo from '../../icons/logo'
 import { AiOutlineFacebook, AiOutlineInstagram } from 'react-icons/ai';
 import { LiaTwitterSquare } from 'react-icons/lia';
+import { useConstants } from '../../helpers/routs/ConstantsProvider';
 
 
 const Footer = () => {
+  const { constants } = useConstants();
   return (
     <footer className="footer">
       <div className="footer-all">
         <div className="footer-info">
           <div className="logo-column">
             <Link className="logo-container" to="/">
-              <Logo />
+              <img src={constants[0].value.filePath} alt={constants[0].key} />
             </Link>
             <ul>
               <li>Kyiv, Illienko Street, 36</li>
