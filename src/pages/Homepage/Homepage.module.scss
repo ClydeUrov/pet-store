@@ -1,63 +1,70 @@
 @import "../../variables.scss";
 
-
 .section {
-padding-top: 100px;
-padding-bottom: 148px;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
 }
 
 .hero {
-    position: relative;  
+  position: relative;
 }
 
 .title_box {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.title{
-    color: $text-color;
-     text-align: center;
+.title {
+  color: $text-color;
+  text-align: center;
 
-    font-size: 64px;
-    font-weight: 700;
-    line-height: 1.12; 
-    margin-bottom: 8px;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.12;
+  margin-bottom: 8px;
 }
 
-.title_notice{
-    color: $second-text-color;
-    text-align: center;
-    
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 1.33; 
-    letter-spacing: 2.88px;
-    text-transform: uppercase;
+.title_notice {
+  color: $second-text-color;
+  text-align: center;
+
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 2.88px;
+  text-transform: uppercase;
 }
 
-.title_signature{
-    color: $text-color;
-     text-align: center;
-    
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.5; 
+.title_signature {
+  color: $text-color;
+  text-align: center;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
-.subtitle{
-color: $text-color;
+.subtitle {
+  color: $text-color;
 
-font-size: 36px;
-font-weight: 600;
-line-height: 1.33; 
-text-transform: capitalize;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.33;
+  text-transform: capitalize;
 
-margin-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 .slider_box {
-    margin-bottom: 64px;
+  margin-bottom: 64px;
+}
+
+.three_swipers {
+  padding-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 6rem;
 }

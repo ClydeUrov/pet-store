@@ -1,0 +1,46 @@
+@import "..//../variables.scss";
+
+.arrow {
+  width: fit-content;
+  height: fit-content;
+}
+.arrow_back {
+  position: absolute;
+  top: 50%;
+  left: -5%;
+  &:hover {
+    color: $hover-color;
+    cursor: pointer;
+  }
+}
+.arrow_forward {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 50%;
+  right: -5%;
+
+  &:hover {
+    color: $hover-color;
+    cursor: pointer;
+  }
+}
+
+.wrapper {
+  position: relative;
+}
+
+.title {
+  text-align: left;
+  margin-bottom: 2rem;
+  font-family: "Lato";
+  font-weight: 500;
+  font-size: 2.1rem;
+}
+
+.swiper_wrapper {
+  // margin-left: 1rem;
+  // margin-right: 1rem;
+  padding: 1rem;
+  z-index: -1;
+}

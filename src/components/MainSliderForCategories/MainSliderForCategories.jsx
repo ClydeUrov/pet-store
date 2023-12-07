@@ -12,8 +12,6 @@ function MainSliderForCategories({ items }) {
   const slider1 = useRef();
   const slider2 = useRef();
 
-  console.log(slider1, slider2);
-
   function handleNextSlide() {
     if (!slider1 && !slider2) return;
     slider1.current.swiper.slidePrev();
@@ -35,6 +33,7 @@ function MainSliderForCategories({ items }) {
           autoplay={{
             delay: 3500,
             disableOnInteraction: false,
+            reverseDirection: true,
           }}
           modules={[Navigation, Autoplay]}
           className={css.swip}
@@ -76,6 +75,7 @@ function MainSliderForCategories({ items }) {
           autoplay={{
             delay: 3500,
             disableOnInteraction: false,
+            reverseDirection: true,
           }}
           modules={[Navigation, Autoplay]}
           className={css.swip}

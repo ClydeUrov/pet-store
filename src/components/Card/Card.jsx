@@ -11,7 +11,6 @@ const Card = ({ item }) => {
   const favorites = useSelector(selectFavorites);
 
   const handleAddOrDeleteFavorite = () => {
-
     if (!favorites.find((favorite) => favorite.id === item.id)) {
       console.log("This item has been successfully added to favorites!");
 
@@ -50,12 +49,10 @@ const Card = ({ item }) => {
 
           <div>
             {/* {item.rating ? ( */}
-            <p className={styles.cardRating}>
+            <div className={styles.cardRating}>
               <StarRating n={item.rating} size={16} />
-              <span className={styles.cardRating_left}>
-                365 reviews
-              </span>
-            </p>
+              <p className={styles.cardRating_left}>365 reviews</p>
+            </div>
             {/* // ) : null} */}
           </div>
           {item.priceWithDiscount ? (
