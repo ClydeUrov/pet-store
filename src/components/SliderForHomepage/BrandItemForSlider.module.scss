@@ -1,5 +1,11 @@
 @import "../../variables.scss";
 
 .container {
-  min-height: 15rem;
+  height: fit-content;
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+.image {
+  height: 8rem;
+  object-fit: fill;
 }

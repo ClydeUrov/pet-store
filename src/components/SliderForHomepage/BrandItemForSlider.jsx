@@ -3,8 +3,8 @@ import styles from "./BrandItemForSlider.module.scss";
 
 function BrandItemForSlider({ item }) {
   return (
-    <Link to="/catalogue/all">
-      <div className={styles.container}>
+    <div className={styles.container}>
+      <Link to="/catalogue/all">
         {!item.image ? (
           <h4>{item.name}</h4>
         ) : (
@@ -15,8 +15,8 @@ function BrandItemForSlider({ item }) {
             className={styles.image}
           />
         )}
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 
