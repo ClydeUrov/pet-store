@@ -1,113 +1,75 @@
 import css from "./Accordion.module.scss";
-import { toast } from "react-toastify";
-import { NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
 import { CheckboxIcon } from "../../icons/icons";
 import { PriceRange } from "./PriceRange";
-import {
-  fetchMainCategories,
-  fetchInnerCategoriesFromMainCategory,
-} from "../../helpers/api";
-import { makeInnerLinkName } from "../../helpers/functions";
 import { IoIosArrowUp } from "react-icons/io";
 
-export const Accordion = ({
-  weights,
-  ages,
-  brands,
-  colors,
-  materials,
-  prescriptions,
-  productSizes,
-}) => {
-  let { pathname } = useLocation();
-  let categoryWithId = pathname.split("/");
-  let categoryId = categoryWithId[2].split("-")[1];
+export const Accordion = ({ characteristics, setChosenCategory, chosenCategory, selected, setSelected }) => {
+  const [openItems, setOpenItems] = useState({});
 
-  const [openId, setOpenId] = useState(null);
-
-  const clickHandler = (i) => {
-    if (i === openId) {
-      setOpenId(null);
-      return;
-    }
-    setOpenId(i);
-    return;
+  const clickHandler = (href) => {
+    setOpenItems((prevOpenItems) => ({
+      ...prevOpenItems,
+      [href]: !prevOpenItems[href],
+    }));
   };
 
-  const [selected, setSelected] = useState([]);
-
-  function handleChange(e) {
+  function handleChange(e, href, id) {
     let isSelected = e.target.checked;
-    let value = e.target.value;
-
+  
     if (isSelected) {
-      setSelected([...selected, value]);
-    } else {
       setSelected((prevData) => {
-        return prevData.filter((id) => {
-          return id !== value;
-        });
+        const existingItem = prevData.find((item) => item.href === href);
+  
+        if (existingItem) {
+          return prevData.map((item) =>
+            item.href === href
+              ? { ...item, id: [...new Set([...item.id, id])] }
+              : item
+          );
+        } else {
+          return [...prevData, { href, id: [id] }];
+        }
       });
+    } else {
+      setSelected((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          id: item.id.filter((itemId) => itemId !== id),
+        }))
+      );
     }
   }
 
-
   const flagList = [
-    { title: "Age", href: "ages", content: ages },
-    { title: "Breed size", href: "productSizes", content: productSizes },
-    { title: "Brand", href: "brands", content: brands },
-    { title: "Material", href: "materials", content: materials },
-    { title: "Package weight", href: "weights", content: weights },
-    { title: "Prescription", href: "prescriptions", content: prescriptions },
+    { title: "Age", href: "ageId", content: characteristics.age },
+    { title: "Breed size", href: "sizeId", content: characteristics.size },
+    { title: "Brand", href: "brandId", content: characteristics.brand },
+    { title: "Color", href: "colorId", content: characteristics.color },
+    { title: "Material", href: "materialId", content: characteristics.material },
+    { title: "Package weight", href: "weightId", content: characteristics.weight },
+    { title: "Prescription", href: "prescriptionId", content: characteristics.prescription },
   ];
-
-
-  const [innerCategories, setInnerCategories] = useState([]);
-
-  useEffect(() => {
-    if (!categoryId) {
-      fetchMainCategories()
-        .then(setInnerCategories)
-        .catch((error) => {
-          toast.error(
-            `Oops, something went wrong! Reload the page or try again later!`
-          );
-          console.log("Error", error);
-        });
-      return;
-    }
-    fetchInnerCategoriesFromMainCategory(categoryId)
-      .then(setInnerCategories)
-      .catch((error) => {
-        toast.error(
-          `Oops, something went wrong! Reload the page or try again later!`
-        );
-        console.log("Error", error);
-      });
-  }, [categoryId]);
 
   return (
     <>
-      {!innerCategories ? (
-        <div>Data is empty</div>
-      ) : (
       <ul className={css.list}>
-        {innerCategories.map((item) => {
-          return (
-            <li key={item.id} className={css.link_item}>
-              <NavLink
-                to={makeInnerLinkName(item)}
-                className={css.link_item_title}
-              >
-                {item.name}
-              </NavLink>
+        {characteristics.category
+          .filter((item) =>
+            chosenCategory
+              ? item.parent?.id === chosenCategory.id
+              : item.parent === null
+          )
+          .map((item) => (
+            <li
+              key={item.id}
+              className={css.link_item}
+              onClick={() => setChosenCategory(item)}
+            >
+              {item.name}
             </li>
-          );
-        })}
+          ))}
       </ul>
-      )}
 
       <p className={css.filters_title}>Narrow by</p>
 
@@ -129,46 +91,44 @@ export const Accordion = ({
 
         {flagList.map(({ title, href, content }) => {
           if (!content) {
-            // Добавьте проверку на существование content и обработку случая, когда он не определен
             return null;
           }
+
+          const isOpen = openItems[href];
           return (
             <li key={title} className={css.accordion_item}>
               <button
-                className={`${css.accordion_title} ${title === openId ? `${css.open}` : ""
-                  }`}
-                onClick={() => clickHandler(title)}
+                className={`${css.accordion_title} ${isOpen ? `${css.open}` : ""}`}
+                onClick={() => clickHandler(href)}
               >
                 {title}
                 <span
-                  className={`${css.accordion_icon} ${title === openId ? `${css.open_icon}` : ""
-                    }`}
+                  className={`${css.accordion_icon} ${isOpen ? `${css.open_icon}` : ""}`}
                 >
                   <IoIosArrowUp size={16} />
                 </span>
               </button>
-              <ul
-                className={`${css.accordion_list} ${title === openId ? `${css.open}` : ""
-                  }`}
-              >
-                {content.map((item) => {
-                  return (
-                    <li key={item.id}>
-                      <label className={css.checkbox_item} htmlFor={`${href}-${item.id}`}>
-                        <input
-                          id={`${href}-${item.id}`}
 
+              {isOpen && (
+                <ul className={css.accordion_list} style={{height:"auto", marginLeft: "20px"}}>
+                {content.map((item) => {
+                  const isChecked = selected.some((select) => select.href === href && select.id.includes(item.id));
+                  const checkboxId = `${href}-${item.id}`;
+
+                  return (
+                    <li key={checkboxId}>
+                      <label className={css.checkbox_item} htmlFor={checkboxId}>
+                        <input
+                          id={checkboxId}
                           type="checkbox"
                           className={css.checkbox__field}
-                          checked={selected.includes(`${href}-${item.id}`)}
-                          value={`${href}-${item.id}`}
-                          onChange={handleChange}
+                          checked={isChecked}
+                          onChange={(e) => handleChange(e, href, item.id)}
                         />
                         <div
-                          className={`${css.checkbox__icon_true} ${selected.includes(`${href}-${item.id}`)
-                            ? ""
-                            : `${css.checkbox__icon_false}`
-                            }`}
+                          className={`${css.checkbox__icon_true} ${
+                            isChecked ? "" : `${css.checkbox__icon_false}`
+                          }`}
                         >
                           <CheckboxIcon />
                         </div>
@@ -177,7 +137,8 @@ export const Accordion = ({
                     </li>
                   );
                 })}
-              </ul>
+                </ul>
+              )}
             </li>
           );
         })}

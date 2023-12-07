@@ -40,6 +40,7 @@ const cardsSlice = createSlice({
 
       //* статус "pending"
       .addCase(getAllCards.pending, state => {
+        console.log(11);
         state.isLoading = true;
       })
       .addCase(getCardsFromOneCategory.pending, state => {
@@ -67,6 +68,7 @@ const cardsSlice = createSlice({
 
       //* статус "rejected"
       .addCase(getAllCards.rejected, (state, action) => {
+        console.log(22, action.payload);
         state.isLoading = false;
         state.error = action.payload;
       })

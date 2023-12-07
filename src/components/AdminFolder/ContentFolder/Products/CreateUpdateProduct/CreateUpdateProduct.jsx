@@ -95,7 +95,7 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
           images={images} setImages={setImages} productId={product?.id} mainImage={mainImage} setMainImage={setMainImage} 
         />)
         : null 
-      }      
+      }
       
       <Formik
         validationSchema={schemaAdminProducts}

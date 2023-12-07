@@ -5,6 +5,10 @@
   margin-bottom: 40px;
 }
 
+.link_item {
+  cursor: pointer;
+}
+
 .link_item:not(:last-child) {
   margin-bottom: 4px;
 }
@@ -37,7 +41,8 @@
 
 .accordion_list {
   overflow: hidden;
-  height: 0;
+  height:"auto"; 
+  margin-left: "20px";
   transition: height 0.3s;
 }
 

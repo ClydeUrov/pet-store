@@ -112,6 +112,7 @@ const Products = ({product}) => {
     const fetchData = () => {
       try {
         dispatch(getAllCards({ page, sortMethod, nameLike }));
+        return;
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -127,8 +128,10 @@ const Products = ({product}) => {
       page !== (allCards.pageable?.pageNumber + 1) ||
       prevLength !== allCards?.content?.length ||
       sortMethod !== prevSort 
-    ) fetchData();
-
+    ) {
+      fetchData()
+    }
+    console.log(1)
     const delayTimer = setTimeout(() => {
       if (nameLike !== prevName) fetchData();
     }, 2000);
@@ -140,6 +143,8 @@ const Products = ({product}) => {
     setNameLike(e.target.value);
     setPage(1);
   };
+
+  console.log(allCards);
 
   if (editProduct) {
     return (
@@ -165,7 +170,7 @@ const Products = ({product}) => {
         <Sort setSortMethod={setSortMethod} isOpen={isOpen} setIsOpen={setIsOpen}/>
         {isLoading ? (
           <Loader />
-        ) : !allCards.content ? (
+        ) : !allCards?.content ? (
           <div className={css.firstLine}>No data available.</div>
         ) : (
           <ProductCards 

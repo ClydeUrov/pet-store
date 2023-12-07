@@ -123,7 +123,6 @@ export const schemaAdminProducts = yup.object().shape({
   name: yup
     .string()
     .min(2, "Minimum 2 characters!")
-    .max(24, "Maximum 24 characters!")
     .matches(/^[0-9A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-.'",!@#$%^&*()_+=]+$/, )
     .required("Required field!"),
   price: yup

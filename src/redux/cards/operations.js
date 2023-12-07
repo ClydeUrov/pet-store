@@ -16,8 +16,28 @@ const dataAction = async (url, options, thunkAPI) => {
   }
 };
 
-export const getAllCards = createAsyncThunk('cards/fetchAllCards', async ({ page, sortMethod, nameLike }, thunkAPI) => {
-  let url = `api/v1/products?pageNumber=${page}${sortMethod && `&sort=${sortMethod}`}${nameLike && `&nameLike=${nameLike}`}`;
+export const getAllCards = createAsyncThunk('cards/fetchAllCards', async ({ 
+  page, sortMethod, nameLike, minPrice, maxPrice, selected, notAvailable}, thunkAPI
+) => {
+  let url = `api/v1/products?pageNumber=${page || 1}`;
+
+  if (selected) {
+    selected.forEach((item) => {
+      const { href, id } = item;
+      id.forEach((idValue) => {
+        url += `&${href}=${idValue}`;
+      });
+    });
+  }
+  
+  if (sortMethod) url += `&sort=${sortMethod}`;
+  if (nameLike) url += `&nameLike=${nameLike}`;
+  if (notAvailable) url += `&notAvailable=false`;
+  if (minPrice) url += `&minPrice=${minPrice}`;
+  if (maxPrice) url += `&maxPrice=${maxPrice}`;
+
+  console.log(url);
+
   return dataAction(url, { method: 'GET' }, thunkAPI);
 });
 
