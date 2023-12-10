@@ -17,7 +17,7 @@ const dataAction = async (url, options, thunkAPI) => {
 };
 
 export const getAllCards = createAsyncThunk('cards/fetchAllCards', async ({ 
-  page, sortMethod, nameLike, minPrice, maxPrice, selected, notAvailable}, thunkAPI
+  page, sortMethod, nameLike, minPrice, maxPrice, selected, notAvailable, urlCategory}, thunkAPI
 ) => {
   let url = `api/v1/products?pageNumber=${page || 1}`;
 
@@ -29,6 +29,7 @@ export const getAllCards = createAsyncThunk('cards/fetchAllCards', async ({
       });
     });
   }
+  if (urlCategory && urlCategory[0] !== "All") url += `&categoryId=${urlCategory[1]}`
   
   if (sortMethod) url += `&sort=${sortMethod}`;
   if (nameLike) url += `&nameLike=${nameLike}`;

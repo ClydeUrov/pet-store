@@ -3,8 +3,9 @@ import { useState } from "react";
 import { CheckboxIcon } from "../../icons/icons";
 import { PriceRange } from "./PriceRange";
 import { IoIosArrowUp } from "react-icons/io";
+import { NavLink } from "react-router-dom";
 
-export const Accordion = ({ characteristics, setChosenCategory, chosenCategory, selected, setSelected }) => {
+export const Accordion = ({ characteristics, selected, urlCategory, setSelected }) => {
   const [openItems, setOpenItems] = useState({});
 
   const clickHandler = (href) => {
@@ -54,21 +55,21 @@ export const Accordion = ({ characteristics, setChosenCategory, chosenCategory, 
   return (
     <>
       <ul className={css.list}>
-        {characteristics.category
-          .filter((item) =>
-            chosenCategory
-              ? item.parent?.id === chosenCategory.id
-              : item.parent === null
-          )
-          .map((item) => (
-            <li
-              key={item.id}
-              className={css.link_item}
-              onClick={() => setChosenCategory(item)}
-            >
-              {item.name}
-            </li>
-          ))}
+        {characteristics.category &&
+          characteristics.category
+            .filter((item) => {
+              if (!urlCategory[1]) {
+                return item.parent === null;
+              }
+              return item.parent?.id === parseInt(urlCategory[1]);
+            })
+            .map((item) => (
+              <NavLink to={`/catalogue/${item.name}-${item.id}`}>
+                <li key={item.id}>
+                  {item.name}
+                </li>
+              </NavLink>
+            ))}
       </ul>
 
       <p className={css.filters_title}>Narrow by</p>

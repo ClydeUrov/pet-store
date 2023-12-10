@@ -1,99 +1,13 @@
 import { useEffect, useState } from "react";
-import { deleteCard, getAllCards } from "../../../../redux/cards/operations";
+import { getAllCards } from "../../../../redux/cards/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "../../../../redux/cards/selectors";
 import css from "./Products.module.scss";
-import Pagination from "../../../Pagination/Pagination";
-import { AiOutlineDelete } from "react-icons/ai";
-import { MdOutlineEdit } from "react-icons/md";
 import Sort from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
-import { toast } from "react-toastify";
-import Modal from "../../../Modal/Modal";
-import ConfirmDeletion from "../../ContentFolder/ConfirmDeletion";
-import { useConstants } from "../../../../helpers/routs/ConstantsProvider";
-
-const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
-  const [isDeleteModal, setDeleteModal] = useState(false);
-  const [deleteItemId, setDeleteItemId] = useState(null);
-  const { constants } = useConstants();
-
-  const handleConfirmDeletion = async () => {
-    try {
-      await toast.promise(
-        dispatch(deleteCard(deleteItemId)), 
-          {
-            pending: "Promise is pending",
-            error: "The product was not deleted",
-          }
-      );
-      setPrevLength(allCards.content.length - 1);
-      setDeleteModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <div style={{width:"100%", marginBottom:"40px"}}>
-      <div className={css.columnHeaders}>
-        <p>Image</p>
-        <p>Name</p>
-        <p>Category</p>
-        <p>Price</p>
-        <p>Discount</p>
-        <p>Brand</p>
-        <p>New</p>
-        <p>Available</p>
-        <p></p>
-      </div>
-      {allCards.content.map((item) => (
-        <div
-          key={item.id}
-          className={
-            item.notAvailable
-              ? css.productRow
-              : `${css.productRow} ${css.notAvailable}`
-          }
-        >
-          <div className={css.picture}>
-            {item.mainImage && (
-              <img src={item.mainImage.filePath} alt="" />
-            )}
-          </div>
-          <div>{item.name}</div>
-          <div>{item.category.name}</div>
-          <div>{constants[1].value}{' '}{item.price}</div>
-          <div>{constants[1].value}{' '}{item.priceWithDiscount ? item.priceWithDiscount : 0}</div>
-          <div>{item.brand ? item.brand.name : "No brand"}</div>
-          <div>{item.newArrival ? "Yes" : "No"}</div>
-          <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
-          <div>
-            <MdOutlineEdit onClick={() => setEditProduct(item)} /> 
-            <AiOutlineDelete onClick={() => {setDeleteItemId(item.id); setDeleteModal(true);} } />
-          </div>
-        </div>
-      ))}
-      <Pagination
-        className="pagination-bar"
-        currentPage={allCards.number + 1}
-        totalCount={allCards.totalElements}
-        pageSize={allCards.size}
-        onPageChange={(page) => setPage(page)}
-      />
-      {isDeleteModal && (
-        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
-          <ConfirmDeletion
-            onConfirm={handleConfirmDeletion}
-            onCancel={() => setDeleteModal(false)}
-          />
-        </Modal>
-      )}
-    </div>
-  );
-};
+import ProductCards from "./ProductCards";
 
 const Products = ({product}) => {
   const dispatch = useDispatch();
@@ -143,8 +57,6 @@ const Products = ({product}) => {
     setNameLike(e.target.value);
     setPage(1);
   };
-
-  console.log(allCards);
 
   if (editProduct) {
     return (

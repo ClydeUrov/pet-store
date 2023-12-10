@@ -10,56 +10,60 @@ import { useState } from 'react';
 import { getAllCards } from '../../redux/cards/operations';
 import { selectCards } from '../../redux/cards/selectors';
 import { fetchProductCharacteristics } from '../../helpers/api';
+import { useLocation } from 'react-router-dom';
 
 const Catalog = () => {
-  const dispatch = useDispatch();
-
-  const { totalElements } = useSelector(selectCards);
+  const { pathname } = useLocation();
+  const pathSegments = pathname.split('/');
+  const [urlCategory, setUrlCategory] = useState([]);
   const [notAvailable, setNotAvailable] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [sortMethod, setSortMethod] = useState("");
-
-  const [page, setPage] = useState(null);
-  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(1); // Set an initial value for page
   const [characteristics, setCharacteristics] = useState({
     age: [],
     brand: [],
-    category: [],
+    category: null,
     color: [],
     material: [],
     prescription: [],
     size: [],
     weight: [],
   });
-  const [chosenCategory, setChosenCategory] = useState(null);
+  const [selected, setSelected] = useState([]);
   const [fetched, setFetched] = useState(false);
+  console.log(urlCategory);
+
+  const dispatch = useDispatch();
+  const { totalElements } = useSelector(selectCards);
 
   useEffect(() => {
-    fetchProductCharacteristics()
-      .then(setCharacteristics)
-      .catch(error => console.log('Error', error))
-  }, [])
+    setUrlCategory(pathSegments[pathSegments.length - 1].split('-'));
+  }, [pathname]);
 
   useEffect(() => {
     setFetched(false);
-  }, [page, selected, sortMethod, notAvailable, chosenCategory]);
+  }, [page, selected, sortMethod, notAvailable, urlCategory]);
 
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getAllCards({ page, chosenCategory, selected, sortMethod, notAvailable }))
-        .then(() => setPage(1));
-    }
-  
     if (!fetched) {
-      fetchData();
-      setFetched(true);
+      fetchProductCharacteristics()
+        .then(setCharacteristics)
+        .catch(error => console.log('Error', error))
+        .finally(() => setFetched(true));
     }
-  }, [fetched, dispatch, page, selected, sortMethod, notAvailable, chosenCategory]);
+  }, [fetched]);
+
+  useEffect(() => {
+    if (fetched) {
+      dispatch(getAllCards({ page, urlCategory, selected, sortMethod, notAvailable }));
+    }
+  }, [fetched, dispatch, page, selected, sortMethod, notAvailable, urlCategory]);
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={css.title}>for All</h2>
+        <h2 className={css.title}>for {urlCategory[0]}</h2>
         <div className={css.sort_part}>
           {totalElements ? 
             (<p className={css.sort_quantity}>{totalElements} Products found</p>) : 
@@ -67,14 +71,12 @@ const Catalog = () => {
           }
           <SaleCheckbox title="On sale" onChange={(isChecked) => setNotAvailable(isChecked)} checked={notAvailable} />
           <Sort setSortMethod={setSortMethod} isOpen={sortOpen} setIsOpen={setSortOpen}/>
-          {/* <Sort onClose={toggleOpen} isOpen={isOpen} /> */}
         </div>
         <div className={css.box}>
           <div className={css.filters}>
             <Accordion
               characteristics={characteristics}
-              chosenCategory={chosenCategory}
-              setChosenCategory={setChosenCategory}
+              urlCategory={urlCategory}
               selected={selected}
               setSelected={setSelected}
             />
@@ -83,7 +85,7 @@ const Catalog = () => {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 export default Catalog;
