@@ -6,7 +6,7 @@ function BrandItemForSlider({ item }) {
     <div className={styles.container}>
       {/* {item.image.filePath ?} */}
       <Link to="/catalogue/all">
-        {item.image ? (
+        {!item.image ? (
           <div className={styles.no_img}>
             <h4>{item.name}</h4>
           </div>
