@@ -9,7 +9,7 @@ const ConfirmDeletion = ({ onConfirm, onCancel }) => {
 
   return (
     <> 
-      <p className={css.logout__text}>Are you sure you want to delete the product?</p>
+      <p className={css.logout__text}>Are you sure you want to delete the item?</p>
       <button
         type="submit"
         className={css.logout__button}

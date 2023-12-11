@@ -11,8 +11,8 @@ const Sort = ({setSortMethod, setIsOpen, isOpen }) => {
   const listBtn = [
     { id: 0, sort: "price,desc", name: "Price (highest to lowest)" },
     { id: 1, sort: "price,asc", name: "Price (lowest to highest)" },
-    { id: 2, sort: "rating,desc", name: "Rating (highest to lowest)" },
-    { id: 3, sort: "rating,asc", name: "Rating (lowest to highest)" },
+    { id: 2, sort: "name,asc", name: "Name (A - Z)" },
+    { id: 3, sort: "name,desc", name: "Name (Z - A)" },
   ];
 
   const handleSortName = (item) => {

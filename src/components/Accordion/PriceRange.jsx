@@ -9,8 +9,24 @@ const MAX = 12000;
 export const PriceRange = () => {
   const [prices, setPrices] = useState([MIN, MAX]);
 
+  const [formData, setFormData] = useState({
+    priceMin: MIN,
+    priceMax: MAX,
+  });
+
+  const handleChange = (value) => {
+    console.log(value);
+    setFormData({
+      priceMin: value[0],
+      priceMax: value[1],
+    });
+  };
+
   const handleSubmit = () => {
-    console.log("prices", prices);
+    console.log("formData", formData);
+    // Далее можно отправить данные формы или выполнить необходимые действия.
+    // Например, вызвать функцию setPrices с новыми значениями цен.
+    setPrices([formData.priceMin, formData.priceMax]);
   };
 
   return (
@@ -21,7 +37,7 @@ export const PriceRange = () => {
         value={prices}
         min={MIN}
         max={MAX}
-        onChange={setPrices}
+        onChange={handleChange}
       />
 
       <div className={css.slider_box}>
@@ -31,7 +47,7 @@ export const PriceRange = () => {
               id="priceMin"
               readOnly
               type="text"
-              value={prices[0]}
+              value={formData.priceMin}
               className={css.slider_input}
             />
           </li>
@@ -41,12 +57,13 @@ export const PriceRange = () => {
               id="priceMax"
               readOnly
               type="text"
-              value={prices[1]}
+              value={formData.priceMax}
               className={css.slider_input}
             />
           </li>
         </ul>
-        <Button text={'OK'} onClickHandler={handleSubmit} isDisabled={false} />      </div>
+        <Button text={"OK"} onClickHandler={handleSubmit} isDisabled={false} />
+      </div>
     </>
   );
 };

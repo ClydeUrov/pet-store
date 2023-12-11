@@ -12,7 +12,8 @@
 
 .formContainer {
   display: flex;
-  gap: 20px; /* Расстояние между формами */
+  gap: 180px;
+  width: 100%;
 }
 
 .firstLine {
@@ -60,4 +61,9 @@
 }
 .button:focus {
   color: $focus-color;
+}
+
+.submitForm {
+  display: flex;
+  
 }
