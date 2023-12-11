@@ -81,8 +81,6 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
     }
   };
 
-  console.log("in create", images);
-
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>
@@ -97,7 +95,7 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
           images={images} setImages={setImages} productId={product?.id} mainImage={mainImage} setMainImage={setMainImage} 
         />)
         : null 
-      }      
+      }
       
       <Formik
         validationSchema={schemaAdminProducts}

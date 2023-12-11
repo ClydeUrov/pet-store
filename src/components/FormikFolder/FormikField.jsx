@@ -1,8 +1,8 @@
-import { ErrorMessage, Field, FieldArray} from "formik";
+import { ErrorMessage, Field } from "formik";
 import css from './FormikField.module.scss';
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { SaleCheckbox } from "../SaleCheckbox/SaleCheckbox";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const FormikField = (props) => {
   const {name, type, value, disabled, width, touched, errors, required, label, optionList, values, setFieldValue} = props;
@@ -16,10 +16,42 @@ const FormikField = (props) => {
     setFieldValue('newArrival', isChecked);
   }
 
-  // if (name === "notAvailable" && values[name]) {
-  //   console.log("values", values);
-  //   values[name] = { id:  values[name] === true ? 1 : 2 };
-  // }
+  const buildTree = (optionList) => {
+    const lookup = {};
+    optionList.forEach((item) => {
+      lookup[item.id] = { ...item, children: [] };
+    });
+  
+    const tree = [];
+    optionList.forEach((item) => {
+      if (item.parent) {
+        lookup[item.parent.id].children.push(lookup[item.id]);
+      } else {
+        tree.push(lookup[item.id]);
+      }
+    });
+  
+    return tree;
+  };
+  
+  const renderTreeOptions = (items, level = 0) => {
+    return items.map((item) => (
+      <>
+        <option
+          key={item.id}
+          value={item.id}
+          style={{
+            color: values[name]?.id === item.id ? "#ffad4d" : ''
+          }}
+        >
+          {values[name]?.id === item.id ? '' : '\u00A0'.repeat(level * 3)}{item.name}
+        </option>
+        {item.children.length > 0 && renderTreeOptions(item.children, level + 1)}
+      </>
+    ));
+  };
+  
+  const tree = buildTree(optionList || []);
 
   return (
     <div className={css.additions}>
@@ -45,15 +77,15 @@ const FormikField = (props) => {
               value={values[name]?.id || ""}
             > 
               <option value={undefined}></option>
-              {optionList?.map((item) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                  // defaultValue={values[name] && values[name].id === item.id}
-                >
-                  {item.name}
-                </option>
-              ))}
+              {name === 'category' ? (
+                renderTreeOptions(tree)
+              ) : (
+                optionList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))
+              )}
             </Field>
             <ErrorMessage name={name} component="p" className={css.error} />
           </div>
@@ -100,11 +132,9 @@ const FormikField = (props) => {
             <Field
               name={name}
               type={type === 'password' ? (passwordShow ? 'text' : 'password') : type}
-              disabled={disabled}
-              // value={value}
               style={{ width: width }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
-              required={required ? "required" : undefined}
+              // required={required ? "required" : undefined}
             />
             {type === "password" && (
               <button type="button" className={css.iconPassword} onClick={toggleVisibility} disabled={disabled}>

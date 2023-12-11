@@ -2,30 +2,70 @@ import { useEffect, useState } from "react";
 import axiosService from "../../../../helpers/axios";
 import Loader from "../../../Loader/Loader";
 import css from "./Constants.module.scss";
-import { AiOutlineDownload } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai";
+import Modal from "../../../Modal/Modal";
+import ConfirmDeletion from "../ConfirmDeletion";
+import { toast } from "react-toastify";
 
 const Constants = () => {
-  const [constants, setConstants] = useState();
+  const [constants, setConstants] = useState({});
   const [loading, setLoading] = useState(true);
+  const [currency, setCurrency] = useState("");
+  const [error, setError] = useState(null);
+  const [isDeleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
     axiosService.get(`/constants`)
       .then((resp) => {
         setLoading(false)
         setConstants(resp.data)
+        setCurrency(resp.data[1].value)
       })
-    ;
+      .catch((error) => setError(error.message));
   }, [])
 
-  const updateItem = ({key, data}) => {
-    if (key === "LOGO") {
-      axiosService.put(`/constants/${key}`, data)
-        .then((resp) => {})
-    } if (key === "CURRENCY") {
-      axiosService.put(`/constants/${key}`, data)
-        .then((resp) => {})
+  const updateItem = ({ key, data }) => {
+    const formData = new FormData();
+    formData.append("value", data);
+
+    const updatePromise = key === 'LOGO'
+      ? axiosService.put(`/constants/${key}`, formData)
+        .then((resp) => {
+          setConstants([
+            {
+              key: key,
+              value: {
+                id: resp.data.id,
+                filePath: resp.data.filePath,
+                fileName: resp.data.fileName,
+              },
+            },
+            constants[1],
+          ]);
+        })
+      : axiosService.put(`/constants/${key}`, formData)
+
+    toast.promise(updatePromise, {
+      success: "Updated successfully",
+      pending: key === 'LOGO' ? "Image loading in progress" : "Currency placement in progress",
+      error: "Operation failed",
+    });
+  };
+
+  const handleConfirmDeletion = () => {
+    if (constants[0].key === "LOGO") {
+      axiosService.delete(`/constants/${constants[0].key}/image`)
+        .then(() => {
+          setConstants([
+            { key: constants[0].key, value: {} },
+            constants[1],
+          ]);
+        })
+        .catch((error) => setError(error.message));
     }
-  }
+    setDeleteModal(false);
+  };
+  console.log(constants)
 
   return (
     <section>
@@ -37,12 +77,19 @@ const Constants = () => {
         ) : constants && constants.length > 0 ? (
           <div className={css.content}>
             <h3>Logo image</h3>
-            <label htmlFor="fileInput" className={css.imageUploadArea}>
-              {constants[0].value.filePath ? (
-                <img src={constants[0].value.filePath} alt={constants[0].key} />
-              ) : (
-                <AiOutlineDownload />
-              )}
+            <div
+              onDrop={(e) => {
+                e.preventDefault();
+                updateItem({ key: "LOGO", data: e.dataTransfer.files[0] });
+              }}
+              onDragOver={(e) => e.preventDefault()}
+            >
+              <label htmlFor="fileInput" className={css.imageUploadArea}>
+                {constants[0].value?.filePath ? (
+                  <img src={constants[0].value.filePath} alt={constants[0].key} />
+                ) : (
+                  <AiOutlineDownload />
+                )}
               </label>
               <input
                 id="fileInput"
@@ -51,20 +98,35 @@ const Constants = () => {
                 onChange={(e) => updateItem({key: constants[0].key, data: e.target.files[0] })}
                 style={{ display: "none" }}
               />
+              {constants[0].value && (
+                <div className={css.delete} onClick={() => {setDeleteModal(true);}}>
+                  <AiOutlineDelete />
+                </div>
+              )}
+            </div>
+              
             <h3>Currency</h3>
-            <select
-              name="currency"
-              value={constants[1].value}
-              onChange={(event) => updateItem({ key: constants[1].key, data: event.target.value })}
-            >
-              <option key={constants[1].key} value={constants[1].value}>
-                {constants[1].value}
-              </option>
-            </select>
+            <div className={css.input}>
+              <input
+                type="text"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)} 
+              />
+              <button onClick={() => {updateItem({ key: constants[1].key, data: currency })}}>Ok</button>
+            </div>
           </div>
         ) : (
           <p>No available items</p>
         )}
+      {error && <p>{error}</p>}
+      {isDeleteModal && (
+        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
+          <ConfirmDeletion
+            onConfirm={handleConfirmDeletion}
+            onCancel={() => setDeleteModal(false)}
+          />
+        </Modal>
+      )}
     </section>
   )
 }

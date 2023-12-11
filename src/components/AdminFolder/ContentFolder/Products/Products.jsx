@@ -1,97 +1,13 @@
 import { useEffect, useState } from "react";
-import { deleteCard, getAllCards } from "../../../../redux/cards/operations";
+import { getAllCards } from "../../../../redux/cards/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "../../../../redux/cards/selectors";
 import css from "./Products.module.scss";
-import Pagination from "../../../Pagination/Pagination";
-import { AiOutlineDelete } from "react-icons/ai";
-import { MdOutlineEdit } from "react-icons/md";
 import Sort from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import CreateUpdateProduct from "./CreateUpdateProduct/CreateUpdateProduct";
-import { toast } from "react-toastify";
-import Modal from "../../../Modal/Modal";
-import ConfirmDeletion from "../../ContentFolder/ConfirmDeletion";
-
-const ProductCards = ({ allCards, setPage, dispatch, setEditProduct, setPrevLength }) => {
-  const [isDeleteModal, setDeleteModal] = useState(false);
-  const [deleteItemId, setDeleteItemId] = useState(null);
-
-  const handleConfirmDeletion = async () => {
-    try {
-      await toast.promise(
-        dispatch(deleteCard(deleteItemId)), 
-          {
-            pending: "Promise is pending",
-            error: "The product was not deleted",
-          }
-      );
-      setPrevLength(allCards.content.length - 1);
-      setDeleteModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <div style={{width:"100%", marginBottom:"40px"}}>
-      <div className={css.columnHeaders}>
-        <p>Image</p>
-        <p>Name</p>
-        <p>Category</p>
-        <p>Price</p>
-        <p>Discount</p>
-        <p>Brand</p>
-        <p>New</p>
-        <p>Available</p>
-        <p></p>
-      </div>
-      {allCards.content.map((item) => (
-        <div
-          key={item.id}
-          className={
-            item.notAvailable
-              ? css.productRow
-              : `${css.productRow} ${css.notAvailable}`
-          }
-        >
-          <div className={css.picture}>
-            {item.mainImage && (
-              <img src={item.mainImage.filePath} alt="" />
-            )}
-          </div>
-          <div>{item.name}</div>
-          <div>{item.category.name}</div>
-          <div>${item.price}</div>
-          <div>${item.priceWithDiscount ? item.priceWithDiscount : 0}</div>
-          <div>{item.brand ? item.brand.name : "No brand"}</div>
-          <div>{item.newArrival ? "Yes" : "No"}</div>
-          <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
-          <div>
-            <MdOutlineEdit onClick={() => setEditProduct(item)} /> 
-            <AiOutlineDelete onClick={() => {setDeleteItemId(item.id); setDeleteModal(true);} } />
-          </div>
-        </div>
-      ))}
-      <Pagination
-        className="pagination-bar"
-        currentPage={allCards.number + 1}
-        totalCount={allCards.totalElements}
-        pageSize={allCards.size}
-        onPageChange={(page) => setPage(page)}
-      />
-      {isDeleteModal && (
-        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
-          <ConfirmDeletion
-            onConfirm={handleConfirmDeletion}
-            onCancel={() => setDeleteModal(false)}
-          />
-        </Modal>
-      )}
-    </div>
-  );
-};
+import ProductCards from "./ProductCards";
 
 const Products = ({product}) => {
   const dispatch = useDispatch();
@@ -110,6 +26,7 @@ const Products = ({product}) => {
     const fetchData = () => {
       try {
         dispatch(getAllCards({ page, sortMethod, nameLike }));
+        return;
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -119,17 +36,18 @@ const Products = ({product}) => {
       }
     };
 
+    if (
+      !allCards ||
+      allCards?.content?.length === 0 ||
+      page !== (allCards.pageable?.pageNumber + 1) ||
+      prevLength !== allCards?.content?.length ||
+      sortMethod !== prevSort 
+    ) {
+      fetchData()
+    }
+    console.log(1)
     const delayTimer = setTimeout(() => {
-      if (
-        !allCards ||
-        allCards?.content?.length === 0 ||
-        page !== (allCards.pageable?.pageNumber + 1) ||
-        prevLength !== allCards?.content?.length ||
-        sortMethod !== prevSort ||
-        nameLike !== prevName
-      ) {
-        fetchData();
-      }
+      if (nameLike !== prevName) fetchData();
     }, 2000);
 
     return () => clearTimeout(delayTimer);
@@ -164,7 +82,7 @@ const Products = ({product}) => {
         <Sort setSortMethod={setSortMethod} isOpen={isOpen} setIsOpen={setIsOpen}/>
         {isLoading ? (
           <Loader />
-        ) : !allCards.content ? (
+        ) : !allCards?.content ? (
           <div className={css.firstLine}>No data available.</div>
         ) : (
           <ProductCards 
