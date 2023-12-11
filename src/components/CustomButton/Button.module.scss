@@ -1,12 +1,14 @@
 @import "../../../src/variables";
 .button {
-  padding: 14px 22px;
-  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  border-radius: 2rem;
+  min-width: fit-content;
+  height: fit-content;
   border: none;
   background-color: $main-color;
   box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
   color: $btn-text;
-  font-size: 21px;
+  font-size: 1.3rem;
   font-weight: 800;
   line-height: 1.14;
   cursor: pointer;
@@ -21,15 +23,18 @@
 
 .btnDisabled {
   background-color: $outstock-btn;
-  padding: 14px 23px;
-  border-radius: 999px;
-  border-color: transparent;
+  padding: 0.7rem 1rem;
+  border-radius: 2rem;
+  min-width: fit-content;
+  height: fit-content;
+  border: none;
   box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
   color: $btn-text;
-  font-family: "Lato";
-  font-size: 21px;
-  font-style: normal;
+  font-size: 1.3rem;
   font-weight: 800;
-  line-height: 24px;
+  line-height: 1.14;
+  cursor: not-allowed;
   outline-color: transparent;
+  text-align: center;
+  font-family: "Lato";
 }

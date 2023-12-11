@@ -4,18 +4,21 @@ import SaleItemForSlider from "./SaleItemForSlider";
 import BrandItemForSlider from "./BrandItemForSlider";
 import FavoriteItemForSlider from "./FavoriteItemForSlider";
 import ButtonForSlider from "./ButtonForSlider";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import Card from "../Card/Card";
 
 function SliderForHomepage({ title, items, type, slidesPerView }) {
   const swiper = useRef();
+
   function handleNextScroll() {
     swiper.current.swiper.slideNext();
   }
+
   function handlePrevScroll() {
     swiper.current.swiper.slidePrev();
   }
+
   return (
     <div className={styles.wrapper}>
       <h3 className={styles.title}>{title}</h3>

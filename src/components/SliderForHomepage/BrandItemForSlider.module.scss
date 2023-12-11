@@ -1,11 +1,22 @@
 @import "../../variables.scss";
 
 .container {
-  height: fit-content;
+  height: 8rem;
   padding: 0 0.5rem 0 0.5rem;
 }
 
 .image {
   height: 8rem;
   object-fit: fill;
+}
+
+.no_img {
+  height: 100%;
+  width: 100%;
+  background-color: #f4f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $main-color;
+  font-size: x-large;
 }

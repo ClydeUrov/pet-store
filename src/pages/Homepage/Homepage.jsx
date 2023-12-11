@@ -1,7 +1,7 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
 import { toast } from "react-toastify";
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { fetchMainCategories } from "../../helpers/api";
 import { SliderOfCards } from "../../components/SliderOfCards/SliderOfCards";
@@ -13,10 +13,27 @@ import { getOnSale } from "../../redux/cards/operations";
 import { fetchIndicators } from "../../helpers/api";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
+import { current } from "@reduxjs/toolkit";
 
 const Homepage = () => {
   const [mainCategories, setMainCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [slidesPerView, setSlidesPerView] = useState(
+    Math.floor(window.innerWidth / 300)
+  );
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setSlidesPerView(Math.floor(window.innerWidth / 300));
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+  console.log(slidesPerView, "SLIDES PER VIEW!!!!");
 
   useEffect(() => {
     fetchMainCategories()
@@ -47,8 +64,6 @@ const Homepage = () => {
 
   const { content } = cardsOnSale;
 
-  console.log(content, "CONTENT!!!!");
-  console.log(brands.length, "BRANDS!!!!");
   return (
     <section className={css.section}>
       <div className={style.container}>
@@ -58,20 +73,20 @@ const Homepage = () => {
             items={content}
             title="Your Pet Will Love These"
             type="saleSlider"
-            slidesPerView={4}
+            slidesPerView={slidesPerView}
           />
 
           <SliderForHomepage
             items={content}
             title="On Sale"
             type="saleSlider"
-            slidesPerView={4}
+            slidesPerView={slidesPerView}
           />
           <SliderForHomepage
             items={brands}
             title="Brands"
             type="brandSlider"
-            slidesPerView={4}
+            slidesPerView={slidesPerView}
           />
         </div>
       </div>

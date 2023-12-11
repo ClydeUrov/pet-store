@@ -50,14 +50,16 @@ const Card = ({ item }) => {
           <div>
             {/* {item.rating ? ( */}
             <div className={styles.cardRating}>
-              <StarRating n={item.rating} size={16} />
+              <div>
+                <StarRating n={item.rating} size={16} />
+              </div>
               <p className={styles.cardRating_left}>365 reviews</p>
             </div>
             {/* // ) : null} */}
           </div>
           {item.priceWithDiscount ? (
             <div className={styles.cardPriceBox}>
-              <p className={styles.cardPrice}>$ {item.priceWithDiscount}</p>{" "}
+              <p className={styles.cardPrice}>$ {item.priceWithDiscount}</p>
               <p className={styles.cardPriceNot}>$ {item.price}</p>
             </div>
           ) : (
