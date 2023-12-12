@@ -1,10 +1,9 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./SliderForHomepage.module.scss";
-import SaleItemForSlider from "./SaleItemForSlider";
 import BrandItemForSlider from "./BrandItemForSlider";
 import FavoriteItemForSlider from "./FavoriteItemForSlider";
 import ButtonForSlider from "./ButtonForSlider";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Navigation } from "swiper/modules";
 import Card from "../Card/Card";
 

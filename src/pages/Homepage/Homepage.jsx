@@ -33,7 +33,6 @@ const Homepage = () => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
-  console.log(slidesPerView, "SLIDES PER VIEW!!!!");
 
   useEffect(() => {
     fetchMainCategories()
@@ -63,6 +62,8 @@ const Homepage = () => {
   }
 
   const { content } = cardsOnSale;
+
+  console.log(content);
 
   return (
     <section className={css.section}>

@@ -1,26 +1,31 @@
 import css from "./ProductAbout.module.scss";
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { fetchProductById } from "../../../helpers/api";
+// import { useParams } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { fetchProductById } from "../../../helpers/api";
 
-const ProductAbout = () => {
-  const { productId } = useParams();
-  const [product, setProduct] = useState(null);
+const ProductAbout = ({ product }) => {
+  // const { productId } = useParams();
+  // const [product, setProduct] = useState(null);
 
-  useEffect(() => {
-    fetchProductById(productId)
-      .then(setProduct)
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  }, [productId]);
+  // console.log("PRODUCT ABOUT");
+
+  // useEffect(() => {
+  //   fetchProductById(productId)
+  //     .then(setProduct)
+  //     .catch((error) => {
+  //       console.log("Error", error);
+  //     });
+  // }, [productId]);
+  // console.log(product, 1);
+  // console.log(productId);
 
   if (!product) {
     return;
   }
 
+  // console.log(product, 2);
   const {
-    description,
+    // description,
     age,
     productSize,
     weight,
@@ -28,6 +33,20 @@ const ProductAbout = () => {
     prescription,
     contraindications,
   } = product;
+  // console.log(
+  //   description,
+  //   age,
+  //   productSize,
+  //   weight,
+  //   brand,
+  //   prescription,
+  //   contraindications,
+  //   3,
+  //   "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  // );
+  const description = `Lorem ipsum dolor sit amet consectetur. Fusce malesuada sed elit arcu dui at quis turpis tincidunt. Purus felis at ornare amet est nisi turpis sit. At a elementum mauris non in pulvinar tempor integer dignissim. Euismod et tempor nec cras congue malesuada quis. Senectus mollis imperdiet ac pellentesque. Et elit vestibulum tristique turpis in et sed.
+  Lorem ipsum dolor sit amet consectetur. Fusce malesuada sed elit arcu dui at quis turpis tincidunt. Purus felis at ornare amet est nisi turpis sit. At a elementum mauris non in pulvinar tempor integer dignissim. Euismod et tempor nec cras congue malesuada quis. Senectus mollis imperdiet ac pellentesque. Et elit vestibulum tristique turpis in et sed.
+  Lorem ipsum dolor sit amet consectetur. Fusce malesuada sed elit arcu dui at quis turpis tincidunt. Purus felis at ornare amet est nisi turpis sit. At a elementum mauris non in pulvinar tempor integer dignissim. Euismod et tempor nec cras congue malesuada quis. Senectus mollis imperdiet ac pellentesque. Et elit vestibulum tristique turpis in et sed.`;
   return (
     <>
       <div className={css.box}>
@@ -83,7 +102,7 @@ const ProductAbout = () => {
                 </td>
                 <td className={css.table_data}>
                   {" "}
-                  {brand ? { brand } : "No info"}{" "}
+                  {brand ? brand.name : "No info"}{" "}
                 </td>
               </tr>
               <tr className={css.table_row}>
