@@ -1,11 +1,9 @@
 import { useState } from "react";
 // import { useDispatch } from "react-redux";
- import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import { useSelector } from 'react-redux';
-import {
-  CheckboxIcon,
-} from "../../icons/icons";
-import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
+import { CheckboxIcon } from "../../icons/icons";
+import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaSignUp } from "../../helpers/schemes";
@@ -20,8 +18,8 @@ const initialValues = {
   remember: false,
 };
 
-const RegisterForm = ({onClick, onClose}) => {
-   const navigate = useNavigate();
+const RegisterForm = ({ onClick, onClose }) => {
+  const navigate = useNavigate();
   // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
@@ -29,7 +27,7 @@ const RegisterForm = ({onClick, onClose}) => {
   const togglePassword = () => {
     setPasswordShow(!passwordShow);
   };
-
+  
   //   const handleSubmit = async (formData, { resetForm }) => {
   //    // const { error } = await login(formData);
   //     if (error) {
@@ -59,7 +57,7 @@ const RegisterForm = ({onClick, onClose}) => {
     resetForm();
     // dispatch(addNewUser(newUser));
     onClose();
-    navigate('/user/account');
+    navigate("/user/account");
     return;
   };
 
@@ -71,18 +69,20 @@ const RegisterForm = ({onClick, onClose}) => {
         onSubmit={handleSubmit}
       >
         {(props) => (
-          
-        <Form className={css.form}>
+          <Form className={css.form}>
             <div className={css.input__wrapper}>
               <label htmlFor="firstName" className={css.label}>
                 First name{" "}
               </label>
               <Field
-                className={ (props.touched.firstName && props.errors.firstName) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.firstName && props.errors.firstName
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="firstName"
                 id="firstName"
                 type="text"
-
                 required
               />
               <ErrorMessage
@@ -97,7 +97,11 @@ const RegisterForm = ({onClick, onClose}) => {
                 Last name{" "}
               </label>
               <Field
-                className={ (props.touched.lastName && props.errors.lastName) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.lastName && props.errors.lastName
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="lastName"
                 id="lastName"
                 type="text"
@@ -117,11 +121,14 @@ const RegisterForm = ({onClick, onClose}) => {
                 E-mail
               </label>
               <Field
-                className={ (props.touched.email && props.errors.email) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.email && props.errors.email
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="email"
                 id="email"
                 type="email"
-
                 required
               />
               <ErrorMessage name="email" component="p" className={css.error} />
@@ -132,26 +139,33 @@ const RegisterForm = ({onClick, onClose}) => {
                 Password
               </label>
               <Field
-                className={ (props.touched.password && props.errors.password) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.password && props.errors.password
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="password"
                 id="password"
                 type={passwordShow ? "text" : "password"}
-
                 required
               />
-              <button type="button"
+              <button
+                type="button"
                 id="visibilityBtn"
                 className={css.iconPassword}
                 onClick={togglePassword}
               >
-                {passwordShow ? <MdOutlineVisibility size={24}/> : <MdOutlineVisibilityOff size={24}/>}
+                {passwordShow ? (
+                  <MdOutlineVisibility size={24} />
+                ) : (
+                  <MdOutlineVisibilityOff size={24} />
+                )}
               </button>
               <ErrorMessage
                 name="password"
                 component="p"
                 className={css.error}
               />
-           
             </div>
 
             <div className={css.checkbox__wrapper}>
@@ -203,9 +217,8 @@ const RegisterForm = ({onClick, onClose}) => {
               Sign Up
             </button>
             <button type="submit" className={css.link} onClick={onClick}>
-            Already have an account? Log in
+              Already have an account? Log in
             </button>
-
           </Form>
         )}
       </Formik>

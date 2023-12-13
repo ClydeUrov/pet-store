@@ -3,6 +3,7 @@ import css from "./Characteristics.module.scss";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineDownload } from "react-icons/ai";
 import axiosService from "../../../../helpers/axios";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const CreateUpdate = ({
   title, action, setField, field, editingItem, setEditingItem, characteristics, setShowCreateForm, setCharacteristics
@@ -39,14 +40,25 @@ const CreateUpdate = ({
           )
         );
       } else {
+        const resp = await axios.post('https://online-zoo-store-backend-web-service.onrender.com/api/v1/auth/login', {
+          "email": "pawsome.eshop@gmail.com",
+          "password": "12345888"
+        })
+        console.log("Log resp", resp.data)
         const response = await toast.promise(axiosService.post(
           `/${action}`, 
-          {name: field.name, ...(field.parent && { parent: field.parent })}
+          {name: field.name, ...(field.parent && { parent: field.parent })},
+          {
+            headers: {
+              'Authorization': `Bearer ${resp.data.accessToken}`,
+            },
+          }
         ), {
           pending: "Creation in progress",
           error: "Item was not created",
           success: "Created successfully",
         });
+        console.log("Char resp", response)
         let newItem = { ...response.data };
   
         if (field.image) {
@@ -59,11 +71,10 @@ const CreateUpdate = ({
       }
     } catch (err) {
       if (err.response?.data.message) {
-        const errorResponse = JSON.parse(err.response.data.message);
-        setError(errorResponse);
+        setError(err.response.data.message);
       } if (err.message) {
-        const errorResponse = JSON.parse(err.message);
-        setError(errorResponse);
+        console.log(err);
+        setError(err.message);
       }
     }
     setField({});

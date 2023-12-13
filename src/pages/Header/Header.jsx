@@ -94,7 +94,7 @@ const Header = () => {
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
-              {categories.length > 0 && showMenu && (
+              {categories?.length > 0 && showMenu && (
                 <div className={styles.dropdownMenu}>
                   <div className={styles.horizontalList} >
                     <ul>

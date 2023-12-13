@@ -3,6 +3,10 @@ import css from "./UserAccount.module.scss";
 import UserOrdersNew from "../UserOrdersNew/UserOrdersNew";
 import { Link } from "react-router-dom";
 import { GoPencil } from 'react-icons/go';
+import axiosService, { fetcher } from "../../helpers/axios";
+import { useUserActions } from "../../helpers/user.actions";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 export const user = {
@@ -37,14 +41,74 @@ export const user = {
 // flat: "",
 
 const UserAccount = () => {
+  const userAction = useUserActions();
+  const [userr, setUser] = useState({});
+
+  // const use = fetcher("/users/profile")
+  const config = {
+    headers: {
+      'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdzb21lLmVzaG9wQGdtYWlsLmNvbSIsImlzcyI6Im9ubGluZS56b28uc3RvcmU6UGF3U29tZSIsImlhdCI6MTcwMjQ3NDAyMywiZXhwIjoxNzAyNTYwNDIzfQ.tzIxDBvLtSkW8mQRWB7ibHxmEfqgEq25e9CDPVUS5AY`,
+    },
+  }
+  const param = {
+      "email": "pawsome.eshop@gmail.com",
+      "password": "12345888"
+  }
+
+  axios.get('https://online-zoo-store-backend-web-service.onrender.com/api/v1/users/profile', config)
+  .then(response => {
+    console.log('1 Успешный ответ:', response.data);
+  })
+  .catch(error => {
+    console.error('1 Ошибка запроса:', error);
+  });
+
+  axios.get('https://online-zoo-store-backend-web-service.onrender.com/api/v1/users', config)
+  .then(response => {
+    console.log('2 Успешный ответ:', response.data);
+  })
+  .catch(error => {
+    console.error('2 Ошибка запроса:', error);
+  });
+
+  axios.post('https://online-zoo-store-backend-web-service.onrender.com/api/v1/auth/login', param)
+  .then(response => {
+    console.log('3 Успешный ответ:', response.data);
+  })
+  .catch(error => {
+    console.error('3 Ошибка запроса:', error);
+  });
+  // const auth = JSON.parse(localStorage.getItem("auth")) || null;
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const use = await axiosService.get(`users/profile`, {
+  //         headers: {
+  //           'Authorization': "Bearer " + auth?.access
+  //         },
+  //         withCredentials: true,
+  //       })
+  //       console.log("user", use);
+  //       setUser(use)
+  //     } catch (error) {
+  //       // Обработка ошибки
+  //       console.error("Error fetching user profile:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // })
+  // console.log("2 userr", use);
+
   return (
     <>
-      <h3 className={css.title}>Hello, {user.name}!</h3>
+      <h3 className={css.title}>Hello, {userr.firstName}!</h3>
 
       <ul className={css.list}>
         <li className={css.item}>
           <p className={css.user__name}>
-            {user.name} {user.surname}
+            {userr.firstName} {userr.lastName}
           </p>
           <Link to="/user/info" className={css.icon}>
             <GoPencil size={24} />
@@ -52,18 +116,19 @@ const UserAccount = () => {
         </li>
         <li className={css.item}>
           <p>E-mail</p>
-          <p className={css.user__info}>{user.email}</p>
+          <p className={css.user__info}>{userr.email}</p>
         </li>
         <li className={css.item}>
           <p>Delivery information</p>
           <p className={css.user__info}>
-            <span>{user.country}, </span>
+            <span>{userr.birthDate},</span>
+            {/* <span>{user.country}, </span>
             <span>{user.region}, </span>
             <span>{user.city}, </span>
             <span>{user.street}, </span>
             <span>{user.building}, </span>
             {user.flat ? <span>{user.flat}, </span> : null}
-            <span>{user.code} </span>
+            <span>{user.code} </span> */}
           </p>
         </li>
       </ul>
