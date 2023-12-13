@@ -25,14 +25,7 @@ const ProductInstructions = ({ instructions }) => {
         <h3 className={css.title}>Feeding instructions</h3>
 
         {instructions ? (
-          <p className={css.text}>
-            Lorem ipsum dolor sit amet consectetur. Fusce malesuada sed elit
-            arcu dui at quis turpis tincidunt. Purus felis at ornare amet est
-            nisi turpis sit. At a elementum mauris non in pulvinar tempor
-            integer dignissim. Euismod et tempor nec cras congue malesuada quis.
-            Senectus mollis imperdiet ac pellentesque. Et elit vestibulum
-            tristique turpis in et sed.{" "}
-          </p>
+          <p className={css.text}>{instructions}</p>
         ) : (
           <p className={css.text}>No information</p>
         )}

@@ -28,15 +28,27 @@ export default function StarRatingNew({
   className = "",
   messages = [],
   defaultRating = 0,
-  onSetRating,
+  onSetRating = function (e) {
+    return;
+  },
+  active = true,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
   function handleRating(rating) {
-    setRating(rating);
-    onSetRating(rating);
+    if (active) {
+      setRating(rating);
+      onSetRating(rating);
+    }
   }
+  const handleOnHoverIn = (i) => {
+    if (active) setTempRating(i);
+  };
+
+  const handleOnHoverOut = (i) => {
+    if (active) setTempRating(i);
+  };
 
   const textStyle = {
     lineHeight: "1",
@@ -53,10 +65,11 @@ export default function StarRatingNew({
             key={i}
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
             onRate={() => handleRating(i + 1)}
-            onHoverIn={() => setTempRating(i + 1)}
-            onHoverOut={() => setTempRating(0)}
+            onHoverIn={() => handleOnHoverIn(i + 1)}
+            onHoverOut={() => handleOnHoverOut(0)}
             color={color}
             size={size}
+            active={active}
           />
         ))}
       </div>
@@ -69,12 +82,12 @@ export default function StarRatingNew({
   );
 }
 
-function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
+function Star({ onRate, full, onHoverIn, onHoverOut, color, size, active }) {
   const starStyle = {
     width: `${size}px`,
     height: `${size}px`,
     display: "block",
-    cursor: "pointer",
+    cursor: active ? "pointer" : "",
   };
 
   return (

@@ -70,6 +70,8 @@ const ProductPage = () => {
     return;
   }
 
+  console.log(product);
+
   // console.log("product", product);
 
   function handleChangeQuantityOfItem(action) {
@@ -144,7 +146,6 @@ const ProductPage = () => {
               <StarRatingNew
                 size={24}
                 color="#FFBD71"
-                defaultRating={0}
                 onSetRating={handleSetStarRating}
               />
               <span className={css.product_rating_text}>0 reviews</span>
