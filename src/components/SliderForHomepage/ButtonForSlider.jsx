@@ -1,6 +1,3 @@
-// import styles from './ButtonForSlider.module.css'
-
-// import { useSwiper } from "swiper/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 function ButtonForSlider({ type, size, onClick }) {

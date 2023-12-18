@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Button from "../CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
-const Card = ({ item }) => {
+const Card = ({ item, onClick }) => {
   const { constants } = useConstants();
   const favorites = useSelector(selectFavorites);
 
@@ -24,10 +24,11 @@ const Card = ({ item }) => {
 
   return (
     <li className={styles.item}>
-      <Link to={`/catalogue/products/${item.id}/about`}>
+      <Link to={`/catalogue/products/${item.id}`}>
         <div className={styles.img_cover}>
           {item.mainImage ? (
             <img
+              onClick={onClick}
               className={styles.itemImg}
               src={item.mainImage.filePath}
               alt={item.name}
@@ -61,12 +62,18 @@ const Card = ({ item }) => {
           </div>
           {item.priceWithDiscount ? (
             <div className={styles.cardPriceBox}>
-              <p className={styles.cardPrice}>{constants[1].value} {item.priceWithDiscount}</p>{" "}
-              <p className={styles.cardPriceNot}>{constants[1].value} {item.price}</p>
+              <p className={styles.cardPrice}>
+                {constants[1].value} {item.priceWithDiscount}
+              </p>{" "}
+              <p className={styles.cardPriceNot}>
+                {constants[1].value} {item.price}
+              </p>
             </div>
           ) : (
             <div className={styles.cardPriceBox}>
-              <p className={styles.cardPrice}>{constants[1].value} {item.price}</p>
+              <p className={styles.cardPrice}>
+                {constants[1].value} {item.price}
+              </p>
             </div>
           )}
         </div>

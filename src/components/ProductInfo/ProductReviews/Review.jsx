@@ -3,15 +3,6 @@ import ButtonForReview from "./ButtonForReview";
 import styles from "./Review.module.scss";
 import { FaUserNinja } from "react-icons/fa6";
 
-// {
-//     name: "Іван",
-//     review:
-//       "Цей новий когтеточ просто чудовий! Мій кіт любить на ньому дряпатися, і він добре виглядає у моєму домі.",
-//     rating: 5,
-//     date: "2023-12-13",
-//     id: 1,
-//   },
-
 function Review({ review }) {
   return (
     <div className={styles.wrapper}>

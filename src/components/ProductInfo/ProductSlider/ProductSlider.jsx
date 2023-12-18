@@ -27,15 +27,9 @@ export const ProductSlider = ({ items }) => {
       >
         {images?.map((item) => {
           return (
-            <SwiperSlide className={css.swiper_slide}>
+            <SwiperSlide className={css.swiper_slide} key={item.id}>
               <div className={css.swiper_thumb_img_cover}>
-                {!item ? null : (
-                  <img
-                    // className={css.item_img}
-                    src={item.filePath}
-                    alt={item.name}
-                  />
-                )}
+                {!item ? null : <img src={item.filePath} alt={item.name} />}
               </div>
             </SwiperSlide>
           );
@@ -59,15 +53,9 @@ export const ProductSlider = ({ items }) => {
         >
           {images?.map((item) => {
             return (
-              <SwiperSlide className={css.swiper_slide}>
+              <SwiperSlide className={css.swiper_slide} key={item.id}>
                 <div className={css.swiper_product_img_cover}>
-                  {!item ? null : (
-                    <img
-                      // className={css.item_img}
-                      src={item.filePath}
-                      alt={item.name}
-                    />
-                  )}
+                  {!item ? null : <img src={item.filePath} alt={item.name} />}
                 </div>
               </SwiperSlide>
             );

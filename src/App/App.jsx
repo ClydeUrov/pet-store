@@ -29,15 +29,7 @@ const UserOrderItem = lazy(() =>
   import("../components/UserOrderItem/UserOrderItem")
 );
 const UserReviews = lazy(() => import("../components/UserReviews/UserReviews"));
-const ProductAbout = lazy(() =>
-  import("../components/ProductInfo/ProductAbout/ProductAbout")
-);
-const ProductInstructions = lazy(() =>
-  import("../components/ProductInfo/ProductInstructions/ProductInstructions")
-);
-const ProductReviews = lazy(() =>
-  import("../components/ProductInfo/ProductReviews/ProductReviews")
-);
+
 const Orders = lazy(() => import("../components/AdminFolder/Orders/Orders"));
 const AdminProfile = lazy(() =>
   import("../components/AdminFolder/AdminProfile/AdminProfile")
@@ -55,14 +47,7 @@ const App = () => {
           <Route
             path="/catalogue/products/:productId"
             element={<ProductPage />}
-          >
-            <Route path="about" element={<ProductAbout />}></Route>
-            <Route
-              path="instructions"
-              element={<ProductInstructions />}
-            ></Route>
-            <Route path="reviews" element={<ProductReviews />}></Route>
-          </Route>
+          />
           <Route path="/cart" element={<Cart />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route

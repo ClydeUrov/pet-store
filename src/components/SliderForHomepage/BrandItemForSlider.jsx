@@ -4,7 +4,6 @@ import styles from "./BrandItemForSlider.module.scss";
 function BrandItemForSlider({ item }) {
   return (
     <div className={styles.container}>
-      {/* {item.image.filePath ?} */}
       <Link to="/catalogue/all">
         {!item.image ? (
           <div className={styles.no_img}>
@@ -12,7 +11,6 @@ function BrandItemForSlider({ item }) {
           </div>
         ) : (
           <img
-            // className={css.itemImg}
             src={item.image.filePath}
             alt={item.name}
             className={styles.image}

@@ -1,20 +1,6 @@
 import css from "./ProductInstructions.module.scss";
-// import { useParams } from "react-router-dom";
-// import { useState, useEffect } from "react";
-// import { fetchProductById } from "../../../helpers/api";
 
 const ProductInstructions = ({ instructions }) => {
-  // const { productId } = useParams();
-  // const [product, setProduct] = useState(null);
-
-  // useEffect(() => {
-  //   fetchProductById(productId)
-  //     .then(setProduct)
-  //     .catch((error) => {
-  //       console.log("Error", error);
-  //     });
-  // }, [productId]);
-
   if (!instructions) {
     return <h3>No instructions for now</h3>;
   }
