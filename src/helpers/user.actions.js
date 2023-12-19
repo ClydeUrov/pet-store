@@ -77,15 +77,13 @@ function useUserActions() {
 }
 
 function useAdminActions() {
-  const access = getAccessToken();
-
   const sendRequest = async (method, path, data) => {
     const response = await axiosService({
       method,
       url: `${baseURL}${path}`,
       data,
       headers: {
-        Authorization: `Bearer ${access}`
+        Authorization: `Bearer ${getAccessToken()}`
       }
     });
     return response.data;

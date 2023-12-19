@@ -14,10 +14,8 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
   const adminAction = useAdminActions();
 
   const handleImageChangeOrDrop = async (e, index) => {
-    e.preventDefault();
-  
-    const file = e.target.files[0] || e.dataTransfer.files[0];
-
+    const file = e.target.files?.[0] ?? e.dataTransfer.files?.[0];
+    
     if (file) {
       if (file.size > 10485760) {
         setError("Image size exceeds 10 MB limit");
@@ -37,24 +35,27 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
         );
 
         const newImages = [...images];
-        console.log("image", newImages, image);
         newImages[index] = image[0];
         setImages(newImages);
       } catch (err) {
+        console.log(err)
         err.response ? setError(err.response.data.message) : setError(err.message)
       }
     }
   };
 
   const handleConfirmDeletion = () => {
-    if(productId) {
+    try {
       adminAction
-        .delete(`/products/${productId}/images/${images[deleteItemId].id}`)
-        .catch((err) => {err.response ? setError(err.response.data.message) : setError(err.message)})
+        .deleteAction(`/products/${productId}/images/${images[deleteItemId].id}`)
+        .catch((err) => err.response ? setError(err.response.data.message) : setError(err.message))
+      
+      const newImages = [...images];
+      newImages.splice(deleteItemId, 1);
+      setImages(newImages);
+    } catch (err) {
+      err.response ? setError(err.response.data.message) : setError(err.message)
     }
-    const newImages = [...images];
-    newImages.splice(deleteItemId, 1);
-    setImages(newImages);
     setDeleteModal(false);
   };
 
@@ -80,11 +81,13 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
         <section key={index}>
           <div
             className={css.imageUploadWindow}
-            onDrop={(e) => handleImageChangeOrDrop(e, index)}
+            onDrop={(e) =>{
+              e.preventDefault();
+              handleImageChangeOrDrop(e, index);
+            }}
             onDragOver={(e) => e.preventDefault()}
           >
             {images[index] ? (
-              
               <button
                 className={`${css.mainImageButton} ${mainImage?.id === images[index].id ? css.activeImg : ""}`}
                 onClick={(e) => handleMainImage(index)}

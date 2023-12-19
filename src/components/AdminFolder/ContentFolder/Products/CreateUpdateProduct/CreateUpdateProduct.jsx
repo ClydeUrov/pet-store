@@ -68,11 +68,11 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
       }
     } else {
       try {
-        dispatch(toast.promise(createCard(values), {
+        toast.promise(dispatch(createCard(values)), {
           pending: "Request in progress",
           success: "Product created successfully!",
           error: "The product was not created",
-        }))
+        })
         navigate(-1)
       } catch (err) {
         err.response ? setError(err.response.data.message) : setError(err.message)
