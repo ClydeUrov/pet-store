@@ -53,6 +53,7 @@
   position: absolute;
   border: none;
   z-index: 10;
+  border: 2px solid $outstock-btn;
 }
 
 .swiper_prev {
@@ -70,10 +71,10 @@
   color: $hover-color;
 }
 
-.swiper_prev:focus,
-.swiper_next:focus {
-  color: $focus-color;
-}
+// .swiper_prev:focus,
+// .swiper_next:focus {
+//   color: $focus-color;
+// }
 
 .swiper_product_img_cover {
   display: flex;

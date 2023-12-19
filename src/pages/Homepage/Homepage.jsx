@@ -59,6 +59,8 @@ const Homepage = () => {
 
   const { content } = cardsOnSale;
 
+  console.log(content);
+
   return (
     <section className={css.section}>
       <div className={style.container}>
