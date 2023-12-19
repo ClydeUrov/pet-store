@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pet-store/static/css/main.4df4eecf.css",
-    "main.js": "/pet-store/static/js/main.2fee25cf.js",
+    "main.css": "/pet-store/static/css/main.66186930.css",
+    "main.js": "/pet-store/static/js/main.523a7af1.js",
     "static/css/2.59447f01.chunk.css": "/pet-store/static/css/2.59447f01.chunk.css",
     "static/js/2.9331df73.chunk.js": "/pet-store/static/js/2.9331df73.chunk.js",
     "static/css/736.d33c0fc0.chunk.css": "/pet-store/static/css/736.d33c0fc0.chunk.css",
@@ -14,16 +14,10 @@
     "static/js/43.e4d6ae9f.chunk.js": "/pet-store/static/js/43.e4d6ae9f.chunk.js",
     "static/css/120.67aa4597.chunk.css": "/pet-store/static/css/120.67aa4597.chunk.css",
     "static/js/120.5085a3c8.chunk.js": "/pet-store/static/js/120.5085a3c8.chunk.js",
-    "static/css/386.ea477650.chunk.css": "/pet-store/static/css/386.ea477650.chunk.css",
-    "static/js/386.d5a58724.chunk.js": "/pet-store/static/js/386.d5a58724.chunk.js",
-    "static/css/958.bbdb2b19.chunk.css": "/pet-store/static/css/958.bbdb2b19.chunk.css",
-    "static/js/958.c1a323df.chunk.js": "/pet-store/static/js/958.c1a323df.chunk.js",
-    "static/css/19.87e61257.chunk.css": "/pet-store/static/css/19.87e61257.chunk.css",
-    "static/js/19.ec5e5418.chunk.js": "/pet-store/static/js/19.ec5e5418.chunk.js",
     "static/css/925.38f93487.chunk.css": "/pet-store/static/css/925.38f93487.chunk.css",
     "static/js/925.e79a1fa4.chunk.js": "/pet-store/static/js/925.e79a1fa4.chunk.js",
     "static/css/180.12429bdf.chunk.css": "/pet-store/static/css/180.12429bdf.chunk.css",
-    "static/js/180.f900dd5b.chunk.js": "/pet-store/static/js/180.f900dd5b.chunk.js",
+    "static/js/180.857f16d5.chunk.js": "/pet-store/static/js/180.857f16d5.chunk.js",
     "static/js/763.36cd7b39.chunk.js": "/pet-store/static/js/763.36cd7b39.chunk.js",
     "static/js/692.b5101568.chunk.js": "/pet-store/static/js/692.b5101568.chunk.js",
     "static/media/axios.cjs": "/pet-store/static/media/axios.e127f42b383af9f755dc.cjs",
@@ -32,8 +26,8 @@
     "static/media/slick.ttf": "/pet-store/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/pet-store/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/pet-store/index.html",
-    "main.4df4eecf.css.map": "/pet-store/static/css/main.4df4eecf.css.map",
-    "main.2fee25cf.js.map": "/pet-store/static/js/main.2fee25cf.js.map",
+    "main.66186930.css.map": "/pet-store/static/css/main.66186930.css.map",
+    "main.523a7af1.js.map": "/pet-store/static/js/main.523a7af1.js.map",
     "2.59447f01.chunk.css.map": "/pet-store/static/css/2.59447f01.chunk.css.map",
     "2.9331df73.chunk.js.map": "/pet-store/static/js/2.9331df73.chunk.js.map",
     "736.d33c0fc0.chunk.css.map": "/pet-store/static/css/736.d33c0fc0.chunk.css.map",
@@ -46,21 +40,15 @@
     "43.e4d6ae9f.chunk.js.map": "/pet-store/static/js/43.e4d6ae9f.chunk.js.map",
     "120.67aa4597.chunk.css.map": "/pet-store/static/css/120.67aa4597.chunk.css.map",
     "120.5085a3c8.chunk.js.map": "/pet-store/static/js/120.5085a3c8.chunk.js.map",
-    "386.ea477650.chunk.css.map": "/pet-store/static/css/386.ea477650.chunk.css.map",
-    "386.d5a58724.chunk.js.map": "/pet-store/static/js/386.d5a58724.chunk.js.map",
-    "958.bbdb2b19.chunk.css.map": "/pet-store/static/css/958.bbdb2b19.chunk.css.map",
-    "958.c1a323df.chunk.js.map": "/pet-store/static/js/958.c1a323df.chunk.js.map",
-    "19.87e61257.chunk.css.map": "/pet-store/static/css/19.87e61257.chunk.css.map",
-    "19.ec5e5418.chunk.js.map": "/pet-store/static/js/19.ec5e5418.chunk.js.map",
     "925.38f93487.chunk.css.map": "/pet-store/static/css/925.38f93487.chunk.css.map",
     "925.e79a1fa4.chunk.js.map": "/pet-store/static/js/925.e79a1fa4.chunk.js.map",
     "180.12429bdf.chunk.css.map": "/pet-store/static/css/180.12429bdf.chunk.css.map",
-    "180.f900dd5b.chunk.js.map": "/pet-store/static/js/180.f900dd5b.chunk.js.map",
+    "180.857f16d5.chunk.js.map": "/pet-store/static/js/180.857f16d5.chunk.js.map",
     "763.36cd7b39.chunk.js.map": "/pet-store/static/js/763.36cd7b39.chunk.js.map",
     "692.b5101568.chunk.js.map": "/pet-store/static/js/692.b5101568.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4df4eecf.css",
-    "static/js/main.2fee25cf.js"
+    "static/css/main.66186930.css",
+    "static/js/main.523a7af1.js"
   ]
 }

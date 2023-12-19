@@ -10,7 +10,7 @@ import Homepage from "../pages/Homepage/Homepage";
 import ProductPage from "../pages/ProductPage/ProductPage";
 import { Layout } from "../components/Layout/Layout";
 import "./App.module.scss";
-import { PrivateRoute } from "../helpers/routs/PrivateRoute";
+import { AdminPrivateRoute, PrivateRoute } from "../helpers/routs/PrivateRoute";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import Favorites from "../pages/Favorites/Favorites";
 import UserProfile from "../components/AdminFolder/Users/UserProfile";
