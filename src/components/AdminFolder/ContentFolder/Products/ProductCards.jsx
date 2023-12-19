@@ -22,15 +22,20 @@ const ProductCards = ({
 
   const handleConfirmDeletion = async () => {
     try {
-      await toast.promise(dispatch(deleteCard(deleteItemId)), {
-        pending: "Promise is pending",
-        error: "The product was not deleted",
-      });
+      await toast.promise(dispatch(deleteCard(deleteItemId)),
+        {
+          pending: "Item is in the process of deletion",
+          error: "The product was not deleted",
+        }
+      );
       setPrevLength(allCards.content.length - 1);
-      setDeleteModal(false);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error("Error deleting card:", err.response?.data?.message || err.message);
+      // Отобразить сообщение об ошибке в интерфейсе (например, в модальном окне или каким-то другим способом)
+      // Пример:
+      alert("An error occurred while deleting the product. Please try again.");
     }
+    setDeleteModal(false);
   };
 
   return (

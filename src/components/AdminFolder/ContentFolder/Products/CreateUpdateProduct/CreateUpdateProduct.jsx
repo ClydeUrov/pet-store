@@ -57,26 +57,25 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
   
     if (product) {
       try {
-        console.log(product, values)
         await toast.promise(dispatch(updateCard({ id: product.id, data: values })), {
           pending: "Request in progress",
           success: "Product updated successfully",
           error: "The product was not updated",
         })
         navigate(0)
-      } catch (error) {
-        setError(`Error: ${error.response.status} ${error.response?.data?.message}` || "An error occurred");
+      } catch (err) {
+        err.response ? setError(err.response.data.message) : setError(err.message)
       }
     } else {
       try {
-        await toast.promise(dispatch(createCard(values)), {
+        dispatch(toast.promise(createCard(values), {
           pending: "Request in progress",
           success: "Product created successfully!",
-          // error: "The product was not created",
-        })
+          error: "The product was not created",
+        }))
         navigate(-1)
-      } catch (error) {
-        setError(`Error: ${error.response.status} ${error.response?.data?.message}` || "An error occurred");
+      } catch (err) {
+        err.response ? setError(err.response.data.message) : setError(err.message)
       }
     }
   };

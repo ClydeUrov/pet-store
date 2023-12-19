@@ -1,13 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { getAccessToken } from '../../helpers/user.actions';
 
 axios.defaults.baseURL = 'https://online-zoo-store-backend-web-service.onrender.com';
 
-const dataAction = async (url, options, thunkAPI) => {
+const dataAction = async (url, method, data, thunkAPI) => {
   try {
     const response = await axios.request({
       url,
-      ...options,
+      method,
+      data,
+      headers: method !== "GET" ? { Authorization: `Bearer ${getAccessToken()}` } : {},
     });
     return response.data;
   } catch (error) {
@@ -37,36 +40,34 @@ export const getAllCards = createAsyncThunk('cards/fetchAllCards', async ({
   if (minPrice) url += `&minPrice=${minPrice}`;
   if (maxPrice) url += `&maxPrice=${maxPrice}`;
 
-  console.log(url);
-
-  return dataAction(url, { method: 'GET' }, thunkAPI);
+  return dataAction(url, 'GET', thunkAPI);
 });
 
 export const getCardsFromOneCategory = createAsyncThunk('cards/fetchCardsFromOneCategory', async (categoryId, thunkAPI) => {
-  return dataAction(`api/v1/products?categoryId=${categoryId}`, { method: 'GET' }, thunkAPI);
+  return dataAction(`api/v1/products?categoryId=${categoryId}`, 'GET', thunkAPI);
 });
 
 export const getOnSale = createAsyncThunk('cards/fetchOnSale', async (_, thunkAPI) => {
-  return dataAction('api/v1/products?onSale=true', { method: 'GET' }, thunkAPI);
+  return dataAction('api/v1/products?onSale=true', 'GET', thunkAPI);
 });
 
 export const createCard = createAsyncThunk('cards/createCard', async (data, thunkAPI) => {
-  return dataAction('api/v1/products', { method: 'POST', data: data }, thunkAPI);
+  return dataAction('api/v1/products', 'POST', data, thunkAPI);
 });
 
 export const updateCard = createAsyncThunk('cards/updateCard', async ({id, data}, thunkAPI) => {
-  return dataAction(`api/v1/products/${id}`, { method: 'PUT', data: data }, thunkAPI);
+  return dataAction(`api/v1/products/${id}`, 'PUT', data, thunkAPI);
 });
 
 
 export const deleteCard = createAsyncThunk('cards/deleteCardProducts', async (id, thunkAPI) => {
-  return dataAction(`api/v1/products/${id}`, { method: 'DELETE' }, thunkAPI);
+  return dataAction(`api/v1/products/${id}`, 'DELETE', thunkAPI);
 });
 
 export const addToFavorite = createAsyncThunk('favourites/addFavoriteCard', async (id, thunkAPI) => {
-  return dataAction(`api/v1/${id}`, { method: 'POST'},  thunkAPI);
+  return dataAction(`api/v1/${id}`, 'POST',  thunkAPI);
 });
 
 export const deleteFromFavorite = createAsyncThunk( 'favourites/deleteFavoriteCard', async (id, thunkAPI) => {
-  return dataAction(`api/v1/${id}`, { method: 'DELETE' }, thunkAPI);
+  return dataAction(`api/v1/${id}`, 'DELETE', thunkAPI);
 });

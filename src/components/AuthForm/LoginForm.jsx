@@ -7,7 +7,6 @@ import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
-import axiosService from "../../helpers/axios";
 import { useUserActions } from "../../helpers/user.actions";
 //import { logIn } from '../../redux/auth/operations';
 
@@ -17,8 +16,7 @@ const initialValues = {
   rememberMe: false,
 };
 
-const LogInForm = ({ onClick, onClose }) => {
-  const navigate = useNavigate();
+const LogInForm = ({ onClose, setModalState }) => {
   const [error, setError] = useState(null);
   const userActions = useUserActions();
   // const dispatch = useDispatch();
@@ -44,29 +42,14 @@ const LogInForm = ({ onClick, onClose }) => {
   //   };
 
   const handleSubmit = async (formData, { resetForm }) => {
-    console.log("1 formData", formData);    
-
-    const existingUser = {
-      email: formData.email,
-      password: formData.password,
-      rememberMe: formData.rememberMe,
-    };
-
-    const user = await userActions
+    await userActions
       .login(formData)
       .catch((err) => {
         err.response ? setError(err.response.data.message) : setError(err.message)
       });
 
-    // const user = await
-    //   axiosService
-    //     .post(`auth/login`, formData)
-    //     .catch((error) => setError(error.response.data.message))
-    console.log("existingUser", user, existingUser);
-    // resetForm();
-    // dispatch(logIn(existingUser));
+    resetForm();
     onClose();
-    // navigate("/user/account");
     return;
   };
 
@@ -133,7 +116,7 @@ const LogInForm = ({ onClick, onClose }) => {
 
             <div className={css.checkbox__wrapper_login}>
               <label className={css.checkbox}>
-                {props.values.remember ? (
+                {props.values.rememberMe ? (
                   <div className={css.checkbox__icon_true}>
                     <CheckboxIcon />
                   </div>
@@ -161,7 +144,7 @@ const LogInForm = ({ onClick, onClose }) => {
             <button type="submit" className={css.button}>
               Log in
             </button>
-            <button type="submit" className={css.link} onClick={onClick}>
+            <button type="submit" className={css.link} onClick={() => setModalState(1)}>
               Sign Up
             </button>
           </Form>

@@ -2,14 +2,16 @@ import css from "./CreateUpdateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import axiosService from '../../../../../helpers/axios'
 import Modal from "../../../../Modal/Modal";
 import ConfirmDeletion from "../../ConfirmDeletion";
+import { useAdminActions } from "../../../../../helpers/user.actions";
 
 const DownloadImages = ({images, setImages, productId, mainImage, setMainImage}) => {
   const [error, setError] = useState(null);
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+
+  const adminAction = useAdminActions();
 
   const handleImageChangeOrDrop = async (e, index) => {
     e.preventDefault();
@@ -27,25 +29,28 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
   
       try {
         const image = await toast.promise(
-          axiosService.post(`products/${productId}/images`, formData), {
-          pending: "Image loading in progress",
-          error: "Image was not loaded"
-        });
-  
+          adminAction.create(`products/${productId}/images`, formData), 
+          {
+            pending: "Image loading in progress",
+            error: "Image was not loaded"
+          }
+        );
+
         const newImages = [...images];
-        newImages[index] = image.data[0];
+        console.log("image", newImages, image);
+        newImages[index] = image[0];
         setImages(newImages);
-      } catch (error) {
-        setError(error.message);
+      } catch (err) {
+        err.response ? setError(err.response.data.message) : setError(err.message)
       }
     }
   };
 
   const handleConfirmDeletion = () => {
     if(productId) {
-      axiosService
+      adminAction
         .delete(`/products/${productId}/images/${images[deleteItemId].id}`)
-        .catch((error) => setError(error.message))
+        .catch((err) => {err.response ? setError(err.response.data.message) : setError(err.message)})
     }
     const newImages = [...images];
     newImages.splice(deleteItemId, 1);

@@ -11,30 +11,48 @@ import { useState } from "react";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { fetchAllCategories } from "../../helpers/api";
+import VerifyEmail from "../../components/AuthForm/VerifyEmail";
+import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 
 const Header = () => {
+  const query = new URLSearchParams(window.location.search);
+  const token = query.get('token');
+
   const { constants } = useConstants();
   const isLoggedIn = false;
+
   const [showModal, setShowModal] = useState(false);
-  const [registerOrLogInForms, setRegisterOrLogInForms] = useState(true);
+  const [modalState, setModalState] = useState(null);
+  const [verifyEmail, setVerifyEmail] = useState(false);
 
   const [categories, setCategories] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [openItems, setOpenItems] = useState([]);
+
+  const modalTitles = {
+    1: "Sign Up",
+    2: "Email verification",
+    3: "Log in",
+    4: "User verification",
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    setModalState(null);
+  };
+
+  useEffect(() => {
+    if (token) {
+      toggleModal();
+      setModalState(4);
+    }
+  }, [token]);
 
   useEffect(() => {
     fetchAllCategories()
       .then(setCategories)
       .catch(error => console.log('Error', error))
   }, [])
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const toggleRegisterOrLogInForms = () => {
-    setRegisterOrLogInForms(!registerOrLogInForms);
-  };
 
   const handleMouseEnter = (itemId, index) => {
     setOpenItems((prevOpen) => {
@@ -150,7 +168,7 @@ const Header = () => {
               <button
                 type="button"
                 className={`${styles.option} ${styles.option_btn}`}
-                onClick={() => toggleModal()}
+                onClick={() => {toggleModal(); setModalState(3)}}
               >
                 <FaRegUser size={32} />
               </button>
@@ -159,23 +177,34 @@ const Header = () => {
         </div>
       </header>
 
-      {registerOrLogInForms
-        ? showModal && (
-            <Modal onClose={toggleModal} title={"Sign Up"}>
-              <RegisterForm
-                onClick={toggleRegisterOrLogInForms}
-                onClose={toggleModal}
-              />
-            </Modal>
-          )
-        : showModal && (
-            <Modal onClose={toggleModal} title={"Log in"}>
-              <LogInForm
-                onClick={toggleRegisterOrLogInForms}
-                onClose={toggleModal}
-              />
-            </Modal>
+      {showModal && (
+        <Modal onClose={toggleModal} title={modalTitles[modalState]}>
+          {modalState === 1 && (
+            <RegisterForm
+              onClick={(email) => {setVerifyEmail(email); setModalState(2)}}
+              setModalState={setModalState}
+              host={window.location.host}
+            />
           )}
+          {modalState === 2 && (
+            <VerifyEmail
+              verifyEmail={verifyEmail}
+            />
+          )}
+          {modalState === 3 && (
+            <LogInForm
+              setModalState={setModalState}
+              onClose={toggleModal}
+            />
+          )}
+          {modalState === 4 && (
+            <VerifyCheck
+              token={token}
+              setModalState={setModalState}
+            />
+          )}
+        </Modal>
+      )}
     </>
   );
 };

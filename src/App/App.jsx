@@ -10,7 +10,7 @@ import Homepage from '../pages/Homepage/Homepage'
 import ProductPage from '../pages/ProductPage/ProductPage'
 import { Layout } from '../components/Layout/Layout'
 import './App.module.scss'
-import { PrivateRoute } from '../helpers/routs/PrivateRoute'
+import { AdminPrivateRoute, PrivateRoute } from '../helpers/routs/PrivateRoute'
 import AdminPage from '../pages/AdminPage/AdminPage';
 import Favorites from '../pages/Favorites/Favorites';
 import UserProfile from '../components/AdminFolder/Users/UserProfile';
@@ -62,14 +62,13 @@ const App = () => {
 
           <Route path="/*" element={<Error />} />
         </Route>
-        <Route path="/admin" element={<PrivateRoute redirectTo="/" component={<AdminPage />} />}>
+        <Route path="/admin" element={<AdminPrivateRoute component={<AdminPage />} />}>
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path="account" element={<AdminProfile />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
           <Route path="products/create" element={<CreateUpdateProduct />} />
-          {/* <Route path="products/update" element={<UpdateProduct />} /> */}
         </Route>
       </Routes>
       <ToastContainer />

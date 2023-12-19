@@ -2,10 +2,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosService from "../helpers/axios";
 
+const baseURL = "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
+
 function useUserActions() {
   const navigate = useNavigate();
   // const baseURL = process.env.REACT_APP_API_URL;
-  const baseURL = "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
+  
 
   return {
     login,
@@ -19,7 +21,7 @@ function useUserActions() {
   function profile() {
     const auth = JSON.parse(localStorage.getItem("auth")) || null;
     console.log("!", auth?.access)
-    return axios.get(`https://online-zoo-store-backend-web-service.onrender.com/api/v1/users/profile`, {
+    return axios.get(`${baseURL}users/profile`, {
       headers: {
         'Authorization': "Bearer " + auth?.access
       }
@@ -50,31 +52,51 @@ function useUserActions() {
   // Login the user
   function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
-      // Registering the account and tokens in the store
-      console.log(222, res)
       setUserData(res.data);
-      navigate("user/account");
+      if(res.data.userDto.role === "CLIENT") {navigate("user/account")}
+      if(res.data.userDto.role === "ADMIN") {navigate("admin/orders")}
     });
   }
 
   // Login the user
   function register(data) {
     return axios.post(`${baseURL}auth/register`, data).then((res) => {
-      // Registering the account and tokens in the store
       setUserData(res.data);
-      navigate("/main/");
     });
   }
 
   // Logout the user
   function logout() {
     return axiosService
-      .post(`${baseURL}auth/logout`, { refresh: getRefreshToken() })
+      .post(`${baseURL}auth/logout`, { refresh: getAccessToken() })
       .then(() => {
         localStorage.removeItem("auth");
-        navigate("login/");
+        navigate("/");
       });
   }
+}
+
+function useAdminActions() {
+  const access = getAccessToken();
+
+  const sendRequest = async (method, path, data) => {
+    const response = await axiosService({
+      method,
+      url: `${baseURL}${path}`,
+      data,
+      headers: {
+        Authorization: `Bearer ${access}`
+      }
+    });
+    return response.data;
+  };
+
+  return {
+    users: () => sendRequest('get', 'users'),
+    create: (path, data) => sendRequest('post', path, data),
+    update: (path, data) => sendRequest('put', path, data),
+    deleteAction: (path) => sendRequest('delete', path),
+  };
 }
 
 
@@ -102,12 +124,11 @@ function getRefreshToken() {
 
 // Set the access, token and user property
 function setUserData(data) {
-  console.log(333, data)
   localStorage.setItem("auth", JSON.stringify({
       access: data.accessToken,
       refresh: data.refreshToken,
-      user: data.user,
+      user: data.userDto,
   }));
 } 
 
-export { useUserActions, getUser,  getAccessToken, getRefreshToken, setUserData };
+export { useUserActions, useAdminActions, getUser, getAccessToken, getRefreshToken, setUserData };

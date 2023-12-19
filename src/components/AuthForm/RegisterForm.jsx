@@ -7,19 +7,12 @@ import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaSignUp } from "../../helpers/schemes";
+import { useUserActions } from "../../helpers/user.actions";
 //import { register } from '../../redux/auth/operations';
 
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  policy: false,
-  remember: false,
-};
-
-const RegisterForm = ({ onClick, onClose }) => {
-  const navigate = useNavigate();
+const RegisterForm = ({ onClick, setModalState, host }) => {
+  const [error, setError] = useState(null);
+  const userActions = useUserActions();
   // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
@@ -27,45 +20,36 @@ const RegisterForm = ({ onClick, onClose }) => {
   const togglePassword = () => {
     setPasswordShow(!passwordShow);
   };
-  
-  //   const handleSubmit = async (formData, { resetForm }) => {
-  //    // const { error } = await login(formData);
-  //     if (error) {
-  //       setIsError({
-  //         message: error.data.message,
-  //         additionalInfo: error.data.additionalInfo,
-  //       });
-  //       resetForm();
-  //       return;
-  //     } else {
-  //       navigate('/user');
-  //     }
-  //   };
 
   const handleSubmit = async (formData, { resetForm }) => {
+    formData.append('host', `${host}/pet-store`)
     console.log("formData", formData);
 
-    const newUser = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      password: formData.password,
-      policy: formData.policy,
-      remember: formData.remember,
-    };
-    console.log("newUser", newUser);
-    resetForm();
-    // dispatch(addNewUser(newUser));
-    onClose();
-    navigate("/user/account");
-    return;
+    await userActions
+      .register(formData)
+      .then((res) => {
+        console.log("register response", res)
+        resetForm();
+        onClick(formData.email);
+      })
+      .catch((err) => {
+        err.response ? setError(err.response.data.message) : setError(err.message);
+    });
   };
 
   return (
     <>
       <Formik
         validationSchema={schemaSignUp}
-        initialValues={initialValues}
+        initialValues={{
+          firstName: "",
+          lastName: "",
+          email: "",
+          birthDate: undefined,
+          password: "",
+          consentToProcessData: false,
+          rememberMe: false,
+        }}
         onSubmit={handleSubmit}
       >
         {(props) => (
@@ -85,11 +69,7 @@ const RegisterForm = ({ onClick, onClose }) => {
                 type="text"
                 required
               />
-              <ErrorMessage
-                name="firstName"
-                component="p"
-                className={css.error}
-              />
+              <ErrorMessage name="firstName" component="p" className={css.error} />
             </div>
 
             <div className={css.input__wrapper}>
@@ -109,11 +89,7 @@ const RegisterForm = ({ onClick, onClose }) => {
 
                 required
               />
-              <ErrorMessage
-                name="lastName"
-                component="p"
-                className={css.error}
-              />
+              <ErrorMessage name="lastName" component="p" className={css.error} />
             </div>
 
             <div className={css.input__wrapper}>
@@ -132,6 +108,24 @@ const RegisterForm = ({ onClick, onClose }) => {
                 required
               />
               <ErrorMessage name="email" component="p" className={css.error} />
+            </div>
+
+            <div className={css.input__wrapper}>
+              <label htmlFor="birthDate" className={css.label}>
+                Birth Date
+              </label>
+              <Field
+                className={
+                  props.touched.birthDate && props.errors.birthDate
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
+                name="birthDate"
+                id="birthDate"
+                type="date"
+                required
+              />
+              <ErrorMessage name="birthDate" component="p" className={css.error} />
             </div>
 
             <div className={css.input__wrapper}>
@@ -161,16 +155,15 @@ const RegisterForm = ({ onClick, onClose }) => {
                   <MdOutlineVisibilityOff size={24} />
                 )}
               </button>
-              <ErrorMessage
-                name="password"
-                component="p"
-                className={css.error}
-              />
+              <ErrorMessage name="password" component="p" className={css.error} />
             </div>
+            {error && (
+              <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
+            )}
 
             <div className={css.checkbox__wrapper}>
               <label className={css.checkbox}>
-                {props.values.policy ? (
+                {props.values.consentToProcessData ? (
                   <div className={css.checkbox__icon_true}>
                     <CheckboxIcon />
                   </div>
@@ -183,8 +176,8 @@ const RegisterForm = ({ onClick, onClose }) => {
                 <Field
                   className={css.checkbox__field}
                   type="checkbox"
-                  name="policy"
-                  id="policy"
+                  name="consentToProcessData"
+                  id="consentToProcessData"
                   required
                 />
 
@@ -194,7 +187,7 @@ const RegisterForm = ({ onClick, onClose }) => {
               </label>
 
               <label className={css.checkbox}>
-                {props.values.remember ? (
+                {props.values.rememberMe ? (
                   <div className={css.checkbox__icon_true}>
                     <CheckboxIcon />
                   </div>
@@ -206,8 +199,8 @@ const RegisterForm = ({ onClick, onClose }) => {
                 <Field
                   className={css.checkbox__field}
                   type="checkbox"
-                  name="remember"
-                  id="remember"
+                  name="rememberMe"
+                  id="rememberMe"
                 />
                 <span className={css.checkbox__text}>Remember me</span>
               </label>
@@ -216,7 +209,7 @@ const RegisterForm = ({ onClick, onClose }) => {
             <button type="submit" className={css.button}>
               Sign Up
             </button>
-            <button type="submit" className={css.link} onClick={onClick}>
+            <button type="submit" className={css.link} onClick={() => setModalState(3)}>
               Already have an account? Log in
             </button>
           </Form>
