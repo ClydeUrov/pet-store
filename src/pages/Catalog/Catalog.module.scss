@@ -2,6 +2,7 @@
 
 .title {
   color: #000;
+  max-width: 1200px;
   font-size: 36px;
   font-weight: 600;
   line-height: 1.33;
@@ -12,6 +13,8 @@
 
 .sort_part {
   display: flex;
+  width: 100%;
+  max-width: 1200px;
   align-items: center;
   margin-bottom: 32px;
 }
@@ -25,6 +28,7 @@
 }
 
 .box {
+  max-width: 1200px;
   display: flex;
   gap: 32px;
 }

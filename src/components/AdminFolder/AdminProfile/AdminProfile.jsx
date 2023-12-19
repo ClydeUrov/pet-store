@@ -4,8 +4,10 @@ import css from "./AdminProfile.module.scss";
 import FormikField from "../../FormikFolder/FormikField";
 import { schemaAdminInformation, schemaAdminPassword } from "../../../helpers/schemes";
 import { GoPencil } from "react-icons/go";
+import { getUser } from "../../../helpers/user.actions";
 
 const AdminProfile = () => {
+  const user = getUser();
   const [editState, setEditState] = useState({
     personalInfo: true,
     passwordInfo: true,
@@ -51,9 +53,9 @@ const AdminProfile = () => {
       <Formik
         validationSchema={schemaAdminInformation}
         initialValues={{
-          surname: "Olivi",
-          email: "oliviarhye@gmail.com",
-          name: "aArhye",
+          surname: user.lastName,
+          email: user.email,
+          name: user.firstName,
         }}
         onSubmit={handleSubmit}
       >
@@ -114,8 +116,8 @@ const AdminProfile = () => {
       <Formik
         validationSchema={schemaAdminPassword}
         initialValues={{
-          password: "12345678",
-          confirm: "12345678",
+          password: "",
+          confirm: "",
           editEnabled: false,
         }}
         onSubmit={(values, form) => handleSubmit(values, 'passwordInfo', form)}

@@ -37,8 +37,7 @@ const cardsSlice = createSlice({
     builder
 
       //* статус "pending"
-      .addCase(getAllCards.pending, (state) => {
-        console.log(11);
+      .addCase(getAllCards.pending, state => {
         state.isLoading = true;
       })
       .addCase(getCardsFromOneCategory.pending, (state) => {
@@ -65,7 +64,6 @@ const cardsSlice = createSlice({
 
       //* статус "rejected"
       .addCase(getAllCards.rejected, (state, action) => {
-        console.log(22, action.payload);
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -121,7 +119,7 @@ const cardsSlice = createSlice({
           (card) => card.id === action.payload.id
         );
         if (updatedCardIndex !== -1) {
-          state.items[updatedCardIndex] = action.payload; // Update the card in the items array
+          state.items[updatedCardIndex] = action.payload;
         }
       })
       .addCase(deleteCard.fulfilled, (state, action) => {

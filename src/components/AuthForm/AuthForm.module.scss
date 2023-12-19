@@ -1,5 +1,12 @@
 @import "..//../variables.scss";
 
+.verifyBlock p {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: "Lato, sans-serif"
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -32,7 +39,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1.71;
-  color: #8d8d8d;
+  color: #373737;
 }
 
 .invalid {
@@ -73,7 +80,7 @@
   color: $btn-text;
 
   font-size: 21px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.14;
 
   outline-color: transparent;

@@ -32,7 +32,6 @@ const Catalog = () => {
   });
   const [selected, setSelected] = useState([]);
   const [fetched, setFetched] = useState(false);
-  console.log(urlCategory);
 
   const dispatch = useDispatch();
   const { totalElements } = useSelector(selectCards);
@@ -63,7 +62,7 @@ const Catalog = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={css.title}>for {urlCategory[0]}</h2>
+        <h2 className={css.title}>for {decodeURIComponent(urlCategory[0])}</h2>
         <div className={css.sort_part}>
           {totalElements ? 
             (<p className={css.sort_quantity}>{totalElements} Products found</p>) : 

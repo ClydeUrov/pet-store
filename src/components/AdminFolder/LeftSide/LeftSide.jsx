@@ -4,11 +4,14 @@ import { NavLink } from "react-router-dom";
 import { AiOutlineDown, AiOutlineRight } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import css from "./LeftSide.module.scss";
+import { useUserActions } from "../../../helpers/user.actions";
 
 const LeftSide = () => {
   const [activeItem, setActiveItem] = useState({href: "orders", text: "Orders"});
   const [isContentListOpen, setIsContentListOpen] = useState(false);
   const { constants } = useConstants();
+
+  const userAction = useUserActions();
 
   const navItems = [
     { href: "orders", text: "Orders" },
@@ -30,6 +33,10 @@ const LeftSide = () => {
     { href: "prescriptions", text: "Prescriptions"},
     { href: "constants", text: "Constants"},
   ];
+
+  const handleLogout = () => {
+    userAction.logout()
+  }
 
   return (
     <div>
@@ -75,9 +82,9 @@ const LeftSide = () => {
                 )}
               </div>
             ) : href === "logout" ? (
-              <a href={href} className={css.logout}>
+              <span onClick={handleLogout} className={css.logout}>
                 <FiLogOut style={{ marginRight: "10px" }} /> {text}
-              </a>
+              </span>
             ) : (
               <NavLink
                 className={href === activeItem.href ? css.activeItem : ""}

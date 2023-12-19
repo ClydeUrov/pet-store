@@ -2,20 +2,20 @@ import css from "./CreateUpdateProduct.module.scss";
 import { AiOutlineDownload, AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import axiosService from '../../../../../helpers/axios'
 import Modal from "../../../../Modal/Modal";
 import ConfirmDeletion from "../../ConfirmDeletion";
+import { useAdminActions } from "../../../../../helpers/user.actions";
 
 const DownloadImages = ({images, setImages, productId, mainImage, setMainImage}) => {
   const [error, setError] = useState(null);
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
 
-  const handleImageChangeOrDrop = async (e, index) => {
-    e.preventDefault();
-  
-    const file = e.target.files[0] || e.dataTransfer.files[0];
+  const adminAction = useAdminActions();
 
+  const handleImageChangeOrDrop = async (e, index) => {
+    const file = e.target.files?.[0] ?? e.dataTransfer.files?.[0];
+    
     if (file) {
       if (file.size > 10485760) {
         setError("Image size exceeds 10 MB limit");
@@ -27,29 +27,35 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
   
       try {
         const image = await toast.promise(
-          axiosService.post(`products/${productId}/images`, formData), {
-          pending: "Image loading in progress",
-          error: "Image was not loaded"
-        });
-  
+          adminAction.create(`products/${productId}/images`, formData), 
+          {
+            pending: "Image loading in progress",
+            error: "Image was not loaded"
+          }
+        );
+
         const newImages = [...images];
-        newImages[index] = image.data[0];
+        newImages[index] = image[0];
         setImages(newImages);
-      } catch (error) {
-        setError(error.message);
+      } catch (err) {
+        console.log(err)
+        err.response ? setError(err.response.data.message) : setError(err.message)
       }
     }
   };
 
   const handleConfirmDeletion = () => {
-    if(productId) {
-      axiosService
-        .delete(`/products/${productId}/images/${images[deleteItemId].id}`)
-        .catch((error) => setError(error.message))
+    try {
+      adminAction
+        .deleteAction(`/products/${productId}/images/${images[deleteItemId].id}`)
+        .catch((err) => err.response ? setError(err.response.data.message) : setError(err.message))
+      
+      const newImages = [...images];
+      newImages.splice(deleteItemId, 1);
+      setImages(newImages);
+    } catch (err) {
+      err.response ? setError(err.response.data.message) : setError(err.message)
     }
-    const newImages = [...images];
-    newImages.splice(deleteItemId, 1);
-    setImages(newImages);
     setDeleteModal(false);
   };
 
@@ -75,11 +81,13 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
         <section key={index}>
           <div
             className={css.imageUploadWindow}
-            onDrop={(e) => handleImageChangeOrDrop(e, index)}
+            onDrop={(e) =>{
+              e.preventDefault();
+              handleImageChangeOrDrop(e, index);
+            }}
             onDragOver={(e) => e.preventDefault()}
           >
             {images[index] ? (
-              
               <button
                 className={`${css.mainImageButton} ${mainImage?.id === images[index].id ? css.activeImg : ""}`}
                 onClick={(e) => handleMainImage(index)}

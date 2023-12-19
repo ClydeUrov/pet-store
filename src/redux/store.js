@@ -14,7 +14,6 @@ import {
 import { authReducer } from "./auth/authSlise";
 import { cardsReducer } from "./cards/cardsSlice";
 import storage from "redux-persist/lib/storage";
-import { usersReducer } from "./user/usersSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -24,7 +23,6 @@ const authPersistConfig = {
 
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
-  users: usersReducer,
   cards: cardsReducer,
 
 });
