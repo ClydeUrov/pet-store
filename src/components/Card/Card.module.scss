@@ -40,7 +40,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: 1rem 1rem 0 0;
-  object-fit: fill;
+  object-fit: cover;
 }
 
 .title {
@@ -72,7 +72,7 @@
 .cardRating {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 0.7rem;
   font-size: 14px;
   font-weight: 500;

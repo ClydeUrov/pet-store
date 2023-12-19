@@ -1,6 +1,6 @@
 .section {
   padding-top: 40px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
 }
 
 .disableScroll {
@@ -15,7 +15,8 @@
 }
 
 .container {
-  width: 97vw;
+  max-width: 1200px;
+  display: flex;
   margin: 0 auto;
-  padding: 0 5rem;
+  flex-direction: column;
 }

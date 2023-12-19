@@ -1,19 +1,15 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
 import { toast } from "react-toastify";
-import React, { useRef } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import { fetchMainCategories } from "../../helpers/api";
-import { SliderOfCards } from "../../components/SliderOfCards/SliderOfCards";
-// import { SliderOfCategories } from "../../components/SliderOfCategories/SliderOfCategories";
-import { SliderOfBrands } from "../../components/SliderOfBrands/SliderOfBrands";
 import { selectOnSale } from "../../redux/cards/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { getOnSale } from "../../redux/cards/operations";
 import { fetchIndicators } from "../../helpers/api";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
-import { current } from "@reduxjs/toolkit";
 
 const Homepage = () => {
   const [mainCategories, setMainCategories] = useState([]);

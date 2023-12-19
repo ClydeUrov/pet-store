@@ -1,23 +1,23 @@
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import React from "react";
-import { lazy } from "react";
-import { Routes, Route } from "react-router-dom";
-import Cart from "../pages/Cart/Cart";
-import Catalog from "../pages/Catalog/Catalog";
-import Error from "../components/Error/Error";
-import Homepage from "../pages/Homepage/Homepage";
-import ProductPage from "../pages/ProductPage/ProductPage";
-import { Layout } from "../components/Layout/Layout";
-import "./App.module.scss";
-import { PrivateRoute } from "../helpers/routs/PrivateRoute";
-import AdminPage from "../pages/AdminPage/AdminPage";
-import Favorites from "../pages/Favorites/Favorites";
-import UserProfile from "../components/AdminFolder/Users/UserProfile";
-import Users from "../components/AdminFolder/Users/Users";
-import AdminContentRoute from "../helpers/routs/AdminContentRoute";
-import CreateUpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateUpdateProduct";
-// import UpdateProduct from '../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React from 'react'
+import { lazy } from 'react';
+import { Routes, Route } from 'react-router-dom'
+import Cart from '../pages/Cart/Cart'
+import Catalog from '../pages/Catalog/Catalog'
+import Error from '../components/Error/Error'
+import Homepage from '../pages/Homepage/Homepage'
+import ProductPage from '../pages/ProductPage/ProductPage'
+import { Layout } from '../components/Layout/Layout'
+import './App.module.scss'
+import { AdminPrivateRoute, PrivateRoute } from '../helpers/routs/PrivateRoute'
+import AdminPage from '../pages/AdminPage/AdminPage';
+import Favorites from '../pages/Favorites/Favorites';
+import UserProfile from '../components/AdminFolder/Users/UserProfile';
+import Users from '../components/AdminFolder/Users/Users';
+import AdminContentRoute from '../helpers/routs/AdminContentRoute';
+import CreateUpdateProduct from '../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateUpdateProduct';
+
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() => import("../components/UserAccount/UserAccount"));
@@ -78,17 +78,14 @@ const App = () => {
 
           <Route path="/*" element={<Error />} />
         </Route>
-        <Route
-          path="/admin"
-          element={<PrivateRoute redirectTo="/" component={<AdminPage />} />}
-        >
+
+        <Route path="/admin" element={<AdminPrivateRoute component={<AdminPage />} />}>
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path="account" element={<AdminProfile />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
           <Route path="products/create" element={<CreateUpdateProduct />} />
-          {/* <Route path="products/update" element={<UpdateProduct />} /> */}
         </Route>
       </Routes>
       <ToastContainer />

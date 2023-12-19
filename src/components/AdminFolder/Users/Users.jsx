@@ -1,34 +1,45 @@
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import css from "./Users.module.scss";
-import { useSelector } from "react-redux";
-import { selectUsers } from "../../../redux/user/selectors";
+import { useEffect, useState } from "react";
+import { useAdminActions } from "../../../helpers/user.actions";
+import UserTable from "./UserTable";
+import Loader from "../../Loader/Loader";
 
 const Users = () => {
   const { userId } = useParams();
   console.log("Users", userId);
 
-  const users = useSelector(selectUsers);
+  const adminAction = useAdminActions()
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await adminAction.users();
+        setAllUsers(users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, [adminAction]);
+
+  console.log(allUsers);
+
 
   return (
     <div className={css.userContainer}>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
       <div className={css.firstLine}>
         <p>Users</p>
         <></>
       </div>
-      <NavLink to="123" type="button" className={css.topButton}>
-        User 1
-      </NavLink>
-      <NavLink to="123" type="button" className={css.topButton}>
-        User 2
-      </NavLink>
-      <NavLink to="123" type="button" className={css.topButton}>
-        User 3
-      </NavLink>
+      {!allUsers || allUsers.length === 0 ? (
+        <Loader />
+      ) : (
+        <UserTable allUsers={allUsers} />
+      )}
+      
     </div>
   );
 };

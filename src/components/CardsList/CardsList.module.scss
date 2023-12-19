@@ -1,8 +1,8 @@
 .list {
     display: grid;
-    grid-template-columns: 276px 276px 276px;
+    grid-template-columns: repeat(3, 276px);
     grid-column-gap: 32px;
-    row-gap: 80px;
+    row-gap: 60px;
     @media (max-width: 550px) {
         justify-content: center;
     }

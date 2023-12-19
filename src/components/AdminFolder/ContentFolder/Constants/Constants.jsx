@@ -6,6 +6,7 @@ import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai";
 import Modal from "../../../Modal/Modal";
 import ConfirmDeletion from "../ConfirmDeletion";
 import { toast } from "react-toastify";
+import { useAdminActions } from "../../../../helpers/user.actions";
 
 const Constants = () => {
   const [constants, setConstants] = useState({});
@@ -13,6 +14,8 @@ const Constants = () => {
   const [currency, setCurrency] = useState("");
   const [error, setError] = useState(null);
   const [isDeleteModal, setDeleteModal] = useState(false);
+
+  const adminActions = useAdminActions();
 
   useEffect(() => {
     axiosService.get(`/constants`)
@@ -29,7 +32,7 @@ const Constants = () => {
     formData.append("value", data);
 
     const updatePromise = key === 'LOGO'
-      ? axiosService.put(`/constants/${key}`, formData)
+      ? adminActions.update(`/constants/${key}`, formData)
         .then((resp) => {
           setConstants([
             {
@@ -43,7 +46,7 @@ const Constants = () => {
             constants[1],
           ]);
         })
-      : axiosService.put(`/constants/${key}`, formData)
+      : adminActions.update(`/constants/${key}`, formData)
 
     toast.promise(updatePromise, {
       success: "Updated successfully",
@@ -54,7 +57,7 @@ const Constants = () => {
 
   const handleConfirmDeletion = () => {
     if (constants[0].key === "LOGO") {
-      axiosService.delete(`/constants/${constants[0].key}/image`)
+      adminActions.delete(`/constants/${constants[0].key}/image`)
         .then(() => {
           setConstants([
             { key: constants[0].key, value: {} },
@@ -65,7 +68,6 @@ const Constants = () => {
     }
     setDeleteModal(false);
   };
-  console.log(constants)
 
   return (
     <section>

@@ -1,24 +1,24 @@
 import { useState } from "react";
 // import { useDispatch } from "react-redux";
- import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import { useSelector } from 'react-redux';
-import {
-  CheckboxIcon,
-} from "../../icons/icons";
-import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
+import { CheckboxIcon } from "../../icons/icons";
+import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
+import { useUserActions } from "../../helpers/user.actions";
 //import { logIn } from '../../redux/auth/operations';
 
 const initialValues = {
   email: "",
   password: "",
-  remember: false,
+  rememberMe: false,
 };
 
-const LogInForm = ({onClick, onClose}) => {
-   const navigate = useNavigate();
+const LogInForm = ({ onClose, setModalState }) => {
+  const [error, setError] = useState(null);
+  const userActions = useUserActions();
   // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
@@ -40,20 +40,16 @@ const LogInForm = ({onClick, onClose}) => {
   //       navigate('/user');
   //     }
   //   };
-  
-  const handleSubmit = async (formData, { resetForm }) => {
-    console.log("formData", formData);
 
-    const existingUser = {
-      email: formData.email,
-      password: formData.password,
-      remember: formData.remember,
-    };
-    console.log("existingUser", existingUser);
+  const handleSubmit = async (formData, { resetForm }) => {
+    await userActions
+      .login(formData)
+      .catch((err) => {
+        err.response ? setError(err.response.data.message) : setError(err.message)
+      });
+
     resetForm();
-    // dispatch(logIn(existingUser));
     onClose();
-    navigate('/user/account');
     return;
   };
 
@@ -66,17 +62,19 @@ const LogInForm = ({onClick, onClose}) => {
       >
         {(props) => (
           <Form className={css.form}>
-   
             <div className={css.input__wrapper}>
               <label htmlFor="email" className={css.label}>
                 E-mail
               </label>
               <Field
-                className={ (props.touched.email && props.errors.email) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.email && props.errors.email
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="email"
                 id="email"
                 type="email"
-
                 required
               />
               <ErrorMessage name="email" component="p" className={css.error} />
@@ -87,32 +85,38 @@ const LogInForm = ({onClick, onClose}) => {
                 Password
               </label>
               <Field
-                className={ (props.touched.password && props.errors.password) ? `${css.invalid} ${css.input}` : `${css.input}` }
+                className={
+                  props.touched.password && props.errors.password
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
                 name="password"
                 id="password"
                 type={passwordShow ? "text" : "password"}
-
                 required
               />
-              <button type="button"
+              <button
+                type="button"
                 id="visibilityBtn"
                 className={css.iconPassword}
                 onClick={togglePassword}
               >
-                {passwordShow ? <MdOutlineVisibility size={24}/> : <MdOutlineVisibilityOff size={24}/>}
+                {passwordShow ? (
+                  <MdOutlineVisibility size={24} />
+                ) : (
+                  <MdOutlineVisibilityOff size={24} />
+                )}
               </button>
               <ErrorMessage
                 name="password"
                 component="p"
                 className={css.error}
               />
-             
             </div>
 
             <div className={css.checkbox__wrapper_login}>
-           
               <label className={css.checkbox}>
-                {props.values.remember ? (
+                {props.values.rememberMe ? (
                   <div className={css.checkbox__icon_true}>
                     <CheckboxIcon />
                   </div>
@@ -124,26 +128,25 @@ const LogInForm = ({onClick, onClose}) => {
                 <Field
                   className={css.checkbox__field}
                   type="checkbox"
-                  name="remember"
-                  id="remember"
+                  name="rememberMe"
+                  id="rememberMe"
                 />
                 <span className={css.checkbox__text}>Remember me</span>
               </label>
-  <p>
+              <p>
                 <a href="/" className={css.forgot_password}>
                   Forgot password?
                 </a>
-            </p>
-
+              </p>
             </div>
+            {error && <p style={{color:"red", marginBottom:"20px"}}>{error}</p>}
 
             <button type="submit" className={css.button}>
               Log in
             </button>
-            <button type="submit" className={css.link} onClick={onClick}>
-            Sign Up
+            <button type="submit" className={css.link} onClick={() => setModalState(1)}>
+              Sign Up
             </button>
-
           </Form>
         )}
       </Formik>

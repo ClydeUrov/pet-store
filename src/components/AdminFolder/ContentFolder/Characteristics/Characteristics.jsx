@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import CreateUpdate from "./CreateUpdateChar";
 import Modal from "../../../Modal/Modal";
 import ConfirmDeletion from "../ConfirmDeletion";
+import { useAdminActions } from "../../../../helpers/user.actions";
 
 const Characteristics = ({action, title}) => {
   const [characteristics, setCharacteristics] = useState([]);
@@ -17,6 +18,8 @@ const Characteristics = ({action, title}) => {
   const [loading, setLoading] = useState(true);
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+
+  const adminActions = useAdminActions();
 
   useEffect(() => {
     if(showCreateForm) setShowCreateForm(false);
@@ -51,7 +54,8 @@ const Characteristics = ({action, title}) => {
 
   const handleConfirmDeletion = () => {
     toast.promise(
-      axiosService.delete(`/${action}/${deleteItemId}`)
+      adminActions
+        .deleteAction(`${action}/${deleteItemId}`)
         .then(() => {
           setCharacteristics((prevCharacteristics) =>
             prevCharacteristics.filter((item) => item.id !== deleteItemId)
@@ -86,6 +90,7 @@ const Characteristics = ({action, title}) => {
       </div>
       {showCreateForm && (
         <CreateUpdate
+          adminActions={adminActions}
           title={title}
           action={action}
           setField={setField}

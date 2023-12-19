@@ -21,14 +21,15 @@ const Products = ({product}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [nameLike, setNameLike] = useState('');
   const [prevName, setPrevName] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = () => {
       try {
         dispatch(getAllCards({ page, sortMethod, nameLike }));
         return;
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (err) {
+        setError(`Error fetching data: ${err.response ? err.response.data.message : err.message}`)
       } finally {
         setPrevLength(allCards?.content?.length);
         setPrevSort(sortMethod || '');
@@ -45,7 +46,6 @@ const Products = ({product}) => {
     ) {
       fetchData()
     }
-    console.log(1)
     const delayTimer = setTimeout(() => {
       if (nameLike !== prevName) fetchData();
     }, 2000);
@@ -84,6 +84,10 @@ const Products = ({product}) => {
           <Loader />
         ) : !allCards?.content ? (
           <div className={css.firstLine}>No data available.</div>
+        ) : error ? (
+          <div className={css.firstLine} style={{color:"darkred"}}>
+            {error} <br /> Please refresh the page
+          </div>
         ) : (
           <ProductCards 
             allCards={allCards} 
