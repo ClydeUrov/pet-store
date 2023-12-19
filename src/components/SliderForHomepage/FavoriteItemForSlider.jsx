@@ -1,4 +1,4 @@
-// import styles from "./FavoriteItemForSlider.module.scss";
+import styles from "./FavoriteItemForSlider.module.scss";
 
 function FavoriteItemForSlider() {
   return <div></div>;

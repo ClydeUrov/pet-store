@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ButtonForReview from "./ButtonForReview";
 import Review from "./Review";
 import styles from "./ReviewsSection.module.scss";
@@ -7,6 +7,8 @@ const REVIEWS_PER_VIEEW = 5;
 
 function ReviewsSection({ onAddReview }) {
   const [page, setPage] = useState(0);
+  const reviewCont = useRef();
+
   const data = [
     {
       name: "Іван",
@@ -100,9 +102,14 @@ function ReviewsSection({ onAddReview }) {
   ];
 
   function handleChangePage(action) {
-    if (action === "back" && page > 0) setPage((page) => (page -= 1));
-    if (action === "forward" && page + 1 < Math.ceil(data.length / 5))
+    if (action === "back" && page > 0) {
+      setPage((page) => (page -= 1));
+      reviewCont.current.scrollIntoView();
+    }
+    if (action === "forward" && page + 1 < Math.ceil(data.length / 5)) {
       setPage((page) => (page += 1));
+      reviewCont.current.scrollIntoView();
+    }
   }
 
   function dataPerPage(itemsPerPage, currentPage, data) {
@@ -114,7 +121,7 @@ function ReviewsSection({ onAddReview }) {
 
   return (
     <div>
-      <div className={styles.header_cont}>
+      <div className={styles.header_cont} ref={reviewCont}>
         <div className={styles.title_cont}>
           <h3>Reviews</h3>
           <p>

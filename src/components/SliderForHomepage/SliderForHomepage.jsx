@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { Navigation } from "swiper/modules";
 import Card from "../Card/Card";
 
-function SliderForHomepage({ title, items, type, slidesPerView }) {
+function SliderForHomepage({ title, items, type, slidesPerView, onClick }) {
   const swiper = useRef();
 
   function handleNextScroll() {
@@ -34,7 +34,7 @@ function SliderForHomepage({ title, items, type, slidesPerView }) {
         >
           {items.map((item) => (
             <SwiperSlide key={item.id}>
-              {type === "saleSlider" && <Card item={item} />}
+              {type === "saleSlider" && <Card item={item} onClick={onClick} />}
               {type === "brandSlider" && <BrandItemForSlider item={item} />}
               {type === "favoriteSlider" && <FavoriteItemForSlider />}
             </SwiperSlide>

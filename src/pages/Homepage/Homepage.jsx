@@ -1,7 +1,7 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
 import { toast } from "react-toastify";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { useState, useEffect } from "react";
 import { fetchMainCategories } from "../../helpers/api";
 import { selectOnSale } from "../../redux/cards/selectors";
@@ -11,12 +11,13 @@ import { fetchIndicators } from "../../helpers/api";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
 
-const Homepage = () => {
-  const [mainCategories, setMainCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
+const Homepage = ({ allCategAndBrands }) => {
+  const [mainCategories, setMainCategories] = useState(allCategAndBrands.main);
+  const [brands, setBrands] = useState(allCategAndBrands.brands);
   const [slidesPerView, setSlidesPerView] = useState(
     Math.floor(window.innerWidth / 300)
   );
+  const { current: checkStorageOnSale } = useRef(useSelector(selectOnSale));
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -30,9 +31,12 @@ const Homepage = () => {
     };
   }, []);
 
-  useEffect(() => {
+  const fetchAllCategor = useCallback(() => {
     fetchMainCategories()
-      .then(setMainCategories)
+      .then((res) => {
+        allCategAndBrands.main = res;
+        setMainCategories(res);
+      })
       .catch((error) => {
         toast.error(
           `Oops, something went wrong! Reload the page or try again later!`
@@ -40,26 +44,34 @@ const Homepage = () => {
         console.log("Error", error);
       });
     fetchIndicators("brands")
-      .then(setBrands)
+      .then((res) => {
+        allCategAndBrands.brands = res;
+        setBrands(res);
+      })
       .catch((error) => {
         console.log("Error", error);
       });
-  }, []);
+  }, [allCategAndBrands]);
+
+  useEffect(() => {
+    if (allCategAndBrands.brands.length && allCategAndBrands.main.length)
+      return;
+    fetchAllCategor();
+  }, [allCategAndBrands, fetchAllCategor]);
 
   const dispatch = useDispatch();
   useEffect(() => {
+    if (checkStorageOnSale?.content?.length) return;
     dispatch(getOnSale());
     return;
-  }, [dispatch]);
+  }, [dispatch, checkStorageOnSale]);
 
   const cardsOnSale = useSelector(selectOnSale);
+
   if (cardsOnSale.length === 0 || mainCategories.length === 0) {
     return;
   }
-
   const { content } = cardsOnSale;
-
-  console.log(content);
 
   return (
     <section className={css.section}>

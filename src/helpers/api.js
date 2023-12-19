@@ -36,10 +36,14 @@ export const fetchImgFromOneCategory = async (categoryId) => {
 
 export const addImagesToCard = async (productId, formData) => {
   try {
-    const response = await axios.post(`/api/v1/products/${productId}/images`, formData, {
-      headers: {"Content-Type": 'multipart/form-data'},
-    });
-    return response.data
+    const response = await axios.post(
+      `/api/v1/products/${productId}/images`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "../../App/App.module.scss";
 import css from "./ProductPage.module.scss";
 import {
@@ -8,16 +8,14 @@ import {
   AiOutlineMinus,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { selectFavorites } from "../../redux/cards/selectors";
-import Loader from "../../components/Loader/Loader";
-import { StarRating } from "../../components/StarRatings/StarRatings";
+import {
+  selectAllItems,
+  selectCards,
+  selectFavorites,
+} from "../../redux/cards/selectors";
 import { fetchProductById } from "../../helpers/api";
-import { Suspense } from "react";
-import { Outlet, useParams } from "react-router-dom";
-import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { selectOnSale } from "../../redux/cards/selectors";
-import { SliderOfCards } from "../../components/SliderOfCards/SliderOfCards";
 import { ProductSlider } from "../../components/ProductInfo/ProductSlider/ProductSlider";
 import Button from "../../components/CustomButton/Button";
 import ProductAbout from "../../components/ProductInfo/ProductAbout/ProductAbout";
@@ -26,21 +24,23 @@ import ProductReviews from "../../components/ProductInfo/ProductReviews/ProductR
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
 
 import StarRatingNew from "../../components/StarRatings/StarRatingNew";
+import { useParams } from "react-router-dom";
+import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
 const ProductPage = () => {
   const [showAboutPage, setShowAboutPage] = useState(true);
   const [showInstructionsPage, setShowInstructionsPage] = useState(false);
   const [showReviewsPage, setShowReviewsPage] = useState(false);
-
+  const [product, setProduct] = useState(null);
+  const { constants } = useConstants();
+  const allItems = useSelector(selectAllItems);
+  const productInfo = useRef();
   const [slidesPerView, setSlidesPerView] = useState(
     Math.floor(window.innerWidth / 300)
   );
-
   const { productId } = useParams();
 
-  const [product, setProduct] = useState(null);
   const favorites = useSelector(selectFavorites);
-
   const cardsOnSale = useSelector(selectOnSale);
   const { content } = cardsOnSale;
 
@@ -59,21 +59,29 @@ const ProductPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchProductById(productId)
-      .then(setProduct)
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  }, [productId]);
+    if (
+      content &&
+      content.length > 0 &&
+      content.some((e) => e.id === +productId)
+    ) {
+      setProduct(content.find((e) => e.id === +productId));
+    } else if (
+      allItems.items.content?.length > 0 &&
+      allItems.items.content?.some((e) => e.id === +productId)
+    ) {
+      setProduct(allItems.items.content.find((e) => e.id === +productId));
+    } else {
+      fetchProductById(productId)
+        .then(setProduct)
+        .catch((error) => {
+          console.log("Error", error);
+        });
+    }
+  }, [productId, allItems.items, content]);
 
   if (!product || !content) {
     return;
   }
-
-  console.log(product);
-
-  // console.log("product", product);
-
   function handleChangeQuantityOfItem(action) {
     if (action === "+")
       setQuantityOfItemToAddInCart((quantity) => quantity + 1);
@@ -105,11 +113,9 @@ const ProductPage = () => {
     console.log(`You set rating to ${e}`);
   }
 
-  // const navItems = [
-  //   { href: "about", text: "About the product" },
-  //   { href: "instructions", text: "Feeding instructions" },
-  //   { href: "reviews", text: "Reviews" },
-  // ];
+  function handlerClickOnSaleItem() {
+    productInfo.current.scrollIntoView();
+  }
 
   function handleSwitchToPage(switchToPage) {
     if (switchToPage === "about") {
@@ -132,7 +138,7 @@ const ProductPage = () => {
   return (
     <section className={css.section}>
       <div className={styles.container}>
-        <div className={css.product_info}>
+        <div className={css.product_info} ref={productInfo}>
           <ProductSlider items={product} />
 
           <div className={css.product_text}>
@@ -142,25 +148,29 @@ const ProductPage = () => {
               <p className={css.product_in}>In stock</p>
             )}
             <h1 className={css.product_title}>{product.name}</h1>
-            <p className={css.product_rating}>
+            <div className={css.product_rating}>
               <StarRatingNew
                 size={24}
                 color="#FFBD71"
                 onSetRating={handleSetStarRating}
               />
               <span className={css.product_rating_text}>0 reviews</span>
-            </p>
+            </div>
 
             {product.priceWithDiscount ? (
               <div className={css.product_price_box}>
                 <p className={css.product_price}>
-                  $ {product.priceWithDiscount}
+                  {constants[1].value} {product.priceWithDiscount}
                 </p>
-                <p className={css.product_price_not}>$ {product.price}</p>
+                <p className={css.product_price_not}>
+                  {constants[1].value} {product.price}
+                </p>
               </div>
             ) : (
               <div className={css.product_price_box}>
-                <p className={css.product_price}>$ {product.price}</p>
+                <p className={css.product_price}>
+                  {constants[1].value} {product.price}
+                </p>
               </div>
             )}
 
@@ -232,14 +242,6 @@ const ProductPage = () => {
                 Reviews
               </span>
             </li>
-            {/*navItems.map(({ href, text }) => (
-              <li key={href} className={css.link_item}>
-                <NavLink to={href} className={css.link_title}>
-                  {" "}
-                  {text}
-                </NavLink>
-              </li>
-            ))*/}
           </ul>
 
           {showAboutPage && <ProductAbout product={product} />}
@@ -247,13 +249,10 @@ const ProductPage = () => {
             <ProductInstructions instructions={product.instructions} />
           )}
           {showReviewsPage && <ProductReviews />}
-
-          {/* <Suspense fallback={<Loader />}>
-            <Outlet />
-          </Suspense> */}
         </div>
 
         <SliderForHomepage
+          onClick={handlerClickOnSaleItem}
           items={content}
           title="On Sale"
           type="saleSlider"

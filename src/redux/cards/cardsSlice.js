@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   getAllCards,
   getCardsFromOneCategory,
@@ -6,64 +6,61 @@ import {
   updateCard,
   deleteCard,
   getOnSale,
-
   addToFavorite,
   deleteFromFavorite,
-
-} from './operations';
+} from "./operations";
 
 //import { logOut } from "../auth/operations";
 
 const cardsSlice = createSlice({
-  name: 'cards',
+  name: "cards",
   initialState: {
     items: [],
     onSale: [],
     favorites: [],
-    cardsInCart:[],
+    cardsInCart: [],
     isLoading: false,
     error: null,
+    //categories:[],
+    // brands:[]
   },
 
   reducers: {
     filterFavorites: (state, action) => {
-      state.favorites = state.favorites.filter(favorite =>
+      state.favorites = state.favorites.filter((favorite) =>
         favorite.id.includes(action.payload)
       );
     },
-  
   },
 
-
-  extraReducers: builder =>
+  extraReducers: (builder) =>
     builder
 
       //* статус "pending"
       .addCase(getAllCards.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getCardsFromOneCategory.pending, state => {
+      .addCase(getCardsFromOneCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createCard.pending, state => {
+      .addCase(createCard.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateCard.pending, state => {
+      .addCase(updateCard.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteCard.pending, state => {
+      .addCase(deleteCard.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOnSale.pending, state => {
+      .addCase(getOnSale.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addToFavorite.pending, state => {
+      .addCase(addToFavorite.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteFromFavorite.pending, state => {
+      .addCase(deleteFromFavorite.pending, (state) => {
         state.isLoading = true;
       })
-
 
       //* статус "rejected"
       .addCase(getAllCards.rejected, (state, action) => {
@@ -118,7 +115,9 @@ const cardsSlice = createSlice({
       .addCase(updateCard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const updatedCardIndex = state.items.content.findIndex(card => card.id === action.payload.id);
+        const updatedCardIndex = state.items.content.findIndex(
+          (card) => card.id === action.payload.id
+        );
         if (updatedCardIndex !== -1) {
           state.items[updatedCardIndex] = action.payload;
         }
@@ -135,7 +134,7 @@ const cardsSlice = createSlice({
         state.error = null;
         state.onSale = action.payload;
       })
-      
+
       .addCase(addToFavorite.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
@@ -145,10 +144,9 @@ const cardsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.favorites = state.favorites.filter(
-          favorite => favorite._id !== action.meta.arg
+          (favorite) => favorite._id !== action.meta.arg
         );
       }),
-
 
   //  .addCase(logOut.fulfilled, (state, action) => {
   //      state.items = [];
@@ -159,7 +157,6 @@ const cardsSlice = createSlice({
   //      state.isLoading = false;
   //     }),
 });
-
 
 export const { filterFavorites } = cardsSlice.actions;
 export const cardsReducer = cardsSlice.reducer;
