@@ -82,9 +82,9 @@ const LeftSide = () => {
                 )}
               </div>
             ) : href === "logout" ? (
-              <div onClick={handleLogout} className={css.logout}>
+              <span onClick={handleLogout} className={css.logout}>
                 <FiLogOut style={{ marginRight: "10px" }} /> {text}
-              </div>
+              </span>
             ) : (
               <NavLink
                 className={href === activeItem.href ? css.activeItem : ""}

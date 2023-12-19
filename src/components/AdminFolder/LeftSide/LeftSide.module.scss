@@ -45,18 +45,23 @@
     justify-content: center;
     margin: 4px 0;
 
-    & > a {
+    & > span, a {
       padding: 10px 14px;
     }
-    & > a.logout {
+    & > span.logout {
       display: flex;
+      cursor: pointer;
       justify-content: center;
       align-items: center;
-      background-color: #ffad4d;
+      background-color: $main-color;
       color: white;
       border-radius: 99px;
       margin: 70px 10px 0;
       padding: 6px 10px;
+
+      &:hover {
+        background-color: $hover-color;
+      }
     }
     :global(.active) {
       color: $main-color;

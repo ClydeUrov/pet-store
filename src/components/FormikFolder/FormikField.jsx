@@ -36,18 +36,18 @@ const FormikField = (props) => {
   
   const renderTreeOptions = (items, level = 0) => {
     return items.map((item) => (
-      <>
+      <React.Fragment key={item.id}>
         <option
-          key={item.id}
           value={item.id}
           style={{
-            color: values[name]?.id === item.id ? "#ffad4d" : ''
+            color: values[name]?.id === item.id ? "#ffad4d" : ""
           }}
         >
-          {values[name]?.id === item.id ? '' : '\u00A0'.repeat(level * 3)}{item.name}
+          {values[name]?.id === item.id ? "" : "\u00A0".repeat(level * 3)}
+          {item.name}
         </option>
         {item.children.length > 0 && renderTreeOptions(item.children, level + 1)}
-      </>
+      </React.Fragment>
     ));
   };
   
