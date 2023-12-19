@@ -21,6 +21,8 @@ const cardsSlice = createSlice({
     cardsInCart: [],
     isLoading: false,
     error: null,
+    //categories:[],
+    // brands:[]
   },
 
   reducers: {

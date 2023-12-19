@@ -1,6 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import React, { useRef } from "react";
 import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Cart from "../pages/Cart/Cart";
@@ -36,11 +36,15 @@ const AdminProfile = lazy(() =>
 );
 
 const App = () => {
+  const { current: categoriesForHomepage } = useRef({ brands: [], main: [] });
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Homepage />} />
+          <Route
+            index
+            element={<Homepage allCategAndBrands={categoriesForHomepage} />}
+          />
           <Route path="/catalogue/:category" element={<Catalog />}>
             <Route path=":itemName" element={<Catalog />} />
           </Route>
