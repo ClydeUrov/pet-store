@@ -18,7 +18,6 @@ import Users from "../components/AdminFolder/Users/Users";
 import AdminContentRoute from "../helpers/routs/AdminContentRoute";
 import CreateUpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateUpdateProduct";
 
-
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() => import("../components/UserAccount/UserAccount"));
 const UserInfo = lazy(() => import("../components/UserInfo/UserInfo"));
@@ -36,15 +35,11 @@ const AdminProfile = lazy(() =>
 );
 
 const App = () => {
-  const { current: categoriesForHomepage } = useRef({ brands: [], main: [] });
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            index
-            element={<Homepage allCategAndBrands={categoriesForHomepage} />}
-          />
+          <Route index element={<Homepage />} />
           <Route path="/catalogue/:category" element={<Catalog />}>
             <Route path=":itemName" element={<Catalog />} />
           </Route>
@@ -68,7 +63,10 @@ const App = () => {
           <Route path="/*" element={<Error />} />
         </Route>
 
-        <Route path="/admin" element={<AdminPrivateRoute component={<AdminPage />} />}>
+        <Route
+          path="/admin"
+          element={<AdminPrivateRoute component={<AdminPage />} />}
+        >
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />

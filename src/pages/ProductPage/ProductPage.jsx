@@ -41,8 +41,7 @@ const ProductPage = () => {
   const { productId } = useParams();
 
   const favorites = useSelector(selectFavorites);
-  const cardsOnSale = useSelector(selectOnSale);
-  const { content } = cardsOnSale;
+  const { content: cardsOnSale } = useSelector(selectOnSale);
 
   const [quantityOfItemToAddInCart, setQuantityOfItemToAddInCart] = useState(1);
 
@@ -60,14 +59,13 @@ const ProductPage = () => {
 
   useEffect(() => {
     if (
-      content &&
-      content.length > 0 &&
-      content.some((e) => e.id === +productId)
+      cardsOnSale.length > 0 &&
+      cardsOnSale.some((e) => e.id === +productId)
     ) {
-      setProduct(content.find((e) => e.id === +productId));
+      setProduct(cardsOnSale.find((e) => e.id === +productId));
     } else if (
-      allItems.items.content?.length > 0 &&
-      allItems.items.content?.some((e) => e.id === +productId)
+      allItems.items.content.length > 0 &&
+      allItems.items.content.some((e) => e.id === +productId)
     ) {
       setProduct(allItems.items.content.find((e) => e.id === +productId));
     } else {
@@ -77,9 +75,9 @@ const ProductPage = () => {
           console.log("Error", error);
         });
     }
-  }, [productId, allItems.items, content]);
+  }, [productId, allItems.items, cardsOnSale]);
 
-  if (!product || !content) {
+  if (!product || !cardsOnSale) {
     return;
   }
   function handleChangeQuantityOfItem(action) {
@@ -97,12 +95,12 @@ const ProductPage = () => {
     //   'The user must be logged in to use this functionality!'
     // );
     // }
-    if (!favorites.find((favorite) => favorite.id === item.id)) {
-      console.log("This item has been successfully added to favorites!");
-      // dispatch(addToFavorite(item._id));
-      // toast.success(`This item has been successfully added to favorites!`);
-      return;
-    }
+    // if (!favorites.find((favorite) => favorite.id === item.id)) {
+    //   console.log("This item has been successfully added to favorites!");
+    // dispatch(addToFavorite(item._id));
+    // toast.success(`This item has been successfully added to favorites!`);
+    //   return;
+    // }
     console.log("This item was successfully removed from favorites!");
     // dispatch(deleteFromFavorite(item._id));
     // toast.success(`This item was successfully removed from favorites!`);
@@ -253,7 +251,7 @@ const ProductPage = () => {
 
         <SliderForHomepage
           onClick={handlerClickOnSaleItem}
-          items={content}
+          items={cardsOnSale}
           title="On Sale"
           type="saleSlider"
           slidesPerView={slidesPerView}
