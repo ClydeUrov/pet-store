@@ -8,33 +8,30 @@ function useUserActions() {
   const navigate = useNavigate();
   // const baseURL = process.env.REACT_APP_API_URL;
   
-
   return {
     login,
     register,
     logout,
-    edit,
+    editProfile,
+    editPassword,
     profile,
   };
 
   // Get profile
   function profile() {
-    const auth = JSON.parse(localStorage.getItem("auth")) || null;
-    console.log("!", auth?.access)
     return axios.get(`${baseURL}users/profile`, {
-      headers: {
-        'Authorization': "Bearer " + auth?.access
-      }
+      headers: { 'Authorization': "Bearer " + getAccessToken() }
     })
   }
 
-  
-
   // Edit the user
-  function edit(data, userId) {
+  function editProfile(data) {
     return axiosService
-      .patch(`${baseURL}user/${userId}/`, data, {
-        headers: { "Content-Type": "multipart/form-data", },
+      .patch(`${baseURL}users/profile`, data, {
+        headers: { 
+          "Content-Type": "multipart/form-data",
+          'Authorization': "Bearer " + getAccessToken()
+        },
       })
       .then((res) => {
         // Registration the account in the store
@@ -47,6 +44,13 @@ function useUserActions() {
           })
         );
       });
+  }
+
+  function editPassword(data) {
+    return axiosService
+      .patch(`${baseURL}users/password`, data, {
+        headers: { 'Authorization': "Bearer " + getAccessToken() }
+      })
   }
 
   // Login the user
@@ -68,8 +72,13 @@ function useUserActions() {
   // Logout the user
   function logout() {
     return axiosService
-      .post(`${baseURL}auth/logout`, { refresh: getAccessToken() })
+      .post(`${baseURL}auth/logout`, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
       .then(() => {
+        console.log(321)
         localStorage.removeItem("auth");
         navigate("/");
       });

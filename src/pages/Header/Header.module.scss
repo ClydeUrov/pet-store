@@ -104,11 +104,17 @@
     .options {
       display: flex;
       align-items: center;
-      gap: 24px;
+      justify-content:center;
+      gap: 18px;
 
       .option {
         color: #494949;
+        height: 38px;
+        width: 38px;
+        text-align: center;
         cursor: pointer;
+        font-size: 34px;
+        border-radius: 50%;
       }
       .option:hover {
         color: $hover-color;

@@ -45,17 +45,21 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
   };
 
   const handleConfirmDeletion = () => {
-    try {
-      adminAction
-        .deleteAction(`/products/${productId}/images/${images[deleteItemId].id}`)
-        .catch((err) => err.response ? setError(err.response.data.message) : setError(err.message))
-      
-      const newImages = [...images];
-      newImages.splice(deleteItemId, 1);
-      setImages(newImages);
-    } catch (err) {
-      err.response ? setError(err.response.data.message) : setError(err.message)
-    }
+
+    toast.promise(adminAction
+      .deleteAction(`products/${productId}/images/${images[deleteItemId].id}`)
+      .then(() => {
+        const newImages = [...images];
+        newImages.splice(deleteItemId, 1);
+        setImages(newImages);
+      })
+      .catch((err) => err.response ? setError(err.response.data.message) : setError(err.message))
+      ,{
+        pending: "Image deletion in progress",
+        error: "Image was not deleted"
+      }
+    );
+
     setDeleteModal(false);
   };
 

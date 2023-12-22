@@ -8,31 +8,30 @@ import { MdOutlineEdit } from "react-icons/md";
 import { deleteCard } from "../../../../redux/cards/operations";
 import { useState } from "react";
 import css from "./Products.module.scss";
+import { NavLink } from "react-router-dom";
 
 const ProductCards = ({
   allCards,
   setPage,
   dispatch,
-  setEditProduct,
   setPrevLength,
 }) => {
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+
   const { constants } = useConstants();
 
   const handleConfirmDeletion = async () => {
     try {
-      await toast.promise(dispatch(deleteCard(deleteItemId)),
-        {
-          pending: "Item is in the process of deletion",
-          error: "The product was not deleted",
-        }
+      await toast.promise(dispatch(deleteCard(deleteItemId)),{
+        pending: "Deletion in process",
+        error: "The product was not deleted"
+      }
       );
       setPrevLength(allCards.content.length - 1);
     } catch (err) {
       console.error("Error deleting card:", err.response?.data?.message || err.message);
-      // Отобразить сообщение об ошибке в интерфейсе (например, в модальном окне или каким-то другим способом)
-      // Пример:
+
       alert("An error occurred while deleting the product. Please try again.");
     }
     setDeleteModal(false);
@@ -76,7 +75,7 @@ const ProductCards = ({
           <div>{item.newArrival ? "Yes" : "No"}</div>
           <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
           <div>
-            <MdOutlineEdit onClick={() => setEditProduct(item)} />
+            <NavLink to={`update/${item.id}`}><MdOutlineEdit /></NavLink>
             <AiOutlineDelete
               onClick={() => {
                 setDeleteItemId(item.id);
