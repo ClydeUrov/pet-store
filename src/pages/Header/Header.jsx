@@ -13,16 +13,21 @@ import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { fetchAllCategories } from "../../helpers/api";
 import VerifyEmail from "../../components/AuthForm/VerifyEmail";
 import VerifyCheck from "../../components/AuthForm/VerifyCheck";
+
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
+
+import { getUser } from "../../helpers/user.actions";
+
 
 const Header = () => {
   const query = new URLSearchParams(window.location.search);
   const token = query.get("token");
 
   const { constants } = useConstants();
-  const isLoggedIn = false;
+  const user = getUser();
+
 
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
@@ -175,9 +180,13 @@ const Header = () => {
               <FiShoppingCart size={32} />
             </NavLink>
 
-            {isLoggedIn ? (
-              <NavLink to="/user/account" className={styles.option}>
-                <FaRegUser size={32} />
+            {user ? (
+              <NavLink 
+                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"} 
+                className={styles.option} 
+                style={{backgroundColor:"#f4f6fa"}}
+              >
+                {user.firstName.charAt(0)}
               </NavLink>
             ) : (
               <button
@@ -212,7 +221,11 @@ const Header = () => {
             <LogInForm setModalState={setModalState} onClose={toggleModal} />
           )}
           {modalState === 4 && (
-            <VerifyCheck token={token} setModalState={setModalState} />
+            <VerifyCheck
+              token={token}
+              setModalState={setModalState}
+              host={window.location.host}
+            />
           )}
         </Modal>
       )}

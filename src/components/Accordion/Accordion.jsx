@@ -64,8 +64,8 @@ export const Accordion = ({ characteristics, selected, urlCategory, setSelected 
               return item.parent?.id === parseInt(urlCategory[1]);
             })
             .map((item) => (
-              <NavLink to={`/catalogue/${item.name}-${item.id}`}>
-                <li key={item.id}>
+              <NavLink key={item.id} to={`/catalogue/${item.name}-${item.id}`}>
+                <li>
                   {item.name}
                 </li>
               </NavLink>

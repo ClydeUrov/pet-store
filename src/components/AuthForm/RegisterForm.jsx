@@ -22,13 +22,11 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
   };
 
   const handleSubmit = async (formData, { resetForm }) => {
-    formData.append('host', `${host}/pet-store`)
-    console.log("formData", formData);
+    const path = `${host}/pet-store`;
 
     await userActions
-      .register(formData)
-      .then((res) => {
-        console.log("register response", res)
+      .register(formData, path)
+      .then(() => {
         resetForm();
         onClick(formData.email);
       })

@@ -42,6 +42,11 @@ const cardsSlice = createSlice({
         favorite.id.includes(action.payload)
       );
     },
+    getProductById: (state, action) => {
+      const productId = action.payload;
+      const product = state.items.find((item) => item.id === productId);
+      state.selectedProduct = product;
+    },
   },
 
   extraReducers: (builder) =>
@@ -193,5 +198,5 @@ const cardsSlice = createSlice({
   //     }),
 });
 
-export const { filterFavorites } = cardsSlice.actions;
+export const { filterFavorites, getProductById } = cardsSlice.actions;
 export const cardsReducer = cardsSlice.reducer;
