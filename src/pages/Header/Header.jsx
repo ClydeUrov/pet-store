@@ -207,6 +207,7 @@ const Header = () => {
             <VerifyCheck
               token={token}
               setModalState={setModalState}
+              host={window.location.host}
             />
           )}
         </Modal>

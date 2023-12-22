@@ -63,8 +63,8 @@ function useUserActions() {
   }
 
   // Login the user
-  function register(data) {
-    return axios.post(`${baseURL}auth/register`, data).then((res) => {
+  function register(data, path) {
+    return axios.post(`${baseURL}auth/register?path=${path}`, data).then((res) => {
       setUserData(res.data);
     });
   }
@@ -78,7 +78,6 @@ function useUserActions() {
         }
       })
       .then(() => {
-        console.log(321)
         localStorage.removeItem("auth");
         navigate("/");
       });
