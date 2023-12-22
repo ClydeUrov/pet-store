@@ -13,11 +13,17 @@ import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { fetchAllCategories } from "../../helpers/api";
 import VerifyEmail from "../../components/AuthForm/VerifyEmail";
 import VerifyCheck from "../../components/AuthForm/VerifyCheck";
+
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllCategories } from "../../redux/cards/selectors";
+import { getAllCategories } from "../../redux/cards/operations";
+
 import { getUser } from "../../helpers/user.actions";
+
 
 const Header = () => {
   const query = new URLSearchParams(window.location.search);
-  const token = query.get('token');
+  const token = query.get("token");
 
   const { constants } = useConstants();
   const user = getUser();
@@ -27,9 +33,12 @@ const Header = () => {
   const [modalState, setModalState] = useState(null);
   const [verifyEmail, setVerifyEmail] = useState(false);
 
-  const [categories, setCategories] = useState([]);
+  const { content: categories, isLoading: categoriesIsLoading } =
+    useSelector(selectAllCategories);
   const [showMenu, setShowMenu] = useState(false);
   const [openItems, setOpenItems] = useState([]);
+
+  const dispatch = useDispatch();
 
   const modalTitles = {
     1: "Sign Up",
@@ -51,45 +60,44 @@ const Header = () => {
   }, [token]);
 
   useEffect(() => {
-    fetchAllCategories()
-      .then(setCategories)
-      .catch(error => console.log('Error', error))
-  }, [])
+    if (categoriesIsLoading || categories.length) return;
+    dispatch(getAllCategories());
+  }, [categoriesIsLoading, categories.length, dispatch]);
 
   const handleMouseEnter = (itemId, index) => {
     setOpenItems((prevOpen) => {
-      if (typeof index === 'number') {
+      if (typeof index === "number") {
         return [...prevOpen.slice(0, index + 1), itemId];
       }
       return [...prevOpen, itemId];
     });
   };
-  
+
   const handleItemChange = (itemId, index) => {
     setOpenItems((prevOpen) => {
-      if (typeof index === 'number') {
+      if (typeof index === "number") {
         return prevOpen.slice(0, index + 1);
       }
       return [];
     });
   };
-  
+
   const parentExist = (itemId, index) => (
     <ul key={index}>
       {categories
         .filter((item) => item.parent?.id === itemId)
         .map((item) => (
-          <li 
+          <li
             key={item.id}
             onMouseEnter={() => handleMouseEnter(item.id, index)}
             onChange={() => handleItemChange(item.id, index)}
-            
           >
-            <NavLink 
-              to={`/catalogue/${item.name}-${item.id}`} 
+            <NavLink
+              to={`/catalogue/${item.name}-${item.id}`}
               style={openItems.includes(item.id) ? { color: "#ffad4d" } : {}}
             >
-              {item.name}<IoIosArrowForward /> 
+              {item.name}
+              <IoIosArrowForward />
             </NavLink>
           </li>
         ))}
@@ -108,15 +116,18 @@ const Header = () => {
               className={styles.catalogue}
               onClick={() => setShowMenu(true)}
               onMouseEnter={() => setShowMenu(true)}
-              onMouseLeave={() => {setShowMenu(false); setOpenItems([])}}
-              >
+              onMouseLeave={() => {
+                setShowMenu(false);
+                setOpenItems([]);
+              }}
+            >
               <NavLink to={`/catalogue/All`}>
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
               {categories?.length > 0 && showMenu && (
                 <div className={styles.dropdownMenu}>
-                  <div className={styles.horizontalList} >
+                  <div className={styles.horizontalList}>
                     <ul>
                       {categories
                         .filter((item) => item.parent === null)
@@ -126,21 +137,28 @@ const Header = () => {
                             onMouseEnter={() => setOpenItems([item.id])}
                             onChange={() => setOpenItems([])}
                           >
-                            <NavLink 
-                              to={`/catalogue/${item.name}-${item.id}`} 
-                              style={openItems.includes(item.id) ? { color: "#ffad4d" } : {}}
+                            <NavLink
+                              to={`/catalogue/${item.name}-${item.id}`}
+                              style={
+                                openItems.includes(item.id)
+                                  ? { color: "#ffad4d" }
+                                  : {}
+                              }
                             >
-                              {item.name}<IoIosArrowForward />
+                              {item.name}
+                              <IoIosArrowForward />
                             </NavLink>
                           </li>
                         ))}
                     </ul>
-                    {openItems?.map((itemId, index) => parentExist(itemId, index))}
+                    {openItems?.map((itemId, index) =>
+                      parentExist(itemId, index)
+                    )}
                   </div>
                 </div>
               )}
             </div>
-            
+
             <NavLink to="/admin/orders" className={styles.catalogue}>
               Admin
             </NavLink>
@@ -174,7 +192,10 @@ const Header = () => {
               <button
                 type="button"
                 className={`${styles.option} ${styles.option_btn}`}
-                onClick={() => {toggleModal(); setModalState(3)}}
+                onClick={() => {
+                  toggleModal();
+                  setModalState(3);
+                }}
               >
                 <FaRegUser size={32} />
               </button>
@@ -187,21 +208,17 @@ const Header = () => {
         <Modal onClose={toggleModal} title={modalTitles[modalState]}>
           {modalState === 1 && (
             <RegisterForm
-              onClick={(email) => {setVerifyEmail(email); setModalState(2)}}
+              onClick={(email) => {
+                setVerifyEmail(email);
+                setModalState(2);
+              }}
               setModalState={setModalState}
               host={window.location.host}
             />
           )}
-          {modalState === 2 && (
-            <VerifyEmail
-              verifyEmail={verifyEmail}
-            />
-          )}
+          {modalState === 2 && <VerifyEmail verifyEmail={verifyEmail} />}
           {modalState === 3 && (
-            <LogInForm
-              setModalState={setModalState}
-              onClose={toggleModal}
-            />
+            <LogInForm setModalState={setModalState} onClose={toggleModal} />
           )}
           {modalState === 4 && (
             <VerifyCheck
