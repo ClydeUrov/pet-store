@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axiosService from '../../helpers/axios';
 import css from "./AuthForm.module.scss";
 
-const VerifyEmail = ({verifyEmail}) => {
+const VerifyEmail = ({verifyEmail, host}) => {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(60);
   const [resendAttempts, setResendAttempts] = useState(5);
@@ -30,9 +30,11 @@ const VerifyEmail = ({verifyEmail}) => {
   }, [isTimerActive, secondsRemaining]);
 
   const handleResend = () => {
+    const path = `${host}/pet-store`;
+
     if (resendAttempts > 0) {
       axiosService
-        .post(`/auth/resend-verification-link?email=${verifyEmail}`)
+        .post(`/auth/resend-verification-link?email=${verifyEmail}&path=${path}`)
         .catch((err) => {
           err.response ? setError(err.response.data.message) : setError(err.message);
         })
@@ -44,17 +46,16 @@ const VerifyEmail = ({verifyEmail}) => {
   return (
     <div className={css.verifyBlock}>
       <p>
-      A confirmation message has been sent to your email address {verifyEmail}. <br/>
-      Kindly peruse your inbox (or spam folder) and proceed by clicking the provided link to validate.
+      A confirmation message has been sent to your email address: <b>{verifyEmail}</b>. <br/>
+      Please check your inbox (or spam folder) and click the confirmation link provided.
       </p>
       <p>
         If the message did not arrive, you can
-      </p>
-      <p>
-      {isTimerActive ? (
+        {isTimerActive ? (
           `try again in ${secondsRemaining} seconds`
         ) : (
           <>
+            <br /><br />
             {resendAttempts > 0 ? (
               <button 
                 className={css.button} 

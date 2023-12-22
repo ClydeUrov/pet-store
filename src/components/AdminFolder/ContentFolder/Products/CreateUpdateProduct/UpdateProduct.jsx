@@ -4,20 +4,31 @@ import DownloadImages from "./DownloadImages";
 import FormikField from "../../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
 import { useEffect, useState } from "react";
-import { fetchProductCharacteristics } from "../../../../../helpers/api";
-import { createCard, updateCard } from "../../../../../redux/cards/operations";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { fetchProductById, fetchProductCharacteristics } from "../../../../../helpers/api";
+import { updateCard } from "../../../../../redux/cards/operations";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { schemaAdminProducts } from "../../../../../helpers/schemes";
 
-const CreateUpdateProduct = ({product, setEditProduct}) => {
+const UpdateProduct = () => {
+  const { productId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  const [mainImage, setMainImage] = useState(product?.mainImage ? { id: product.mainImage.id, url: product.mainImage.filePath } : null);
-  const [images, setImages] = useState(product?.images || []);
+  const [product, setProduct] = useState(useSelector(
+    state => state.cards.items.content.find(item => item.id === parseInt(productId))
+  ));
+
+  if (!product) {
+    setProduct(fetchProductById(productId))
+  }
+
+  const [mainImage, setMainImage] = useState(
+    product.mainImage ? { id: product.mainImage.id, url: product.mainImage.filePath } : null
+  );
+  const [images, setImages] = useState(product.images || []);
 
   const [characteristics, setCharacteristics] = useState({
     age : [],
@@ -55,60 +66,41 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
     if(values.size) { values.productSize = values.size }
     if (mainImage) {values.mainImage = mainImage}
   
-    if (product) {
-      try {
-        await toast.promise(dispatch(updateCard({ id: product.id, data: values })), {
-          pending: "Request in progress",
-          success: "Product updated successfully",
-          error: "The product was not updated",
-        })
-        navigate(0)
-      } catch (err) {
-        err.response ? setError(err.response.data.message) : setError(err.message)
-      }
-    } else {
-      try {
-        toast.promise(dispatch(createCard(values)), {
-          pending: "Request in progress",
-          success: "Product created successfully!",
-          error: "The product was not created",
-        })
-        navigate(-1)
-      } catch (err) {
-        err.response ? setError(err.response.data.message) : setError(err.message)
-      }
+    try {
+      await toast.promise(dispatch(updateCard({ id: product.id, data: values })), {
+        pending: "Request in progress",
+        success: "Product updated successfully",
+        error: "The product was not updated",
+      })
+      navigate("/admin/products/");
+    } catch (err) {
+      err.response ? setError(err.response.data.message) : setError(err.message)
     }
   };
 
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>
-        {product
-          ? (<p>Product information</p>)
-          : (<p>Create product</p>)
-        }
+        <p>Product information</p>
       </div>
 
-      {product
-        ? ( <DownloadImages 
-          images={images} setImages={setImages} productId={product?.id} mainImage={mainImage} setMainImage={setMainImage} 
-        />)
-        : null 
-      }
+      <DownloadImages 
+        images={images} setImages={setImages} productId={product?.id} mainImage={mainImage} setMainImage={setMainImage} 
+      />
       
       <Formik
         validationSchema={schemaAdminProducts}
         initialValues={{
-          name: product?.name || "",
+          name: product.name,
           description: product?.description || undefined,
           instructions: product?.instructions || undefined,
           contraindications: product?.contraindications || undefined,
           prescription: product?.prescription || undefined,
           priceWithDiscount: product?.priceWithDiscount || undefined,
-          price: product?.price || 0,
+          price: product.price,
           age: product?.age || undefined,
           brand: product?.brand || undefined,
-          category: product?.category || undefined,
+          category: product.category,
           color: product?.color || undefined,
           material: product?.material || undefined,
           size: product?.productSize || undefined,
@@ -148,8 +140,8 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
           </div>
           {error && <p>{error}</p>}
           <div className={css.buttons}>
-            {product ? <button type="submit" >Update</button> : <button type="submit" >Create</button>} 
-            <button type="button" onClick={() => { navigate('/admin/products/'); product && setEditProduct(null); }} >Cancel</button>
+            <button type="submit" >Update</button>
+            <button type="button" onClick={() => navigate('/admin/products/')} >Cancel</button>
           </div>
         </Form>
         )}
@@ -158,4 +150,4 @@ const CreateUpdateProduct = ({product, setEditProduct}) => {
   );
 };
 
-export default CreateUpdateProduct;
+export default UpdateProduct;

@@ -133,7 +133,13 @@ export const schemaAdminProducts = yup.object().shape({
     .required("Required field!"),
   priceWithDiscount: yup
     .number()
-    .positive("Price must be greater than zero"),
+    .positive("Price with discount must be greater than zero")
+    .when('price', (price, schema) => {
+      return schema.test('is-less-than-price', 'Price with discount must be less than price', (value) => {
+        // Проверяем, что priceWithDiscount существует и имеет какие-либо значения, а затем сравниваем с price
+        return (value !== undefined && value !== null) ? (value > 0 && value < price) : true;
+      });
+    }),
   category: yup
     .object()
     .required("Required field!"),
