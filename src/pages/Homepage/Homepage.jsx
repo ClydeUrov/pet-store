@@ -1,23 +1,30 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
-import { toast } from "react-toastify";
-import React, { useCallback, useRef } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
-import { fetchMainCategories } from "../../helpers/api";
-import { selectOnSale } from "../../redux/cards/selectors";
+import {
+  selectBrands,
+  selectMainCategories,
+  selectOnSale,
+} from "../../redux/cards/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { getOnSale } from "../../redux/cards/operations";
-import { fetchIndicators } from "../../helpers/api";
+import {
+  getAllCategories,
+  getBrands,
+  getOnSale,
+} from "../../redux/cards/operations";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
 
-const Homepage = ({ allCategAndBrands }) => {
-  const [mainCategories, setMainCategories] = useState(allCategAndBrands.main);
-  const [brands, setBrands] = useState(allCategAndBrands.brands);
+const Homepage = () => {
   const [slidesPerView, setSlidesPerView] = useState(
     Math.floor(window.innerWidth / 300)
   );
-  const { current: checkStorageOnSale } = useRef(useSelector(selectOnSale));
+
+  const cardsOnSale = useSelector(selectOnSale);
+  const mainCategories = useSelector(selectMainCategories);
+  const brands = useSelector(selectBrands);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -31,68 +38,53 @@ const Homepage = ({ allCategAndBrands }) => {
     };
   }, []);
 
-  const fetchAllCategor = useCallback(() => {
-    fetchMainCategories()
-      .then((res) => {
-        allCategAndBrands.main = res;
-        setMainCategories(res);
-      })
-      .catch((error) => {
-        toast.error(
-          `Oops, something went wrong! Reload the page or try again later!`
-        );
-        console.log("Error", error);
-      });
-    fetchIndicators("brands")
-      .then((res) => {
-        allCategAndBrands.brands = res;
-        setBrands(res);
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  }, [allCategAndBrands]);
+  // useEffect(() => {
+  //   if (mainCategories.content.length || mainCategories.isLoading) {
+  //     return;
+  //   }
+
+  //   dispatch(getAllCategories());
+  // }, [dispatch, mainCategories]);
 
   useEffect(() => {
-    if (allCategAndBrands.brands.length && allCategAndBrands.main.length)
-      return;
-    fetchAllCategor();
-  }, [allCategAndBrands, fetchAllCategor]);
+    if (brands.content.length || brands.isLoading) return;
 
-  const dispatch = useDispatch();
+    dispatch(getBrands());
+  }, [brands, dispatch]);
+
   useEffect(() => {
-    if (checkStorageOnSale?.content?.length) return;
+    if (cardsOnSale.content.length || cardsOnSale.isLoading) return;
     dispatch(getOnSale());
-    return;
-  }, [dispatch, checkStorageOnSale]);
+  }, [dispatch, cardsOnSale]);
 
-  const cardsOnSale = useSelector(selectOnSale);
-
-  if (cardsOnSale.length === 0 || mainCategories.length === 0) {
+  if (
+    cardsOnSale.content.length === 0 ||
+    mainCategories.content.length === 0 ||
+    brands.content.length === 0
+  ) {
     return;
   }
-  const { content } = cardsOnSale;
 
   return (
     <section className={css.section}>
       <div className={style.container}>
-        <MainSliderForCategories items={mainCategories} />
+        <MainSliderForCategories items={mainCategories.content} />
         <div className={css.three_swipers}>
           <SliderForHomepage
-            items={content}
+            items={cardsOnSale.content}
             title="Your Pet Will Love These"
             type="saleSlider"
             slidesPerView={slidesPerView}
           />
 
           <SliderForHomepage
-            items={content}
+            items={cardsOnSale.content}
             title="On Sale"
             type="saleSlider"
             slidesPerView={slidesPerView}
           />
           <SliderForHomepage
-            items={brands}
+            items={brands.content}
             title="Brands"
             type="brandSlider"
             slidesPerView={slidesPerView}

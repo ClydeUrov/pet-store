@@ -8,6 +8,8 @@ import {
   getOnSale,
   addToFavorite,
   deleteFromFavorite,
+  getAllCategories,
+  getBrands,
 } from "./operations";
 
 //import { logOut } from "../auth/operations";
@@ -16,13 +18,22 @@ const cardsSlice = createSlice({
   name: "cards",
   initialState: {
     items: [],
-    onSale: [],
+    onSale: {
+      content: [],
+      isLoading: false,
+    },
     favorites: [],
     cardsInCart: [],
     isLoading: false,
     error: null,
-    //categories:[],
-    // brands:[]
+    categories: {
+      content: [],
+      isLoading: false,
+    },
+    brands: {
+      content: [],
+      isLoading: false,
+    },
   },
 
   reducers: {
@@ -42,7 +53,7 @@ const cardsSlice = createSlice({
     builder
 
       //* статус "pending"
-      .addCase(getAllCards.pending, state => {
+      .addCase(getAllCards.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getCardsFromOneCategory.pending, (state) => {
@@ -58,13 +69,19 @@ const cardsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getOnSale.pending, (state) => {
-        state.isLoading = true;
+        state.onSale.isLoading = true;
       })
       .addCase(addToFavorite.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(deleteFromFavorite.pending, (state) => {
         state.isLoading = true;
+      })
+      .addCase(getAllCategories.pending, (state) => {
+        state.categories.isLoading = true;
+      })
+      .addCase(getBrands.pending, (state) => {
+        state.brands.isLoading = true;
       })
 
       //* статус "rejected"
@@ -89,7 +106,7 @@ const cardsSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(getOnSale.rejected, (state, action) => {
-        state.isLoading = false;
+        state.onSale.isLoading = false;
         state.error = action.payload;
       })
       .addCase(addToFavorite.rejected, (state, action) => {
@@ -98,6 +115,14 @@ const cardsSlice = createSlice({
       })
       .addCase(deleteFromFavorite.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllCategories.rejected, (state, action) => {
+        state.categories.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getBrands.rejected, (state, action) => {
+        state.brands.isLoading = false;
         state.error = action.payload;
       })
 
@@ -135,9 +160,9 @@ const cardsSlice = createSlice({
         }
       })
       .addCase(getOnSale.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.error = null;
         state.onSale = action.payload;
+        state.onSale.isLoading = false;
       })
 
       .addCase(addToFavorite.fulfilled, (state, action) => {
@@ -151,6 +176,16 @@ const cardsSlice = createSlice({
         state.favorites = state.favorites.filter(
           (favorite) => favorite._id !== action.meta.arg
         );
+      })
+      .addCase(getAllCategories.fulfilled, (state, action) => {
+        state.categories.isLoading = false;
+        state.error = null;
+        state.categories.content = action.payload;
+      })
+      .addCase(getBrands.fulfilled, (state, action) => {
+        state.brands.isLoading = false;
+        state.error = null;
+        state.brands.content = action.payload;
       }),
 
   //  .addCase(logOut.fulfilled, (state, action) => {

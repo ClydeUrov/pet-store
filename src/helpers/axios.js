@@ -1,6 +1,6 @@
 import axios from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { getRefreshToken, getUser } from "./user.actions";
+// import createAuthRefreshInterceptor from "axios-auth-refresh";
+// import { getRefreshToken, getUser } from "./user.actions";
 
 const axiosService = axios.create({
   baseURL: "https://online-zoo-store-backend-web-service.onrender.com/api/v1",
