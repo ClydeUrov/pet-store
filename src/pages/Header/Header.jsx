@@ -141,9 +141,6 @@ const Header = () => {
               )}
             </div>
             
-            <NavLink to="/admin/orders" className={styles.catalogue}>
-              Admin
-            </NavLink>
             <div className={styles.search}>
               <input
                 type="text"
