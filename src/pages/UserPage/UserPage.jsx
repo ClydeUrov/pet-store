@@ -32,8 +32,12 @@ const UserPage = () => {
       <div className={css.container}>
 
         <ul className={css.list}>
-          {navItems.map(({ href, text }) => (<li className={css.item} key={href}><NavLink to={href} className={css.link}> {text}</NavLink></li>))}
-          <li className={css.item}><button type='button' onClick={() => toggleModal()} className={`${css.link} ${css.link_btn}`}> Exit account</button></li>
+          {navItems.map(({ href, text }) => (
+            <li className={css.item} key={href}><NavLink to={href} className={css.link}> {text}</NavLink></li>
+          ))}
+          <li className={css.item}>
+            <button type='button' onClick={() => toggleModal()} className={`${css.link} ${css.link_btn}`}> Exit account</button>
+          </li>
         </ul>
 
         <div className={css.outlet}>

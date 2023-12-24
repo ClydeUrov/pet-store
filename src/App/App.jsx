@@ -18,6 +18,7 @@ import Users from "../components/AdminFolder/Users/Users";
 import AdminContentRoute from "../helpers/routs/AdminContentRoute";
 import UpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct";
 import CreateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateProduct";
+import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() => import("../components/UserAccount/UserAccount"));
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path="account" element={<AdminProfile />} />
+          <Route path="settings" element={<Constants />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
           <Route path="products/create" element={<CreateProduct />} />
           <Route path="products/update/:productId" element={<UpdateProduct />} />

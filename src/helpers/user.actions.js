@@ -28,8 +28,7 @@ function useUserActions() {
   function editProfile(data) {
     return axiosService
       .patch(`${baseURL}users/profile`, data, {
-        headers: { 
-          "Content-Type": "multipart/form-data",
+        headers: {
           'Authorization': "Bearer " + getAccessToken()
         },
       })
@@ -102,6 +101,7 @@ function useAdminActions() {
     create: (path, data) => sendRequest('post', path, data),
     update: (path, data) => sendRequest('put', path, data),
     deleteAction: (path) => sendRequest('delete', path),
+    updateStatus: (path) => sendRequest('patch', path),
   };
 }
 

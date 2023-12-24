@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getAllCards } from "../../../../redux/cards/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "../../../../redux/cards/selectors";
@@ -15,45 +15,43 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [prevLength, setPrevLength] = useState(0);
   const [sortMethod, setSortMethod] = useState("");
-  const [prevSort, setPrevSort] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [nameLike, setNameLike] = useState('');
-  const [prevName, setPrevName] = useState('');
   const [error, setError] = useState(null);
 
-  const filter = !allCards || allCards.content?.length === 0 ||
-    page !== (allCards.pageable?.pageNumber + 1) ||
-    prevLength !== allCards.content?.length ||
-    sortMethod !== prevSort
+  const fetchData = useCallback(() => {
+    try {
+      dispatch(getAllCards({ page, sortMethod, nameLike }));
+      return;
+    } catch (err) {
+      setError(`Error fetching data: ${err.response ? err.response.data.message : err.message}`)
+    } finally {
+      setPrevLength(allCards?.content?.length);
+    }
+  }, [dispatch, page, sortMethod, nameLike, allCards?.content?.length]);
+
+  const filter =
+    !allCards || prevLength !== allCards.content?.length ||
+    page !== (allCards.pageable?.pageNumber + 1) || sortMethod !== '';
 
   useEffect(() => {
-    const fetchData = () => {
-      try {
-        dispatch(getAllCards({ page, sortMethod, nameLike }));
-        return;
-      } catch (err) {
-        setError(`Error fetching data: ${err.response ? err.response.data.message : err.message}`)
-      } finally {
-        setPrevLength(allCards?.content?.length);
-        setPrevSort(sortMethod || '');
-        setPrevName(nameLike || '');
-      }
-    };
-
     if (filter) {
-      fetchData()
+      fetchData();
     }
+
     const delayTimer = setTimeout(() => {
-      if (nameLike !== prevName) fetchData();
+      fetchData();
     }, 2000);
 
     return () => clearTimeout(delayTimer);
-  }, [allCards, page, prevLength, dispatch, sortMethod, nameLike]);
+  }, [filter, page, sortMethod, fetchData]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     setNameLike(e.target.value);
     setPage(1);
-  };
+  }, []);
+
+  console.log("ASK fetcher")
 
   return (
     <div className={css.productContainer}>

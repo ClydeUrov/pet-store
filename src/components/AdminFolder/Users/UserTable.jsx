@@ -1,33 +1,55 @@
 import React, { useState } from 'react'
 import Pagination from '../../Pagination/Pagination';
-import { AiOutlineDelete } from 'react-icons/ai';
-import { MdOutlineEdit } from 'react-icons/md';
 import css from './Users.module.scss';
 import Modal from '../../Modal/Modal';
-import ConfirmDeletion from '../ContentFolder/ConfirmDeletion';
+import { LiaUserCheckSolid, LiaUserTimesSolid } from "react-icons/lia";
+import axiosService from '../../../helpers/axios';
+import { useAdminActions } from '../../../helpers/user.actions';
 
-const UserTable = ({
-  allUsers, 
-  setPage,
-  dispatch,
-  setEditProduct,
-  setPrevLength
-}) => {
+const ChangeStatus = ({ onConfirm, status }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onConfirm();
+  };
 
-  const [isDeleteModal, setDeleteModal] = useState(false);
-  const [deleteItemId, setDeleteItemId] = useState(null);
+  return (
+    <> 
+      <p className={css.logout__text}>Are you sure you want to change {status} status?</p>
+      <button
+        type="submit"
+        className={css.logout__button}
+        onClick={handleSubmit}
+      >
+        Confirm
+      </button>
+    </>
+  );
+}
 
-  const handleConfirmDeletion = async () => {
-    // try {
-    //   await toast.promise(dispatch(deleteCard(deleteItemId)), {
-    //     pending: "Promise is pending",
-    //     error: "The product was not deleted",
-    //   });
-    //   setPrevLength(allCards.content.length - 1);
-    //   setDeleteModal(false);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+const UserTable = ({ allUsers, setPage }) => {
+  const adminAction = useAdminActions();
+  const [isModal, setModal] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [error, setError] = useState('');
+
+  const handleStatus = async () => {
+    await adminAction
+      .updateStatus(
+        `users/${selected.email}/status?status=${selected.status === "ACTIVE" ? "BLOCKED" : "ACTIVE"}`
+      )
+      .then(closeModal())
+      .catch((e) => {
+        console.log(e)
+        e.response ? setError(e.response.data.message) : setError(e.message)
+      })
+
+    closeModal();
+  };
+
+  const closeModal = () => {
+    setModal(false);
+    setSelected(null);
+    setError('');
   };
 
   return (
@@ -44,11 +66,13 @@ const UserTable = ({
       {allUsers.content.map((item) => (
         <div
           key={item.id}
-          className={
-            item.status === "ACTIVE"
-              ? css.productRow
-              : `${css.productRow} ${css.notAvailable}`
-          }
+          className={css.productRow}
+          style={{
+            backgroundColor:
+              item.status === "BLOCKED" ? "#D0D0D0"
+                : item.role === "ADMIN" ? "#edddff"
+                : "#def6df",
+          }}
         >
           <div>{item.firstName}</div>
           <div>{item.lastName}</div>
@@ -57,13 +81,16 @@ const UserTable = ({
           <div>{item.status}</div>
           <div>{item.createdAt ? item.createdAt : "No data"}</div>
           <div>
-            <MdOutlineEdit onClick={() => setEditProduct(item)} />
-            <AiOutlineDelete
-              onClick={() => {
-                setDeleteItemId(item.id);
-                setDeleteModal(true);
-              }}
-            />
+            {item.status === "ACTIVE" ? 
+              <LiaUserCheckSolid onClick={() => {
+                setModal(true);
+                setSelected({ status: item.status, email: item.email });
+              }} /> :
+              <LiaUserTimesSolid onClick={() => {
+                setModal(true);
+                setSelected({ status: item.status, email: item.email });
+              }} />
+            }
           </div>
         </div>
       ))}
@@ -74,11 +101,11 @@ const UserTable = ({
         pageSize={allUsers.size}
         onPageChange={(page) => setPage(page)}
       />
-      {isDeleteModal && (
-        <Modal title="Confirm Deletion" onClose={() => setDeleteModal(false)}>
-          <ConfirmDeletion
-            onConfirm={handleConfirmDeletion}
-            onCancel={() => setDeleteModal(false)}
+      {isModal && (
+        <Modal title="Confirm Status Change" onClose={closeModal}>
+          <ChangeStatus
+            onConfirm={handleStatus}
+            status={selected.status}
           />
         </Modal>
       )}

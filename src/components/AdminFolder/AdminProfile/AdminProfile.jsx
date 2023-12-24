@@ -4,10 +4,12 @@ import css from "./AdminProfile.module.scss";
 import FormikField from "../../FormikFolder/FormikField";
 import { schemaAdminInformation, schemaAdminPassword } from "../../../helpers/schemes";
 import { GoPencil } from "react-icons/go";
-import { getUser } from "../../../helpers/user.actions";
+import { getUser, useUserActions } from "../../../helpers/user.actions";
 
 const AdminProfile = () => {
   const user = getUser();
+  const userAction = useUserActions();
+  const [error, setError] = useState('');
   const [editState, setEditState] = useState({
     personalInfo: true,
     passwordInfo: true,
@@ -30,15 +32,24 @@ const AdminProfile = () => {
       const userInfo = {
         name: formData.name,
         surname: formData.surname,
-        email: formData.email,
       };
-      console.log(userInfo);
+      await userAction
+        .editProfile(userInfo)
+        .then()
+        .catch((e) => {
+          e.response ? setError(e.response.data.message) : setError(e.message)
+        })
     } else {
       const passwordInfo = {
         password: formData.password,
         confirm: formData.confirm,
       };
-      console.log(passwordInfo);
+      await userAction
+        .editPassword(passwordInfo)
+        .then()
+        .catch((e) => {
+          e.response ? setError(e.response.data.message) : setError(e.message)
+        })
     }
 
     toggleEditState(formName);
@@ -81,12 +92,10 @@ const AdminProfile = () => {
             />
             <FormikField
               name="email"
-              type="text"
+              type="unstyled"
               label="E-mail"
               width="276px"
-              onChange={(e) => {form.handleChange(e)}}
-              disabled={editState.personalInfo}
-              required
+              value={user.email}
             />
             {editState.personalInfo ? (
               <button
@@ -166,6 +175,7 @@ const AdminProfile = () => {
           </Form>
         )}
       </Formik>
+      {error && <p>{error}</p>}
       </div>
     </div>
   );

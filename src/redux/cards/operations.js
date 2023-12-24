@@ -52,7 +52,7 @@ export const getAllCards = createAsyncThunk(
     thunkAPI
   ) => {
     let url = `api/v1/products?pageNumber=${page || 1}`;
-
+    console.log(url);
     if (selected) {
       selected.forEach((item) => {
         const { href, id } = item;
