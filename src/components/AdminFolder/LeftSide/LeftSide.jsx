@@ -17,6 +17,7 @@ const LeftSide = () => {
     { href: "orders", text: "Orders" },
     { href: "content", text: "Content" },
     { href: "users", text: "Users" },
+    { href: "settings", text: "Settings"},
     { href: "account", text: "My profile" },
     { href: "logout", text: "Log out" },
   ];
@@ -31,7 +32,6 @@ const LeftSide = () => {
     { href: "ages", text: "Ages"},
     { href: "sizes", text: "Sizes"},
     { href: "prescriptions", text: "Prescriptions"},
-    { href: "constants", text: "Constants"},
   ];
 
   const handleLogout = () => {

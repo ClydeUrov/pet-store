@@ -8,19 +8,13 @@ const VerifyCheck = ({token, setModalState}) => {
 	const [error, setError] = useState('');
 
 	const fetchData = useCallback(async () => {
-		console.log(22)
-    try {
-      await axiosService.post(`/auth/verify-email?token=${token}`);
-      setModalState(3);
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message);
-      } else {
-        setError(err.message);
-      }
-    } finally {
-      setLoading(false);
-    }
+    await axiosService
+      .post(`/auth/verify-email?token=${token}`)
+      .then(setModalState(3))
+      .catch((err) => {
+        err.response ? setError(err.response.data.message) : setError(err.message)
+      })
+      .finally(setLoading(false));
   }, [token, setModalState]);
 
   useEffect(() => {
@@ -28,7 +22,6 @@ const VerifyCheck = ({token, setModalState}) => {
   }, [fetchData]);
 
 	const handleRetry = () => {
-		console.log(11)
     setError(null);
     setLoading(true);
     fetchData();
