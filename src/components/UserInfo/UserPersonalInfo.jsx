@@ -1,30 +1,12 @@
 import css from "./UserInfo.module.scss";
-// import { useState, useEffect } from 'react';
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GoPencil } from "react-icons/go";
-// import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-//import { useSelector } from 'react-redux';
-import { user } from "../UserAccount/UserAccount";
-
-import { Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { schemaUserPersonalInfoNew } from "../../helpers/schemes";
-import FormikField from "../FormikFolder/FormikField";
-import { getUser, useUserActions } from "../../helpers/user.actions";
+import { getUser } from "../../helpers/user.actions";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
-const initialValues = {
-  name: user.name,
-  surname: user.surname,
-  email: user.email,
-  password: "qweqweqwe",
-  confirm: "qweqweqwe",
-};
-
 export const UserPersonalInfo = () => {
-  // const [user, setUser] = useState(getUser());
-  // const user = getUser();
   const [disabled, setDisabled] = useState(true);
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);

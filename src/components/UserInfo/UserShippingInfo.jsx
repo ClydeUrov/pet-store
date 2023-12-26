@@ -1,25 +1,10 @@
 import css from "./UserInfo.module.scss";
 // import { useState, useEffect } from 'react';
-import { user } from "../UserAccount/UserAccount";
 
 import { GoPencil } from "react-icons/go";
 import { useState } from "react";
-// import { useDispatch } from "react-redux";
-//import { useSelector } from 'react-redux';
-
-import { Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { schemaUserShippingInfo } from "../../helpers/schemes";
-import FormikField from "../FormikFolder/FormikField";
-
-const initialValues = {
-  country: user.country,
-  region: user.region,
-  city: user.city,
-  code: user.code,
-  street: user.street,
-  building: user.building,
-  flat: user.flat,
-};
 
 export const UserShippingInfo = () => {
   const [disabled, setDisabled] = useState(true);
@@ -49,21 +34,6 @@ export const UserShippingInfo = () => {
     handleReset();
     toggleDisabled();
   };
-
-  // const handleSubmit = async (formData) => {
-  //   const newInfo = {
-  //     country: formData.country,
-  //     region: formData.region,
-  //     city: formData.city,
-  //     code: formData.code,
-  //     street: formData.street,
-  //     building: formData.building,
-  //     flat: formData.flat,
-  //   };
-  //   console.log("newInfo", newInfo);
-  //   // dispatch(addNewUser(newUser));
-  //   toggleDisabled();
-  // };
 
   return (
     <>
