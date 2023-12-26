@@ -19,6 +19,7 @@ StarRatingNew.propTypes = {
   messages: PropTypes.array,
   className: PropTypes.string,
   onSetRating: PropTypes.func,
+  active: PropTypes.bool,
 };
 
 export default function StarRatingNew({
@@ -28,7 +29,7 @@ export default function StarRatingNew({
   className = "",
   messages = [],
   defaultRating = 0,
-  onSetRating = function (e) {
+  onSetRating = function () {
     return;
   },
   active = true,

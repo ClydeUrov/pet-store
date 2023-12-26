@@ -11,11 +11,75 @@
 }
 
 .form {
-  width: 320px;
+  width: 20rem;
   display: flex;
   flex-direction: column;
 
   margin-bottom: 32px;
+
+  & > label {
+    margin-bottom: 0.2rem;
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+  & > input {
+    border: 1px solid #bababa;
+    border-radius: 0.4rem;
+    color: #8d8d8d;
+    padding: 0.6rem;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+
+    &.passwordInp {
+      width: 16rem;
+    }
+
+    &:focus {
+      color: $text-color;
+    }
+  }
+}
+
+.passwordCont {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  & i {
+    padding-right: 0.4rem;
+
+    &:hover {
+      color: $focus-color;
+      cursor: pointer;
+    }
+  }
+
+  & > .lblFroInput {
+    margin-bottom: 0.2rem;
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+  & > .inputElem {
+    border: 1px solid #bababa;
+    border-radius: 0.4rem;
+    color: #8d8d8d;
+    padding: 0.6rem;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    width: 17rem;
+    &:focus {
+      color: $text-color;
+    }
+  }
+}
+
+.errorMess {
+  color: $error-color;
+}
+
+.errInp {
+  border-color: $error-border-color;
 }
 
 .input__wrapper {
@@ -46,10 +110,9 @@
   font-weight: 400;
   line-height: 1.5;
   color: #8d8d8d;
-
 }
 
-.invalid{
+.invalid {
   border-color: $error-border-color;
 }
 
@@ -131,7 +194,7 @@
   background-color: $main-color;
 }
 
-.item__btn:first-child > .button:disabled{
+.item__btn:first-child > .button:disabled {
   border: 1px solid transparent;
   background-color: $outstock-btn;
 }
@@ -168,10 +231,10 @@
   background-color: transparent;
 }
 
-.iconPassword:hover{
+.iconPassword:hover {
   color: $focus-color;
 }
 
-.iconPassword:focus{
+.iconPassword:focus {
   color: $focus-color;
 }

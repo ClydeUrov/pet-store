@@ -1,49 +1,62 @@
-import css from './UserPage.module.scss';
-import { useState } from 'react';
+import css from "./UserPage.module.scss";
+import { useState } from "react";
 // import { useState, useEffect } from 'react';
 // import { useSelector } from 'react-redux';
-import Modal from '../../components/Modal/Modal';
-import LogOutForm from '../../components/AuthForm/LogOutForm';
+import Modal from "../../components/Modal/Modal";
+import LogOutForm from "../../components/AuthForm/LogOutForm";
 
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 import { Suspense } from "react";
-import { Outlet } from 'react-router-dom';
-import Loader from '../../components/Loader/Loader';
-
+import { Outlet } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
+import { getUser } from "../../helpers/user.actions";
 
 const UserPage = () => {
-
   const [showModal, setShowModal] = useState(false);
+  // const user = getUser();
+  // console.log(user);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
   const navItems = [
-    { href: '/user/account', text: 'My account' },
-    { href: 'info', text: 'Personal information' },
-    { href: 'orders', text: 'My orders' },
-    { href: 'reviews', text: 'My reviews' },
+    { href: "account", text: "My account" },
+    { href: "info", text: "Personal information" },
+    { href: "orders", text: "My orders" },
+    { href: "reviews", text: "My reviews" },
   ];
 
   return (
     <>
       <div className={css.container}>
-
         <ul className={css.list}>
-          {navItems.map(({ href, text }) => (<li className={css.item} key={href}><NavLink to={href} className={css.link}> {text}</NavLink></li>))}
-          <li className={css.item}><button type='button' onClick={() => toggleModal()} className={`${css.link} ${css.link_btn}`}> Exit account</button></li>
+          {navItems.map(({ href, text }) => (
+            <li className={css.item} key={href}>
+              <NavLink to={href} className={css.link}>
+                {" "}
+                {text}
+              </NavLink>
+            </li>
+          ))}
+          <li className={css.item}>
+            <button
+              type="button"
+              onClick={() => toggleModal()}
+              className={`${css.link} ${css.link_btn}`}
+            >
+              {" "}
+              Exit account
+            </button>
+          </li>
         </ul>
 
         <div className={css.outlet}>
           <Suspense fallback={<Loader />}>
-
             <Outlet />
           </Suspense>
         </div>
-
-
       </div>
       {showModal && (
         <Modal onClose={toggleModal}>
@@ -52,7 +65,6 @@ const UserPage = () => {
       )}
     </>
   );
-}
-
+};
 
 export default UserPage;

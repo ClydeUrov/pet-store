@@ -1,6 +1,6 @@
 import css from "./UserReviews.module.scss";
 import { BiTrashAlt } from "react-icons/bi";
-import { StarRating } from "../StarRatings/StarRatings";
+import StarRatingNew from "../StarRatings/StarRatingNew";
 //  import { useState, useEffect } from 'react';
 
 // import { useNavigate } from 'react-router-dom';
@@ -34,9 +34,9 @@ export const allReviews = [
 
 const UserReviews = () => {
   // const [userReviews, setUserReviews] = useState({});
- 
+
   //   const navigate = useNavigate();
-  
+
   return (
     <>
       <h3 className={css.title}>Products You’ve Reviewed</h3>
@@ -53,21 +53,29 @@ const UserReviews = () => {
         <tbody className={css.list}>
           {allReviews.map(({ name, review, img, data, rating }) => (
             <tr key={name}>
-              <td  className={css.table_data}>
+              <td className={css.table_data}>
                 <div className={css.img_cover}>
                   {img ? (
                     <img src={img} className={css.img} alt={name} />
                   ) : null}
                 </div>
               </td>
-              <td  className={css.table_data}>
+              <td className={css.table_data}>
                 <p className={css.prod_name}>{name}</p>{" "}
               </td>
-              <td  className={`${css.table_data} ${css.table_data_review}`}>
+              <td className={`${css.table_data} ${css.table_data_review}`}>
                 <p className={css.review_data}>{data}</p>
-                <p className={css.review_rating}>{StarRating(rating)}</p>
+                <StarRatingNew
+                  active={false}
+                  defaultRating={rating}
+                  color="#ffad4d"
+                  size={24}
+                />
                 <p className={css.review_text}>{review}</p>
-                 <button type="button" className={css.icon} > <BiTrashAlt size={24} /></button>
+                <button type="button" className={css.icon}>
+                  {" "}
+                  <BiTrashAlt size={24} />
+                </button>
                 <a
                   href="/"
                   target="_blank"
@@ -76,7 +84,6 @@ const UserReviews = () => {
                 >
                   Go to
                 </a>
-               
               </td>
             </tr>
           ))}

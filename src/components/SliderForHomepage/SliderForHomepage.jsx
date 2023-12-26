@@ -11,11 +11,11 @@ function SliderForHomepage({ title, items, type, slidesPerView, onClick }) {
   const swiper = useRef();
 
   function handleNextScroll() {
-    swiper.current.swiper.slideNext();
+    swiper.current.swiper.slidePrev();
   }
 
   function handlePrevScroll() {
-    swiper.current.swiper.slidePrev();
+    swiper.current.swiper.slideNext();
   }
 
   return (

@@ -1,16 +1,18 @@
 import css from "./UserInfo.module.scss";
 // import { useState, useEffect } from 'react';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
 // import { useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 //import { useSelector } from 'react-redux';
 import { user } from "../UserAccount/UserAccount";
 
-import { Form, Formik } from "formik";
-import { schemaUserPersonalInfo } from "../../helpers/schemes";
+import { Form, Formik, useFormik } from "formik";
+import { schemaUserPersonalInfoNew } from "../../helpers/schemes";
 import FormikField from "../FormikFolder/FormikField";
+import { getUser, useUserActions } from "../../helpers/user.actions";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const initialValues = {
   name: user.name,
@@ -21,143 +23,175 @@ const initialValues = {
 };
 
 export const UserPersonalInfo = () => {
+  // const [user, setUser] = useState(getUser());
+  // const user = getUser();
   const [disabled, setDisabled] = useState(true);
-  const [disabledBtn, setDisabledBtn] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
+  const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+
+  const { values, errors, handleChange, handleSubmit, handleReset } = useFormik(
+    {
+      initialValues: { ...getUser(), password: "12312312" },
+      validationSchema: schemaUserPersonalInfoNew,
+      onSubmit: function (e) {
+        console.log(e, "SUBMIT");
+        toggleDisabled();
+      },
+    }
+  );
 
   const toggleDisabled = () => {
     setDisabled(!disabled);
   };
-  const togglePassword = () => {
-    setPasswordShow(!passwordShow);
-  };
 
-  const handleBtnDisable = (e) => {
-    setDisabledBtn(true);
-  };
-  const handleBtnEnable = (e) => {
-    setDisabledBtn(false);
-  };
-
-  const handleCancel = (props) => {
-    props.handleReset();
+  const handleCancel = () => {
+    handleReset();
     toggleDisabled();
-    handleBtnDisable();
-    return;
-  };
-
-  const handleSubmit = async (formData) => {
-    const newInfo = {
-      name: formData.name,
-      surname: formData.surname,
-      email: formData.email,
-      password: formData.password,
-      confirm: formData.confirm,
-    };
-    console.log("newInfo", newInfo);
-    toggleDisabled();
-    handleBtnDisable();
-    // dispatch(addNewUser(newUser));
     return;
   };
 
   return (
     <>
       <h3 className={css.title}>Personal information</h3>
-      <Formik
-        validationSchema={schemaUserPersonalInfo}
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      >
-        {(props) => {
-        console.log("props in User", props);
-        return (
-          <Form className={css.form}>
-            <FormikField
-              name="name"
-              type="text"
-              label="Name"
-              width="100%"
-              // value={props.values.name}
-              disabled={disabled}
-              onClick={handleBtnEnable}
-              onTogglePassword={togglePassword}
-              required
-            />
 
-            <FormikField
-              name="surname"
-              type="text"
-              label="Surname"
-              width="100%"
-              // value={props.values.surname}
-              disabled={disabled}
-              onClick={handleBtnEnable}
-              onTogglePassword={togglePassword}
-              required
-            />
+      <form className={css.form} onSubmit={handleSubmit}>
+        <label className={css.lblFroInput} htmlFor="firstNameInp">
+          First Name
+        </label>
+        {errors.firstName && (
+          <p className={css.errorMess}>{errors.firstName}</p>
+        )}
+        <input
+          className={
+            css.inputElem + " " + `${errors.firstName ? css.errInp : ""}`
+          }
+          id="firstNameInp"
+          name="firstName"
+          type="text"
+          disabled={disabled}
+          value={values.firstName}
+          onChange={handleChange}
+          required
+        />
 
-            <FormikField
-              name="email"
-              type="email"
-              label="E-mail"
-              width="100%"
-              // value={props.values.email}
-              disabled={disabled}
-              onClick={handleBtnEnable}
-              onTogglePassword={togglePassword}
-              required
-            />
+        <label className={css.lblFroInput} htmlFor="lstNameInp">
+          Surname
+        </label>
+        {errors.lastName && <p className={css.errorMess}>{errors.lastName}</p>}
 
-            <FormikField
-              name="password"
-              type="password"
-              label="Password"
-              width="100%"
-              // value={props.values.password}
-              disabled={disabled}
-              onClick={handleBtnEnable}
-              onTogglePassword={togglePassword}
-              required
-            />
+        <input
+          id="lstNameInp"
+          className={
+            css.inputElem + " " + `${errors.lastName ? css.errInp : ""}`
+          }
+          name="lastName"
+          type="text"
+          value={values.lastName}
+          disabled={disabled}
+          onChange={handleChange}
+          required
+        />
+        <label className={css.lblFroInput} htmlFor="emailInp">
+          E-mail
+        </label>
+        {errors.email && <p className={css.errorMess}>{errors.email}</p>}
 
-            
+        <input
+          id="emailInp"
+          className={css.inputElem + " " + `${errors.email ? css.errInp : ""}`}
+          name="email"
+          type="email"
+          value={values.email}
+          disabled={disabled}
+          onChange={handleChange}
+          required
+        />
 
-            {disabled ? (
-              <button type="button" onClick={toggleDisabled} className={css.button}>
-                Edit
-                <GoPencil size={20} className={css.btn__icon} />
-              </button>
-            ) : (
-              <>
-              <FormikField
-                name="confirm"
-                type="password"
-                label="Confirm password"
-                width="100%"
-                // value={props.values.confirm}
+        {disabled ? (
+          <button type="button" onClick={toggleDisabled} className={css.button}>
+            Edit
+            <GoPencil size={20} className={css.btn__icon} />
+          </button>
+        ) : (
+          <>
+            <label className={css.lblFroInput} htmlFor="passwordInp">
+              New password
+            </label>
+            {errors.password && (
+              <p className={css.errorMess}>{errors.password}</p>
+            )}
+
+            <div className={css.passwordCont}>
+              <input
+                id="passwordInp"
+                className={
+                  css.inputElem +
+                  " " +
+                  css.passwordInp +
+                  " " +
+                  `${errors.password ? css.errInp : ""}`
+                }
+                name="password"
+                type={passwordShow ? "text" : "password"}
                 disabled={disabled}
-                onClick={handleBtnEnable}
-                onTogglePassword={togglePassword}
+                onChange={handleChange}
                 required
               />
-              <ul className={css.list__btn}>
-                <li className={css.item__btn}>
-                  <button type="submit" className={css.button} disabled={disabledBtn}>
-                    Confirm
-                  </button>
-                </li>
-                <li className={css.item__btn}>
-                  <button type="button" onClick={() => handleCancel(props)} className={css.button}>
-                    Cancel
-                  </button>
-                </li>
-              </ul>
-              </>
+              <i onClick={() => setPasswordShow((st) => !st)}>
+                {!passwordShow ? (
+                  <FaRegEye size={28} />
+                ) : (
+                  <FaRegEyeSlash size={28} />
+                )}
+              </i>
+            </div>
+            <label className={css.lblFroInput} htmlFor="passwordInpConf">
+              Confirm new password
+            </label>
+            {errors.confirm && (
+              <p className={css.errorMess}>{errors.confirm}</p>
             )}
-          </Form>
-        )}}
-      </Formik>
+
+            <div className={css.passwordCont}>
+              <input
+                name="confirm"
+                className={
+                  css.inputElem + " " + `${errors.confirm ? css.errInp : ""}`
+                }
+                id="passwordInpConf"
+                type={confirmPasswordShow ? "text" : "password"}
+                // value={values.confirm}
+                disabled={disabled}
+                onChange={handleChange}
+                required
+              />
+              <i onClick={() => setConfirmPasswordShow((st) => !st)}>
+                {!confirmPasswordShow ? (
+                  <FaRegEye size={28} />
+                ) : (
+                  <FaRegEyeSlash size={28} />
+                )}
+              </i>
+            </div>
+            <ul className={css.list__btn}>
+              <li className={css.item__btn}>
+                <button type="submit" className={css.button}>
+                  Confirm
+                </button>
+              </li>
+              <li className={css.item__btn}>
+                <button
+                  type="button"
+                  onClick={() => handleCancel()}
+                  className={css.button}
+                >
+                  Cancel
+                </button>
+              </li>
+            </ul>
+          </>
+        )}
+      </form>
     </>
   );
 };
