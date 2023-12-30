@@ -23,7 +23,7 @@ const Users = () => {
     };
 
     fetchUsers();
-  }, [adminAction]);
+  }, []);
 
   console.log(allUsers);
 

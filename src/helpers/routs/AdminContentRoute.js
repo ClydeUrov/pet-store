@@ -25,8 +25,6 @@ const AdminContentRoute = () => {
         return <Characteristics action='product-sizes' title='Sizes' />;
       case "prescriptions":
         return <Characteristics action='prescriptions' title='Prescriptions' />;
-      case "constants":
-        return <Constants />;
       default:
         return;
     }

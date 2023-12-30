@@ -31,7 +31,6 @@ const ProductCards = ({
       setPrevLength(allCards.content.length - 1);
     } catch (err) {
       console.error("Error deleting card:", err.response?.data?.message || err.message);
-
       alert("An error occurred while deleting the product. Please try again.");
     }
     setDeleteModal(false);

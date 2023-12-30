@@ -134,6 +134,7 @@ const FormikField = (props) => {
               type={type === 'password' ? (passwordShow ? 'text' : 'password') : type}
               style={{ width: width }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
+              disabled={disabled}
               // required={required ? "required" : undefined}
             />
             {type === "password" && (
