@@ -21,14 +21,26 @@ import CreateProduct from "../components/AdminFolder/ContentFolder/Products/Crea
 import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
-const UserAccount = lazy(() => import("../components/UserAccount/UserAccount"));
-const UserInfo = lazy(() => import("../components/UserInfo/UserInfo"));
-const UserOrdersAll = lazy(() => import("../components/UserOrdersAll/UserOrdersAll") );
-const UserOrderItem = lazy(() => import("../components/UserOrderItem/UserOrderItem") );
-const UserReviews = lazy(() => import("../components/UserReviews/UserReviews"));
+const UserAccount = lazy(() =>
+  import("../components/UserFolder/UserAccount/UserAccount")
+);
+const UserInfo = lazy(() =>
+  import("../components/UserFolder/UserInfo/UserInfo")
+);
+const UserOrdersAll = lazy(() =>
+  import("../components/UserFolder/UserOrdersAll/UserOrdersAll")
+);
+const UserOrderItem = lazy(() =>
+  import("../components/UserFolder/UserOrderItem/UserOrderItem")
+);
+const UserReviews = lazy(() =>
+  import("../components/UserFolder/UserReviews/UserReviews")
+);
 
 const Orders = lazy(() => import("../components/AdminFolder/Orders/Orders"));
-const AdminProfile = lazy(() => import("../components/AdminFolder/AdminProfile/AdminProfile") );
+const AdminProfile = lazy(() =>
+  import("../components/AdminFolder/AdminProfile/AdminProfile")
+);
 
 const App = () => {
   return (
@@ -70,7 +82,10 @@ const App = () => {
           <Route path="settings" element={<Constants />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
           <Route path="products/create" element={<CreateProduct />} />
-          <Route path="products/update/:productId" element={<UpdateProduct />} />
+          <Route
+            path="products/update/:productId"
+            element={<UpdateProduct />}
+          />
         </Route>
       </Routes>
       <ToastContainer />

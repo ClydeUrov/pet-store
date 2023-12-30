@@ -1,11 +1,11 @@
+import UserPasswordChange from "./UserPasswordChange";
 import { UserPersonalInfo } from "./UserPersonalInfo";
-import { UserShippingInfo } from "./UserShippingInfo";
 
 const UserInfo = () => {
   return (
     <>
       <UserPersonalInfo />
-      <UserShippingInfo />
+      <UserPasswordChange />
     </>
   );
 };

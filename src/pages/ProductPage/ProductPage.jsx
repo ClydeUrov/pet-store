@@ -76,10 +76,13 @@ const ProductPage = () => {
         });
     }
   }, [productId, allItems.items, cardsOnSale]);
+  console.log(product);
 
   if (!product || !cardsOnSale) {
     return;
   }
+
+  const productNoAvaible = product.notAvailable;
   function handleChangeQuantityOfItem(action) {
     if (action === "+")
       setQuantityOfItemToAddInCart((quantity) => quantity + 1);
@@ -172,26 +175,32 @@ const ProductPage = () => {
               </div>
             )}
 
-            <div className={css.product_quantity}>
-              <button
-                type="button"
-                className={css.btn_quantity}
-                onClick={() => handleChangeQuantityOfItem("-")}
-              >
-                <AiOutlineMinus size={13} />
-              </button>
-              <p className={css.quantity}>{quantityOfItemToAddInCart}</p>
-              <button
-                type="button"
-                className={css.btn_quantity}
-                onClick={() => handleChangeQuantityOfItem("+")}
-              >
-                <AiOutlinePlus size={13} />
-              </button>
-            </div>
+            {!productNoAvaible && (
+              <div className={css.product_quantity}>
+                <button
+                  type="button"
+                  className={css.btn_quantity}
+                  onClick={() => handleChangeQuantityOfItem("-")}
+                >
+                  <AiOutlineMinus size={13} />
+                </button>
+                <p className={css.quantity}>{quantityOfItemToAddInCart}</p>
+                <button
+                  type="button"
+                  className={css.btn_quantity}
+                  onClick={() => handleChangeQuantityOfItem("+")}
+                >
+                  <AiOutlinePlus size={13} />
+                </button>
+              </div>
+            )}
 
             <div className={css.product_btn}>
-              <Button text="Add to card" buttonSize={"large"} />
+              <Button
+                text="Add to card"
+                buttonSize={"large"}
+                isDisabled={productNoAvaible}
+              />
               <button
                 onClick={handleAddOrDeleteFavorite}
                 className={css.favourite_icon}

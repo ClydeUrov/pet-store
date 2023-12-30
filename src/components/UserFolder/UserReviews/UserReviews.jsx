@@ -1,6 +1,6 @@
 import css from "./UserReviews.module.scss";
 import { BiTrashAlt } from "react-icons/bi";
-import StarRatingNew from "../StarRatings/StarRatingNew";
+import StarRatingNew from "../../StarRatings/StarRatingNew";
 //  import { useState, useEffect } from 'react';
 
 // import { useNavigate } from 'react-router-dom';
@@ -33,10 +33,6 @@ export const allReviews = [
 ];
 
 const UserReviews = () => {
-  // const [userReviews, setUserReviews] = useState({});
-
-  //   const navigate = useNavigate();
-
   return (
     <>
       <h3 className={css.title}>Products You’ve Reviewed</h3>

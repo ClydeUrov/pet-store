@@ -38,7 +38,7 @@ export const schemaLogIn = yup.object().shape({
   password: yup
     .string()
     .matches(/^[^\s]*$/, "Must not contain spaces!")
-    .min(7, "Minimum 7 characters!")
+    .min(6, "Minimum 6 characters!")
     .max(32, "Password must contain no more than 32 characters!")
     .required("Password is required!"),
 });
@@ -76,6 +76,29 @@ export const schemaUserPersonalInfo = yup.object().shape({
     )
     .required("Required!"),
 });
+
+export const schemaUserPassword = yup.object().shape({
+  oldPassword: yup
+    .string()
+    .matches(/^[^\s]*$/, "Must not contain spaces!")
+    .min(6, "Minimum 6 characters!")
+    .max(32, "Password must contain no more than 32 characters!")
+    .required("Password is required!"),
+  password: yup
+    .string()
+    .matches(/^[^\s]*$/, "Must not contain spaces!")
+    .min(6, "Minimum 6 characters!")
+    .max(32, "Password must contain no more than 32 characters!")
+    .required("Password is required!"),
+  confirm: yup
+    .string()
+    .oneOf(
+      [yup.ref("password"), null],
+      "Confirm password must match the password!"
+    )
+    .required("Required!"),
+});
+
 export const schemaUserPersonalInfoNew = yup.object().shape({
   firstName: yup
     .string()
@@ -88,26 +111,6 @@ export const schemaUserPersonalInfoNew = yup.object().shape({
     .min(4, "Minimum 4 characters!")
     .max(120, "Maximum 120 characters!")
     .required("Required field!"),
-  email: yup
-    .string()
-    .matches(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Correct format: mail@ukr.net or mail@gmail.com"
-    )
-    .required("Required field!"),
-  password: yup
-    .string()
-    .matches(/^[^\s]*$/, "Must not contain spaces!")
-    .min(7, "Minimum 7 characters!")
-    .max(32, "Password must contain no more than 32 characters!")
-    .required("Password is required!"),
-  confirm: yup
-    .string()
-    .oneOf(
-      [yup.ref("password"), null],
-      "Confirm password must match the password!"
-    )
-    .required("Required!"),
 });
 
 export const schemaUserShippingInfo = yup.object().shape({

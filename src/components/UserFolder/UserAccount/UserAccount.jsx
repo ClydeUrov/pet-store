@@ -4,7 +4,7 @@ import UserOrdersNew from "../UserOrdersNew/UserOrdersNew";
 import { Link } from "react-router-dom";
 import { GoPencil } from "react-icons/go";
 // import axiosService, { fetcher } from "../../helpers/axios";
-import { getUser, useUserActions } from "../../helpers/user.actions";
+import { getUser, useUserActions } from "../../../helpers/user.actions";
 import { useEffect, useState } from "react";
 // import axios from "axios";
 
@@ -42,7 +42,7 @@ export const user = {
 const UserAccount = () => {
   // const userAction = useUserActions();
   // const user = getUser();
-  const [user, _] = useState(getUser());
+  const [user, setUser] = useState(getUser());
 
   // console.log(user);
 
@@ -121,16 +121,9 @@ const UserAccount = () => {
           <p className={css.user__info}>{user.email}</p>
         </li>
         <li className={css.item}>
-          <p>Delivery information</p>
+          <p>Date of bithday</p>
           <p className={css.user__info}>
             <span>{user.birthDate},</span>
-            {/* <span>{user.country}, </span>
-            <span>{user.region}, </span>
-            <span>{user.city}, </span>
-            <span>{user.street}, </span>
-            <span>{user.building}, </span>
-            {user.flat ? <span>{user.flat}, </span> : null}
-            <span>{user.code} </span> */}
           </p>
         </li>
       </ul>

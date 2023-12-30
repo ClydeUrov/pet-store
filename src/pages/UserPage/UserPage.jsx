@@ -10,12 +10,9 @@ import { NavLink } from "react-router-dom";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
-import { getUser } from "../../helpers/user.actions";
 
 const UserPage = () => {
   const [showModal, setShowModal] = useState(false);
-  // const user = getUser();
-  // console.log(user);
 
   const toggleModal = () => {
     setShowModal(!showModal);

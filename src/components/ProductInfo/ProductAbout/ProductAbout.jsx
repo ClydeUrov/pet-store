@@ -34,64 +34,71 @@ const ProductAbout = ({ product }) => {
           <table className={css.table}>
             <tbody className={css.list}>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  <p className={css.table_title_box}>Age</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {" "}
-                  {age ? age.name : "No info"}{" "}
-                </td>
+                {age?.name && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Age</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{age.name}</td>
+                  </>
+                )}
               </tr>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  {" "}
-                  <p className={css.table_title_box}>Breed size</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {productSize ? productSize.name : "No info"}{" "}
-                </td>
+                {productSize?.name && (
+                  <>
+                    <td className={css.table_title}>
+                      {" "}
+                      <p className={css.table_title_box}>Breed size</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{productSize.name}</td>
+                  </>
+                )}
               </tr>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  <p className={css.table_title_box}>Package weight</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {" "}
-                  {weight ? weight.name : "No info"}{" "}
-                </td>
+                {weight?.name && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Package weight</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{weight.name}</td>
+                  </>
+                )}
               </tr>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  <p className={css.table_title_box}>Brand</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {" "}
-                  {brand ? brand.name : "No info"}{" "}
-                </td>
+                {brand?.name && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Brand</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{brand.name}</td>
+                  </>
+                )}
               </tr>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  <p className={css.table_title_box}>Prescription</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {" "}
-                  {prescription ? prescription.name : "No info"}{" "}
-                </td>
+                {prescription?.name && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Prescription</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{prescription.name}</td>
+                  </>
+                )}
               </tr>
               <tr className={css.table_row}>
-                <td className={css.table_title}>
-                  <p className={css.table_title_box}>Contraindications</p>
-                  <span className={css.line}></span>
-                </td>
-                <td className={css.table_data}>
-                  {" "}
-                  {contraindications ? contraindications : "No info"}{" "}
-                </td>
+                {contraindications && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Contraindications</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{contraindications}</td>
+                  </>
+                )}
               </tr>
             </tbody>
           </table>

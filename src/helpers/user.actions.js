@@ -26,30 +26,37 @@ function useUserActions() {
   }
 
   // Edit the user
-  function editProfile(data) {
+  function editProfile(data, dataInStorage) {
+    // console.log(data);
+    // console.log(`${baseURL}users/profile`, "/api/v1/users/profile");
     return axiosService
       .patch(`${baseURL}users/profile`, data, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          // "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + getAccessToken(),
         },
       })
       .then((res) => {
         // Registration the account in the store
-        localStorage.setItem(
-          "auth",
-          JSON.stringify({
-            access: getAccessToken(),
-            refresh: getRefreshToken(),
-            user: res.data,
-          })
-        );
+        if (res.status === 200)
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              access: getAccessToken(),
+              refresh: getRefreshToken(),
+              user: { ...dataInStorage },
+            })
+          );
       });
   }
 
   function editPassword(data) {
     return axiosService.patch(`${baseURL}users/password`, data, {
-      headers: { Authorization: "Bearer " + getAccessToken() },
+      headers: {
+        // "Content-Type": "multipart/form-data",
+
+        Authorization: "Bearer " + getAccessToken(),
+      },
     });
   }
 

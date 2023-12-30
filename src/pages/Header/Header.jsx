@@ -20,14 +20,12 @@ import { getAllCategories } from "../../redux/cards/operations";
 
 import { getUser } from "../../helpers/user.actions";
 
-
 const Header = () => {
   const query = new URLSearchParams(window.location.search);
   const token = query.get("token");
 
   const { constants } = useConstants();
   const user = getUser();
-
 
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
@@ -177,10 +175,10 @@ const Header = () => {
             </NavLink>
 
             {user ? (
-              <NavLink 
-                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"} 
-                className={styles.option} 
-                style={{backgroundColor:"#f4f6fa"}}
+              <NavLink
+                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                className={styles.option}
+                style={{ backgroundColor: "#f4f6fa" }}
               >
                 {user.firstName.charAt(0)}
               </NavLink>
