@@ -15,7 +15,6 @@ function UserPasswordChange() {
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
   const { editPassword } = useUserActions();
   const { email } = getUser();
-  console.log(email);
 
   const {
     values,

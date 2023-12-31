@@ -8,11 +8,7 @@ import {
   AiOutlineMinus,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import {
-  selectAllItems,
-  selectCards,
-  selectFavorites,
-} from "../../redux/cards/selectors";
+import { selectAllItems, selectFavorites } from "../../redux/cards/selectors";
 import { fetchProductById } from "../../helpers/api";
 import { useState, useEffect } from "react";
 import { selectOnSale } from "../../redux/cards/selectors";
@@ -76,7 +72,6 @@ const ProductPage = () => {
         });
     }
   }, [productId, allItems.items, cardsOnSale]);
-  console.log(product);
 
   if (!product || !cardsOnSale) {
     return;
@@ -84,7 +79,7 @@ const ProductPage = () => {
 
   const productNoAvaible = product.notAvailable;
   function handleChangeQuantityOfItem(action) {
-    if (action === "+")
+    if (action === "+" && quantityOfItemToAddInCart < 100)
       setQuantityOfItemToAddInCart((quantity) => quantity + 1);
     if (action === "-" && !(quantityOfItemToAddInCart === 1))
       setQuantityOfItemToAddInCart((quantity) => quantity - 1);
@@ -160,7 +155,11 @@ const ProductPage = () => {
 
             {product.priceWithDiscount ? (
               <div className={css.product_price_box}>
-                <p className={css.product_price}>
+                <p
+                  className={
+                    css.product_price + " " + css.product_price_with_discount
+                  }
+                >
                   {constants[1].value} {product.priceWithDiscount}
                 </p>
                 <p className={css.product_price_not}>
@@ -227,18 +226,20 @@ const ProductPage = () => {
                 About the product
               </span>
             </li>
-            <li className={css.link_item}>
-              <span
-                onClick={() => handleSwitchToPage("instructions")}
-                className={
-                  showInstructionsPage
-                    ? `${css.link_title} active`
-                    : css.link_title
-                }
-              >
-                Feeding instructions
-              </span>
-            </li>
+            {product.instructions && (
+              <li className={css.link_item}>
+                <span
+                  onClick={() => handleSwitchToPage("instructions")}
+                  className={
+                    showInstructionsPage
+                      ? `${css.link_title} active`
+                      : css.link_title
+                  }
+                >
+                  Feeding instructions
+                </span>
+              </li>
+            )}
             <li className={css.link_item}>
               <span
                 onClick={() => handleSwitchToPage("reviews")}

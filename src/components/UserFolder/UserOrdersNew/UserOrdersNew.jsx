@@ -16,9 +16,9 @@ const UserOrdersNew = () => {
             Your orders will be shown here after you buy something
           </p>
         ) : null}
-        <Link to="/" className={css.btn}>
+        {/*<Link to="/" className={css.btn}>
           Go to shop
-        </Link>
+        </Link>*/}
       </div>
 
       <UserOrdersList elements={newOrders} />

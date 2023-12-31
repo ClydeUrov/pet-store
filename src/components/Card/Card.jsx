@@ -62,7 +62,11 @@ const Card = ({ item, onClick }) => {
           </div>
           {item.priceWithDiscount ? (
             <div className={styles.cardPriceBox}>
-              <p className={styles.cardPrice}>
+              <p
+                className={
+                  styles.cardPrice + " " + styles.product_price_with_discount
+                }
+              >
                 {constants[1].value} {item.priceWithDiscount}
               </p>{" "}
               <p className={styles.cardPriceNot}>

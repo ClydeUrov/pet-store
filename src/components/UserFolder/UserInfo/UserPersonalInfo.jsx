@@ -10,7 +10,6 @@ export const UserPersonalInfo = () => {
   const [disabled, setDisabled] = useState(true);
   const { editProfile } = useUserActions();
   const user = getUser();
-  console.log(user, "USER!!!!");
 
   const { values, errors, handleChange, handleSubmit, handleReset } = useFormik(
     {
