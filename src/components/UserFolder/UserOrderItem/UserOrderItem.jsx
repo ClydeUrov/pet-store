@@ -1,6 +1,5 @@
 import css from "./UserOrderItem.module.scss";
 import { allOrders } from "../UserOrdersAll/UserOrdersAll";
-import { user } from "../UserAccount/UserAccount";
 import { useLocation } from "react-router-dom";
 
 const UserOrderItem = () => {
@@ -15,7 +14,21 @@ const UserOrderItem = () => {
   };
 
   const order = obj(orderN);
-  console.log("order.items", order.items);
+  // console.log("order.items", order.items);
+
+  const user = {
+    name: "Name",
+    surname: "User",
+    email: "maladoipacan@gmail.com",
+
+    country: "Ukr",
+    region: "Kyivska Oblast’",
+    city: "Kyiv",
+    code: "61000",
+    street: "Adamovycha",
+    building: "20/32",
+    flat: "",
+  };
 
   return (
     <>

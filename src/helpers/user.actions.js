@@ -61,9 +61,10 @@ function useUserActions() {
   }
 
   // Login the user
-  function login(data) {
+  function login(data, setUserLogined) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
+      setUserLogined(true);
       if (res.data.userDto.role === "CLIENT") {
         navigate("user/account");
       }
@@ -83,7 +84,7 @@ function useUserActions() {
   }
 
   // Logout the user
-  function logout() {
+  function logout(role, setUserLogined) {
     return axiosService
       .post(`${baseURL}auth/logout`, {
         headers: {
@@ -92,6 +93,7 @@ function useUserActions() {
       })
       .then(() => {
         localStorage.removeItem("auth");
+        setUserLogined(false);
         navigate("/");
       });
   }

@@ -1,23 +1,30 @@
 import css from "./AuthForm.module.scss";
-import { useUserActions } from "../../helpers/user.actions";
+import { getUser, useUserActions } from "../../helpers/user.actions";
 import { useState } from "react";
+import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const LogOutForm = () => {
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const userActivation = useUserActions();
+  const { role } = getUser();
+  const { setUserLogined } = useUserContext();
 
   const handleSubmit = async () => {
-    userActivation
-      .logout()
-      .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError(err.message)
-      })
+    userActivation.logout(role, setUserLogined).catch((err) => {
+      err.response
+        ? setError(err.response.data.message)
+        : setError(err.message);
+    });
   };
 
   return (
     <>
       <h3 className={css.logout__title}>Log Out</h3>
-      <p className={css.logout__text}>{error ? 'Something went wrong please, try again' : "Are you sure you want to log out?"}</p>
+      <p className={css.logout__text}>
+        {error
+          ? "Something went wrong please, try again"
+          : "Are you sure you want to log out?"}
+      </p>
       <button
         type="submit"
         className={css.logout__button}

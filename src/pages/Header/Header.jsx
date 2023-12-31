@@ -19,12 +19,15 @@ import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
 
 import { getUser } from "../../helpers/user.actions";
+import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const Header = () => {
   const query = new URLSearchParams(window.location.search);
   const token = query.get("token");
 
   const { constants } = useConstants();
+
+  const { userLogined } = useUserContext();
   const user = getUser();
 
   const [showModal, setShowModal] = useState(false);
@@ -174,7 +177,7 @@ const Header = () => {
               <FiShoppingCart size={32} />
             </NavLink>
 
-            {user ? (
+            {user && userLogined ? (
               <NavLink
                 to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
                 className={styles.option}

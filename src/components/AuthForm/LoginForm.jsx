@@ -6,6 +6,7 @@ import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
 import Loader from "../Loader/Loader";
+import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const initialValues = {
   email: "",
@@ -17,6 +18,7 @@ const LogInForm = ({ onClose, setModalState }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
+  const { setUserLogined } = useUserContext();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -27,13 +29,15 @@ const LogInForm = ({ onClose, setModalState }) => {
   const handleSubmit = async (formData, { resetForm }) => {
     setIsLoading(true);
     await userActions
-      .login(formData)
+      .login(formData, setUserLogined)
       .then(() => {
         resetForm();
         onClose();
       })
       .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError(err.message)
+        err.response
+          ? setError(err.response.data.message)
+          : setError(err.message);
       })
       .finally(setIsLoading(false));
     return;
@@ -66,7 +70,11 @@ const LogInForm = ({ onClose, setModalState }) => {
                   type="email"
                   required
                 />
-                <ErrorMessage name="email" component="p" className={css.error} />
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className={css.error}
+                />
               </div>
 
               <div className={css.input__wrapper}>
@@ -128,12 +136,18 @@ const LogInForm = ({ onClose, setModalState }) => {
                   </a>
                 </p>
               </div>
-              {error && <p style={{color:"red", marginBottom:"20px"}}>{error}</p>}
+              {error && (
+                <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
+              )}
 
               <button type="submit" className={css.button}>
                 Log in
               </button>
-              <button type="submit" className={css.link} onClick={() => setModalState(1)}>
+              <button
+                type="submit"
+                className={css.link}
+                onClick={() => setModalState(1)}
+              >
                 Sign Up
               </button>
             </Form>
