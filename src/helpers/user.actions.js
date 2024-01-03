@@ -84,7 +84,7 @@ function useUserActions() {
   }
 
   // Logout the user
-  function logout(role, setUserLogined) {
+  function logout() {
     return axiosService
       .post(`${baseURL}auth/logout`, {
         headers: {
@@ -93,7 +93,6 @@ function useUserActions() {
       })
       .then(() => {
         localStorage.removeItem("auth");
-        setUserLogined(false);
         navigate("/");
       });
   }
