@@ -4,10 +4,10 @@ import { useState } from "react";
 
 const LogOutForm = () => {
   const [error, setError] = useState('');
-  const userActivation = useUserActions();
+  const userAction = useUserActions();
 
   const handleSubmit = async () => {
-    userActivation
+    await userAction
       .logout()
       .catch((err) => {
         err.response ? setError(err.response.data.message) : setError(err.message)

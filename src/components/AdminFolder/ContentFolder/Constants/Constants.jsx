@@ -43,9 +43,9 @@ const Constants = () => {
             {
               key: key,
               value: {
-                id: resp.data.id,
-                filePath: resp.data.filePath,
-                fileName: resp.data.fileName,
+                id: resp.id,
+                filePath: resp.filePath,
+                fileName: resp.fileName,
               },
             },
             constants[1],
@@ -73,8 +73,6 @@ const Constants = () => {
     }
     setDeleteModal(false);
   };
-
-  console.log(constants, currency);
 
   return (
     <section>

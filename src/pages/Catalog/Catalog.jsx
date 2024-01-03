@@ -9,17 +9,18 @@ import { Accordion } from '../../components/Accordion/Accordion'
 import { useState } from 'react';
 import { getAllCards } from '../../redux/cards/operations';
 import { selectCards } from '../../redux/cards/selectors';
-import { fetchProductCharacteristics } from '../../helpers/api';
+import { fetchProductCharacteristics, getMaxPrice } from '../../helpers/api';
 import { useLocation } from 'react-router-dom';
 
 const Catalog = () => {
   const { pathname } = useLocation();
-  const pathSegments = pathname.split('/');
   const [urlCategory, setUrlCategory] = useState([]);
   const [notAvailable, setNotAvailable] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [sortMethod, setSortMethod] = useState("");
-  const [page, setPage] = useState(1); // Set an initial value for page
+  const [page, setPage] = useState(1);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [price, setPrice] = useState([])
   const [characteristics, setCharacteristics] = useState({
     age: [],
     brand: [],
@@ -31,33 +32,29 @@ const Catalog = () => {
     weight: [],
   });
   const [selected, setSelected] = useState([]);
-  const [fetched, setFetched] = useState(false);
 
   const dispatch = useDispatch();
   const { totalElements } = useSelector(selectCards);
 
   useEffect(() => {
+    const pathSegments = pathname.split('/');
     setUrlCategory(pathSegments[pathSegments.length - 1].split('-'));
   }, [pathname]);
 
   useEffect(() => {
-    setFetched(false);
-  }, [page, selected, sortMethod, notAvailable, urlCategory]);
-
-  useEffect(() => {
-    if (!fetched) {
       fetchProductCharacteristics()
         .then(setCharacteristics)
         .catch(error => console.log('Error', error))
-        .finally(() => setFetched(true));
-    }
-  }, [fetched]);
+  }, []);
 
   useEffect(() => {
-    if (fetched) {
-      dispatch(getAllCards({ page, urlCategory, selected, sortMethod, notAvailable }));
-    }
-  }, [fetched, dispatch, page, selected, sortMethod, notAvailable, urlCategory]);
+    getMaxPrice()
+      .then(setMaxPrice)
+  }, [])
+
+  useEffect(() => {
+      dispatch(getAllCards({ page, urlCategory, selected, sortMethod, notAvailable, price, maxPrice }));
+  }, [dispatch, page, selected, sortMethod, notAvailable, urlCategory, price, maxPrice]);
 
   return (
     <section className={styles.section}>
@@ -78,6 +75,9 @@ const Catalog = () => {
               urlCategory={urlCategory}
               selected={selected}
               setSelected={setSelected}
+              maxPrice={maxPrice}
+              price={price}
+              setPrice={setPrice}
             />
           </div>
           <CardsList setPage={setPage} />

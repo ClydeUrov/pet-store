@@ -2,6 +2,13 @@ import axios from "axios";
 
 //axios.defaults.baseURL = 'https://online-zoo-store-backend-web-service.onrender.com/';
 
+export const getMaxPrice = async () => {
+  return await axios
+    .get('/api/v1/products/max-price')
+    .then((response) => response.data)
+    .catch((err) => console.log(err));
+}
+
 export const fetchProductCharacteristics = async () => {
   return await axios
     .get(`/api/v1/product-characteristics`)
