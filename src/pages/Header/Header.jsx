@@ -17,12 +17,15 @@ import { getAllCategories } from "../../redux/cards/operations";
 import ResetPassword from "../../components/AuthForm/ResetPassword"
 
 import { getUser } from "../../helpers/user.actions";
+import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 import Modal from "../../components/Modal/Modal";
+
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token")
 
   const { constants } = useConstants();
+  const { userLogined } = useUserContext();
   const user = getUser();
 
   const [showModal, setShowModal] = useState(false);
@@ -172,11 +175,11 @@ const Header = () => {
               <FiShoppingCart size={32} />
             </NavLink>
 
-            {user ? (
-              <NavLink 
-                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"} 
-                className={styles.option} 
-                style={{backgroundColor:"#f4f6fa"}}
+            {user && userLogined ? (
+              <NavLink
+                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                className={styles.option}
+                style={{ backgroundColor: "#f4f6fa" }}
               >
                 {user.firstName.charAt(0)}
               </NavLink>

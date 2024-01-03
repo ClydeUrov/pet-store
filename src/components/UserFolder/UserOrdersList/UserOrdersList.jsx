@@ -1,17 +1,7 @@
-import css from './UserOrdersList.module.scss';
-import { Link } from 'react-router-dom';
-// import { useState, useEffect } from 'react';
+import css from "./UserOrdersList.module.scss";
+import { Link } from "react-router-dom";
 
-// import { useNavigate } from 'react-router-dom';
-
-
-const UserOrdersList = ({ elems }) => {
-  // const [userOrders, setUserOrders] = useState({});
-
-  //   const navigate = useNavigate();
-
-  // console.log('userOrders', userOrders);
-
+const UserOrdersList = ({ elements }) => {
   function markupImgItem(items) {
     return (
       <>
@@ -46,12 +36,12 @@ const UserOrdersList = ({ elems }) => {
     }
     return;
   };
-  if (elems === undefined) {
-    <h1>coming soon</h1>
+  if (elements === undefined) {
+    console.log(elements);
+    return <h1>coming soon</h1>;
   } else
     return (
       <>
-
         <table className={css.table}>
           <thead>
             <tr className={css.table_row}>
@@ -64,10 +54,13 @@ const UserOrdersList = ({ elems }) => {
           </thead>
 
           <tbody className={css.list}>
-            {elems.map(({ orderId, status, date, summ, items }) => (
+            {elements.map(({ orderId, status, date, summ, items }) => (
               <tr className={css.table_row} key={orderId}>
-
-                <td className={css.table_data}><Link to={`/user/orders/${orderId}`} className={css.link}>{orderId}</Link></td>
+                <td className={css.table_data}>
+                  <Link to={`/user/orders/${orderId}`} className={css.link}>
+                    {orderId}
+                  </Link>
+                </td>
                 <td className={css.table_data}> {status}</td>
                 <td className={css.table_data}> {date}</td>
                 <td className={css.table_data}> ${summ}</td>
