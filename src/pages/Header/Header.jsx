@@ -1,38 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import styles from "./Header.module.scss";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
-import Modal from "../../components/Modal/Modal";
 import RegisterForm from "../../components/AuthForm/RegisterForm";
 import LogInForm from "../../components/AuthForm/LoginForm";
 import { useState } from "react";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { fetchAllCategories } from "../../helpers/api";
 import VerifyEmail from "../../components/AuthForm/VerifyEmail";
 import VerifyCheck from "../../components/AuthForm/VerifyCheck";
-
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
+import ResetPassword from "../../components/AuthForm/ResetPassword"
 
 import { getUser } from "../../helpers/user.actions";
 import { useUserContext } from "../../helpers/routs/UserLoginedContext";
+import Modal from "../../components/Modal/Modal";
+
 
 const Header = () => {
-  const query = new URLSearchParams(window.location.search);
-  const token = query.get("token");
+  const token = new URLSearchParams(window.location.search).get("token")
 
   const { constants } = useConstants();
-
   const { userLogined } = useUserContext();
   const user = getUser();
 
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
-  const [verifyEmail, setVerifyEmail] = useState(false);
 
   const { content: categories, isLoading: categoriesIsLoading } =
     useSelector(selectAllCategories);
@@ -43,9 +40,10 @@ const Header = () => {
 
   const modalTitles = {
     1: "Sign Up",
-    2: "Email verification",
+    2: "Email Verification",
     3: "Log in",
-    4: "User verification",
+    4: "Verify Email Address",
+    5: "Reset Password"
   };
 
   const toggleModal = () => {
@@ -202,29 +200,42 @@ const Header = () => {
       </header>
 
       {showModal && (
-        <Modal onClose={toggleModal} title={modalTitles[modalState]}>
-          {modalState === 1 && (
-            <RegisterForm
-              onClick={(email) => {
-                setVerifyEmail(email);
-                setModalState(2);
-              }}
-              setModalState={setModalState}
-              host={window.location.host}
-            />
-          )}
-          {modalState === 2 && <VerifyEmail verifyEmail={verifyEmail} />}
-          {modalState === 3 && (
-            <LogInForm setModalState={setModalState} onClose={toggleModal} />
-          )}
-          {modalState === 4 && (
-            <VerifyCheck
-              token={token}
-              setModalState={setModalState}
-              host={window.location.host}
-            />
-          )}
-        </Modal>
+        modalState === 4 ? (
+          <VerifyCheck
+            token={token}
+            setModalState={setModalState}
+            toggleModal={toggleModal}
+          />
+        ) : (
+          <Modal 
+            onClose={toggleModal} 
+            title={modalTitles[modalState]} 
+            disabledBack={modalState === 6 ? true : false}
+          >
+            {modalState === 1 && (
+              <RegisterForm
+                setModalState={setModalState}
+                host={window.location.host}
+              />
+            )}
+            {modalState === 2 && (
+              <VerifyEmail
+                host={window.location.host}
+                setModalState={setModalState}
+              />
+            )}
+            {modalState === 3 && (
+              <LogInForm setModalState={setModalState} onClose={toggleModal} />
+            )}
+            {modalState === 5 && (
+              <ResetPassword
+                token={token}
+                setModalState={setModalState}
+                host={window.location.host}
+              />
+            )}
+          </Modal>
+        )
       )}
     </>
   );

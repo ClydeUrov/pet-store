@@ -1,11 +1,16 @@
-import { Navigate } from 'react-router-dom';
 import { getUser } from '../user.actions';
 import Error from '../../components/Error/Error';
 
-export const PrivateRoute = ({ component: Component, redirectTo = '/' }) => {
-  const  isLoggedIn = true;
-  
-  return !isLoggedIn ? <Navigate to={redirectTo} /> : Component;
+
+
+export const PrivateRoute = ({ component: Component }) => { 
+  const user = getUser();
+  console.log(user);
+  return user && user.status === 'ACTIVE' && user.role === 'CLIENT' ? (
+    Component
+  ) : (
+    <Error />
+  );
 };
 
 export const AdminPrivateRoute = ({ component: Component }) => {

@@ -4,17 +4,18 @@ import { useState } from "react";
 import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const LogOutForm = () => {
-  const [error, setError] = useState("");
-  const userActivation = useUserActions();
-  const { role } = getUser();
   const { setUserLogined } = useUserContext();
 
+  const [error, setError] = useState('');
+  const userAction = useUserActions();
+
   const handleSubmit = async () => {
-    userActivation.logout(role, setUserLogined).catch((err) => {
-      err.response
-        ? setError(err.response.data.message)
-        : setError(err.message);
-    });
+    await userAction
+      .logout(setUserLogined)
+      .then(() => setUserLogined(false))
+      .catch((err) => {
+        err.response ? setError(err.response.data.message) : setError(err.message)
+      })
   };
 
   return (
