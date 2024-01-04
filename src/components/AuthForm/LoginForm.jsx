@@ -6,7 +6,6 @@ import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
 import Loader from "../Loader/Loader";
-import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const initialValues = {
   email: "",
@@ -18,7 +17,6 @@ const LogInForm = ({ onClose, setModalState }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
-  const { setUserLogined } = useUserContext();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -29,7 +27,7 @@ const LogInForm = ({ onClose, setModalState }) => {
   const handleSubmit = async (formData, { resetForm }) => {
     setIsLoading(true);
     await userActions
-      .login(formData, setUserLogined)
+      .login(formData)
       .then(() => {
         resetForm();
         onClose();

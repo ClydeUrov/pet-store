@@ -10,7 +10,6 @@ import LogInForm from "../../components/AuthForm/LoginForm";
 import { useState } from "react";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { fetchAllCategories } from "../../helpers/api";
 import VerifyEmail from "../../components/AuthForm/VerifyEmail";
 import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 
@@ -19,17 +18,16 @@ import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
 
 import { getUser } from "../../helpers/user.actions";
-import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const Header = () => {
   const query = new URLSearchParams(window.location.search);
   const token = query.get("token");
+  const [userIsLogined, setUserIsLogined] = useState(false);
 
   const { constants } = useConstants();
 
-  const { userLogined } = useUserContext();
   const user = getUser();
-
+  console.log(user, userIsLogined);
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
   const [verifyEmail, setVerifyEmail] = useState(false);
@@ -52,6 +50,18 @@ const Header = () => {
     setShowModal(!showModal);
     setModalState(null);
   };
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const user = getUser();
+      if (user) {
+        setUserIsLogined(true);
+      } else if (!user) setUserIsLogined(false);
+    };
+
+    window.addEventListener("storage", handleStorage());
+    return () => window.removeEventListener("storage", handleStorage());
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -177,7 +187,7 @@ const Header = () => {
               <FiShoppingCart size={32} />
             </NavLink>
 
-            {user && userLogined ? (
+            {user && userIsLogined ? (
               <NavLink
                 to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
                 className={styles.option}
