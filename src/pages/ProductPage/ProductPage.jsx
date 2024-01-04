@@ -55,12 +55,12 @@ const ProductPage = () => {
 
   useEffect(() => {
     if (
-      cardsOnSale.length > 0 &&
+      cardsOnSale?.length > 0 &&
       cardsOnSale.some((e) => e.id === +productId)
     ) {
       setProduct(cardsOnSale.find((e) => e.id === +productId));
     } else if (
-      allItems.items.content.length > 0 &&
+      allItems.items.content?.length > 0 &&
       allItems.items.content.some((e) => e.id === +productId)
     ) {
       setProduct(allItems.items.content.find((e) => e.id === +productId));

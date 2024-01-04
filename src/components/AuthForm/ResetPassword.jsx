@@ -1,4 +1,3 @@
-import axiosService from '../../helpers/axios';
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { emailSchema } from '../../helpers/schemes';
@@ -25,7 +24,7 @@ const ResetPassword = ({setModalState, host}) => {
 
       <Formik
         validationSchema={emailSchema}
-        initialValues={{email: ""}}
+        initialValues={{ email: "" }}
         onSubmit={handleSubmit}
       >
         {(props) => (
@@ -49,12 +48,13 @@ const ResetPassword = ({setModalState, host}) => {
               <ErrorMessage name="email" component="p" className={css.error} />
             </div>
             <button
-              className={css.button} 
-              style={{padding: "10px 10px", margin: "10px"}} 
+              className={css.button}
+              style={{ padding: "10px 10px", margin: "10px" }}
               onClick={handleSubmit}
             >
               Reset password
             </button>
+
             <Button text={`Return to Log In`} onClickHandler={() => setModalState(3)} buttonSize={"cancel"} />
           </Form>
         )}
@@ -62,10 +62,5 @@ const ResetPassword = ({setModalState, host}) => {
       {error && (
         <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
       )}
-
-      
-		</div>
-  )
-}
 
 export default ResetPassword;

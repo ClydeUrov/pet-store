@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axiosService from "../axios";
-import { UserExistProvider } from "./UserLoginedContext";
 
 const ConstantsContext = createContext();
 

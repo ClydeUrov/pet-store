@@ -5,8 +5,7 @@ import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
-import Loader from "../Loader/Loader";
-import { useUserContext } from "../../helpers/routs/UserLoginedContext";
+
 import { RotatingLines } from "react-loader-spinner";
 
 const initialValues = {
@@ -19,7 +18,6 @@ const LogInForm = ({ onClose, setModalState }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
-  const { setUserLogined } = useUserContext();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -29,16 +27,21 @@ const LogInForm = ({ onClose, setModalState }) => {
 
   const handleSubmit = async (formData, { resetForm }) => {
     setIsLoading(true);
+
     try {
-      await userActions.login(formData, setUserLogined);
+      await userActions.login(formData);
       resetForm();
       onClose();
     } catch (err) {
-      err.response.status === 401 ? setError("Unauthorized, please register") :
-      err.response && err.response.data ? setError(err.response.data.message) : setError(err.message);
+      err.response.status === 401
+        ? setError("Unauthorized, please register")
+        : err.response && err.response.data
+        ? setError(err.response.data.message)
+        : setError(err.message);
     } finally {
       setIsLoading(false);
     }
+
     return;
   };
 
@@ -55,7 +58,11 @@ const LogInForm = ({ onClose, setModalState }) => {
               E-mail
             </label>
             <Field
-              className={`${touched.email && errors.email ? `${css.invalid} ${css.input}` : css.input}`}
+              className={`${
+                touched.email && errors.email
+                  ? `${css.invalid} ${css.input}`
+                  : css.input
+              }`}
               name="email"
               id="email"
               type="email"
@@ -69,7 +76,11 @@ const LogInForm = ({ onClose, setModalState }) => {
               Password
             </label>
             <Field
-              className={`${touched.password && errors.password ? `${css.invalid} ${css.input}` : css.input}`}
+              className={`${
+                touched.password && errors.password
+                  ? `${css.invalid} ${css.input}`
+                  : css.input
+              }`}
               name="password"
               id="password"
               type={passwordShow ? "text" : "password"}
@@ -114,7 +125,9 @@ const LogInForm = ({ onClose, setModalState }) => {
             </p>
           </div>
 
-          {error && <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>}
+          {error && (
+            <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
+          )}
 
           <button type="submit" className={css.button}>
             {isLoading && (
@@ -132,7 +145,11 @@ const LogInForm = ({ onClose, setModalState }) => {
             <p>Log in</p>
           </button>
 
-          <button type="submit" className={css.link} onClick={() => setModalState(1)}>
+          <button
+            type="submit"
+            className={css.link}
+            onClick={() => setModalState(1)}
+          >
             Sign Up
           </button>
         </Form>

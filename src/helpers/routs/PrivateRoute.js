@@ -1,11 +1,9 @@
-import { getUser } from '../user.actions';
-import Error from '../../components/Error/Error';
+import { getUser } from "../user.actions";
+import Error from "../../components/Error/Error";
 
-
-
-export const PrivateRoute = ({ component: Component }) => { 
+export const PrivateRoute = ({ component: Component }) => {
   const user = getUser();
-  return user && user.status === 'ACTIVE' && user.role === 'CLIENT' ? (
+  return user && user.status === "ACTIVE" && user.role === "CLIENT" ? (
     Component
   ) : (
     <Error />
@@ -14,9 +12,9 @@ export const PrivateRoute = ({ component: Component }) => {
 
 export const AdminPrivateRoute = ({ component: Component }) => {
   const user = getUser();
-  return user && user.status === 'ACTIVE' && user.role === 'ADMIN' ? (
+  return user && user.status === "ACTIVE" && user.role === "ADMIN" ? (
     Component
   ) : (
     <Error />
   );
-}
+};

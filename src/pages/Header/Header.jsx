@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
@@ -14,19 +14,18 @@ import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
-import ResetPassword from "../../components/AuthForm/ResetPassword"
+import ResetPassword from "../../components/AuthForm/ResetPassword";
 
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
 import PasswordRecovery from "../../components/AuthForm/PasswordRecovery";
 
-
 const Header = () => {
-  const token = new URLSearchParams(window.location.search).get("token")
+  const token = new URLSearchParams(window.location.search).get("token");
+  const [userIsLogined, setUserIsLogined] = useState(false);
 
   const { constants } = useConstants();
   const user = getUser();
-  console.log(user);
 
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
@@ -51,6 +50,18 @@ const Header = () => {
     setShowModal(!showModal);
     setModalState(null);
   };
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const user = getUser();
+      if (user) {
+        setUserIsLogined(true);
+      } else if (!user) setUserIsLogined(false);
+    };
+
+    window.addEventListener("storage", handleStorage());
+    return () => window.removeEventListener("storage", handleStorage());
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -176,7 +187,7 @@ const Header = () => {
               <FiShoppingCart size={32} />
             </NavLink>
 
-            {user ? (
+            {user && userIsLogined ? (
               <NavLink
                 to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
                 className={styles.option}
@@ -200,17 +211,17 @@ const Header = () => {
         </div>
       </header>
 
-      {showModal && (
-        modalState === 4 ? (
+      {showModal &&
+        (modalState === 4 ? (
           <VerifyCheck
             token={token}
             setModalState={setModalState}
             toggleModal={toggleModal}
           />
         ) : (
-          <Modal 
-            onClose={toggleModal} 
-            title={modalTitles[modalState]} 
+          <Modal
+            onClose={toggleModal}
+            title={modalTitles[modalState]}
             disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
@@ -241,8 +252,7 @@ const Header = () => {
               />
             )}
           </Modal>
-        )
-      )}
+        ))}
     </>
   );
 };

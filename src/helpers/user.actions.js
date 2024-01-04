@@ -27,12 +27,9 @@ function useUserActions() {
 
   // Edit the user
   function editProfile(data, dataInStorage) {
-    // console.log(data);
-    // console.log(`${baseURL}users/profile`, "/api/v1/users/profile");
     return axiosService
       .patch(`${baseURL}users/profile`, data, {
         headers: {
-          // "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + getAccessToken(),
         },
       })
@@ -53,18 +50,15 @@ function useUserActions() {
   function editPassword(data) {
     return axiosService.patch(`${baseURL}users/password`, data, {
       headers: {
-        // "Content-Type": "multipart/form-data",
-
         Authorization: "Bearer " + getAccessToken(),
       },
     });
   }
 
   // Login the user
-  function login(data, setUserLogined) {
+  function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
-      setUserLogined(true);
       if (res.data.userDto.role === "CLIENT") {
         navigate("user/account");
       }

@@ -1,22 +1,16 @@
 import { useState } from "react";
-// import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-//import { useSelector } from 'react-redux';
 import { CheckboxIcon } from "../../icons/icons";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaSignUp } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
-import Loader from "../Loader/Loader";
 import { RotatingLines } from "react-loader-spinner";
-//import { register } from '../../redux/auth/operations';
 
 const RegisterForm = ({ setModalState, host }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
-  // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -28,15 +22,15 @@ const RegisterForm = ({ setModalState, host }) => {
     const path = `${host}/pet-store`;
     setIsLoading(true);
     try {
-      await userActions
-        .register(formData, path)
-        .then(() => {
-          setModalState(2);
-        })
+      await userActions.register(formData, path).then(() => {
+        setModalState(2);
+      });
     } catch (err) {
-      err.response ? setError(err.response.data.message) : setError(err.message);
+      err.response
+        ? setError(err.response.data.message)
+        : setError(err.message);
     } finally {
-      localStorage.setItem('userEmail', formData.email);
+      localStorage.setItem("userEmail", formData.email);
       setIsLoading(false);
     }
   };
@@ -73,7 +67,11 @@ const RegisterForm = ({ setModalState, host }) => {
                 type="text"
                 required
               />
-              <ErrorMessage name="firstName" component="p" className={css.error} />
+              <ErrorMessage
+                name="firstName"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -93,7 +91,11 @@ const RegisterForm = ({ setModalState, host }) => {
 
                 required
               />
-              <ErrorMessage name="lastName" component="p" className={css.error} />
+              <ErrorMessage
+                name="lastName"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -129,7 +131,11 @@ const RegisterForm = ({ setModalState, host }) => {
                 type="date"
                 required
               />
-              <ErrorMessage name="birthDate" component="p" className={css.error} />
+              <ErrorMessage
+                name="birthDate"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -159,7 +165,11 @@ const RegisterForm = ({ setModalState, host }) => {
                   <MdOutlineVisibilityOff size={24} />
                 )}
               </button>
-              <ErrorMessage name="password" component="p" className={css.error} />
+              <ErrorMessage
+                name="password"
+                component="p"
+                className={css.error}
+              />
             </div>
             {error && (
               <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
@@ -211,19 +221,25 @@ const RegisterForm = ({ setModalState, host }) => {
             </div>
 
             <button type="submit" className={css.button}>
-              {isLoading && <span style={{marginRight: "20px"}}>
-                <RotatingLines
-                  strokeColor="#ffffff"
-                  strokeWidth="3"
-                  animationDuration="0.75"
-                  width="40"
-                  height="1"
-                  visible={true}
-                />
-              </span> }
+              {isLoading && (
+                <span style={{ marginRight: "20px" }}>
+                  <RotatingLines
+                    strokeColor="#ffffff"
+                    strokeWidth="3"
+                    animationDuration="0.75"
+                    width="40"
+                    height="1"
+                    visible={true}
+                  />
+                </span>
+              )}
               <p>Sign Up</p>
             </button>
-            <button type="submit" className={css.link} onClick={() => setModalState(3)}>
+            <button
+              type="submit"
+              className={css.link}
+              onClick={() => setModalState(3)}
+            >
               Already have an account? Log in
             </button>
           </Form>
