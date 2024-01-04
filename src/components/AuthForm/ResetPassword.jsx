@@ -1,26 +1,36 @@
 import css from "./AuthForm.module.scss";
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { emailSchema } from '../../helpers/schemes';
-import Button from '../CustomButton/Button';
-import { useState } from 'react';
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { emailSchema } from "../../helpers/schemes";
+import Button from "../CustomButton/Button";
+import { useState } from "react";
+import axiosService from "../../helpers/axios";
 
-const ResetPassword = ({setModalState, host}) => {
+const ResetPassword = ({ setModalState, host }) => {
   const [error, setError] = useState(null);
-	
+
   const handleSubmit = async (values) => {
     const { email } = values;
-    
+
     try {
       const path = `${host}/pet-store`;
-      await axiosService.post(`/auth/forgot-password?email=${email}&path=${path}`);
+      await axiosService.post(
+        `/auth/forgot-password?email=${email}&path=${path}`
+      );
     } catch (err) {
-      setError(err.response ? err.response.data.message : "Something went wrong. Please, try again.");
+      setError(
+        err.response
+          ? err.response.data.message
+          : "Something went wrong. Please, try again."
+      );
     }
-  }
+  };
 
   return (
     <div className={css.verifyBlock}>
-			<p>Please enter your email address to confirm your account before changing your password.</p>
+      <p>
+        Please enter your email address to confirm your account before changing
+        your password.
+      </p>
 
       <Formik
         validationSchema={emailSchema}
@@ -55,12 +65,17 @@ const ResetPassword = ({setModalState, host}) => {
               Reset password
             </button>
 
-            <Button text={`Return to Log In`} onClickHandler={() => setModalState(3)} buttonSize={"cancel"} />
+            <Button
+              text={`Return to Log In`}
+              onClickHandler={() => setModalState(3)}
+              buttonSize={"cancel"}
+            />
           </Form>
         )}
       </Formik>
-      {error && (
-        <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
-      )}
+      {error && <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>}
+    </div>
+  );
+};
 
 export default ResetPassword;

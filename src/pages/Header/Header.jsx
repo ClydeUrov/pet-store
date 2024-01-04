@@ -19,14 +19,18 @@ import ResetPassword from "../../components/AuthForm/ResetPassword";
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
 import PasswordRecovery from "../../components/AuthForm/PasswordRecovery";
+import {
+  UserLoginLogoutSubscribe,
+  UserLoginLogoutUnsubscribe,
+} from "../../helpers/events/LoginLogout";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
-  const [userIsLogined, setUserIsLogined] = useState(false);
 
   const { constants } = useConstants();
   const user = getUser();
 
+  const [userIsLogined, setUserIsLogined] = useState(!!user);
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
 
@@ -43,7 +47,7 @@ const Header = () => {
     3: "Log in",
     4: "Verify Email Address",
     5: "Reset Password",
-    6: "Password Recovery"
+    6: "Password Recovery",
   };
 
   const toggleModal = () => {
@@ -52,15 +56,13 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const handleStorage = () => {
-      const user = getUser();
-      if (user) {
-        setUserIsLogined(true);
-      } else if (!user) setUserIsLogined(false);
-    };
+    UserLoginLogoutSubscribe("UserLogin", () => setUserIsLogined(true));
+    UserLoginLogoutSubscribe("UserLogout", () => setUserIsLogined(false));
 
-    window.addEventListener("storage", handleStorage());
-    return () => window.removeEventListener("storage", handleStorage());
+    return () => {
+      UserLoginLogoutUnsubscribe("UserLogin", () => setUserIsLogined(false));
+      UserLoginLogoutUnsubscribe("UserLogout", () => setUserIsLogined(true));
+    };
   }, []);
 
   useEffect(() => {
