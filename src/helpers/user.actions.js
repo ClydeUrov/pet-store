@@ -79,6 +79,7 @@ function useUserActions() {
 
   // Logout the user
   function logout() {
+    console.log(321);
     return axiosService
       .post(`${baseURL}auth/logout`, {
         headers: {

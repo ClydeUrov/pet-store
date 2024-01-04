@@ -18,13 +18,13 @@ import ResetPassword from "../../components/AuthForm/ResetPassword";
 
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
+import PasswordRecovery from "../../components/AuthForm/PasswordRecovery";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
   const [userIsLogined, setUserIsLogined] = useState(false);
 
   const { constants } = useConstants();
-
   const user = getUser();
 
   const [showModal, setShowModal] = useState(false);
@@ -43,6 +43,7 @@ const Header = () => {
     3: "Log in",
     4: "Verify Email Address",
     5: "Reset Password",
+    6: "Password Recovery"
   };
 
   const toggleModal = () => {
@@ -65,7 +66,7 @@ const Header = () => {
   useEffect(() => {
     if (token) {
       toggleModal();
-      setModalState(4);
+      setModalState(user ? 4 : 6);
     }
   }, [token]);
 
@@ -240,7 +241,12 @@ const Header = () => {
             )}
             {modalState === 5 && (
               <ResetPassword
-                token={token}
+                setModalState={setModalState}
+                host={window.location.host}
+              />
+            )}
+            {modalState === 6 && (
+              <PasswordRecovery
                 setModalState={setModalState}
                 host={window.location.host}
               />
