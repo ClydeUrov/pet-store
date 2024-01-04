@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosService from "../helpers/axios";
+import { UserLoginLogoutPublish } from "./events/LoginLogout";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
@@ -59,6 +60,7 @@ function useUserActions() {
   function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
+      UserLoginLogoutPublish("UserLogin");
       if (res.data.userDto.role === "CLIENT") {
         navigate("user/account");
       }
@@ -87,6 +89,7 @@ function useUserActions() {
       })
       .then(() => {
         localStorage.removeItem("auth");
+        UserLoginLogoutPublish("UserLogout");
         navigate("/");
       });
   }
