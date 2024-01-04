@@ -2,13 +2,35 @@ import css from "./AuthForm.module.scss";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { emailSchema } from "../../helpers/schemes";
 import Button from "../CustomButton/Button";
+import { useState } from "react";
+import axiosService from "../../helpers/axios";
 
-const ResetPassword = ({ token, setModalState }) => {
-  const handleSubmit = () => {};
+const ResetPassword = ({ setModalState, host }) => {
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (values) => {
+    const { email } = values;
+
+    try {
+      const path = `${host}/pet-store`;
+      await axiosService.post(
+        `/auth/forgot-password?email=${email}&path=${path}`
+      );
+    } catch (err) {
+      setError(
+        err.response
+          ? err.response.data.message
+          : "Something went wrong. Please, try again."
+      );
+    }
+  };
 
   return (
     <div className={css.verifyBlock}>
-      <p>Enter the email address linked to your account</p>
+      <p>
+        Please enter your email address to confirm your account before changing
+        your password.
+      </p>
 
       <Formik
         validationSchema={emailSchema}
@@ -31,6 +53,7 @@ const ResetPassword = ({ token, setModalState }) => {
                 id="email"
                 type="email"
                 required
+                onClick={setError(null)}
               />
               <ErrorMessage name="email" component="p" className={css.error} />
             </div>
@@ -41,14 +64,16 @@ const ResetPassword = ({ token, setModalState }) => {
             >
               Reset password
             </button>
+
             <Button
-              text={`Return to sign in`}
-              onClickHandler={() => setModalState(4)}
+              text={`Return to Log In`}
+              onClickHandler={() => setModalState(3)}
               buttonSize={"cancel"}
             />
           </Form>
         )}
       </Formik>
+      {error && <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>}
     </div>
   );
 };
