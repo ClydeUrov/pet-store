@@ -43,16 +43,15 @@ export const getAllCards = createAsyncThunk(
       page,
       sortMethod,
       nameLike,
-      minPrice,
-      maxPrice,
+      price,
       selected,
       notAvailable,
       urlCategory,
+      maxPrice
     },
     thunkAPI
   ) => {
     let url = `api/v1/products?pageNumber=${page || 1}`;
-    console.log(url);
     if (selected) {
       selected.forEach((item) => {
         const { href, id } = item;
@@ -61,14 +60,22 @@ export const getAllCards = createAsyncThunk(
         });
       });
     }
-    if (urlCategory && urlCategory[0] !== "All")
-      url += `&categoryId=${urlCategory[1]}`;
+
+    if (urlCategory && urlCategory[0] !== "All") {
+      console.log(urlCategory)
+      url += `&categoryId=${urlCategory[1]}`
+    }
 
     if (sortMethod) url += `&sort=${sortMethod}`;
     if (nameLike) url += `&nameLike=${nameLike}`;
     if (notAvailable) url += `&notAvailable=false`;
-    if (minPrice) url += `&minPrice=${minPrice}`;
-    if (maxPrice) url += `&maxPrice=${maxPrice}`;
+    console.log(price, maxPrice)
+    if (price && price.length !== 0) {
+      if(price[0]) url += `&minPrice=${price[0]}`;
+      if(price[1] !== Math.round(maxPrice)) url += `&maxPrice=${price[1]}`;
+    }
+
+    console.log(url);
 
     return dataAction(url, "GET", thunkAPI);
   }

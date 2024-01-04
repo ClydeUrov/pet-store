@@ -8,17 +8,17 @@ const UserOrdersNew = () => {
 
   return (
     <>
+      <Link to="/" className={css.btn}>
+        Go to shop
+      </Link>
       <h3 className={css.title}>My active orders</h3>
 
-      <div>
+      <div className={css.wrapper}>
         {!newOrders ? (
           <p className={css.text}>
             Your orders will be shown here after you buy something
           </p>
         ) : null}
-        {/*<Link to="/" className={css.btn}>
-          Go to shop
-        </Link>*/}
       </div>
 
       <UserOrdersList elements={newOrders} />

@@ -1,49 +1,91 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axiosService from '../../helpers/axios';
-import Loader from '../Loader/Loader';
 import css from "./AuthForm.module.scss";
+import Modal from '../Modal/Modal';
+import Loader from '../Loader/Loader';
 
-const VerifyCheck = ({token, setModalState}) => {
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState('');
+const VerifyCheck = ({ token, setModalState, toggleModal }) => {
+  const [error, setError] = useState('');
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const userEmail = localStorage.getItem('userEmail');
+  const [isLoading, setIsLoading] = useState(false);
 
-	const fetchData = useCallback(async () => {
-    await axiosService
-      .post(`/auth/verify-email?token=${token}`)
-      .then(setModalState(3))
-      .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError(err.message)
-      })
-      .finally(setLoading(false));
-  }, [token, setModalState]);
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const rightToken = token.replace(/\s/g, '');
+      await axiosService.post(`/auth/verify-email?token=${rightToken}`);
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.message);
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token, setIsLoading]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData()
+  }, [fetchData])
 
-	const handleRetry = () => {
+  const handleRetry = () => {
     setError(null);
-    setLoading(true);
     fetchData();
   };
 
   return (
-    <div className={css.verifyBlock}>
-			{loading && <p>Please wait for data transfer..</p>}
-      {!loading && error && (
-        <div>
-          <p>{error}</p>
-          <button
-						className={css.button} 
-						style={{padding: "10px 10px", margin: "10px"}} 
-						onClick={handleRetry}
-					>
-						Try again
-					</button>
+    isLoading ? (
+      <Modal 
+        onClose={toggleModal} 
+        title={"Verify Email Address"} 
+        disabledBack={true}
+      >
+        <Loader />
+      </Modal>
+    ) : (
+      <Modal 
+        onClose={toggleModal} 
+        title={error ? "Error Verification" : "Verify Email Address"}
+      >
+        <div className={css.verifyBlock}>
+          {error ? (
+            <>
+              <button className={css.openError} onClick={() => setIsErrorOpen(!isErrorOpen)} >
+                {isErrorOpen ? 'Close ' : 'Open '} Error
+              </button>
+              {isErrorOpen && (
+                <p>{error}</p>
+              )}
+              <p>
+                To verify your email, we`ve sent a link to {userEmail} {' '}
+                <span 
+                  className={css.errorSpan}
+                  onClick={() => setModalState(1)}
+                >
+                    (Change)
+                </span>
+              </p>
+              <button
+                className={css.button}
+                onClick={handleRetry}
+              >
+                Resend verification link
+              </button>
+            </>
+          ) : (
+            <>
+              <p>Account successfully registered, please login!</p>
+              <button onClick={() => setModalState(3)} className={css.button}>
+                Switch to Log In form
+              </button>
+            </>
+          )}
         </div>
-      )}
-		</div>
-  )
-}
+      </Modal>
+    )
+  );
+};
 
 export default VerifyCheck;

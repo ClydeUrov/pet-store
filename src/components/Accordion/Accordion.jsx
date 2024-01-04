@@ -5,7 +5,7 @@ import { PriceRange } from "./PriceRange";
 import { IoIosArrowUp } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
-export const Accordion = ({ characteristics, selected, urlCategory, setSelected }) => {
+export const Accordion = ({ characteristics, selected, urlCategory, setSelected, maxPrice, price, setPrice }) => {
   const [openItems, setOpenItems] = useState({});
 
   const clickHandler = (href) => {
@@ -86,7 +86,7 @@ export const Accordion = ({ characteristics, selected, urlCategory, setSelected 
             </span>
           </button>
           <div className={css.accordion_item_price}>
-            <PriceRange />
+            <PriceRange maxPrice={maxPrice} price={price} setPrice={setPrice} />
           </div>
         </li>
 

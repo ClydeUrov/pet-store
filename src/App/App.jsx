@@ -59,7 +59,7 @@ const App = () => {
           <Route path="/favorites" element={<Favorites />} />
           <Route
             path="/user"
-            element={<PrivateRoute redirectTo="/" component={<UserPage />} />}
+            element={<PrivateRoute component={<UserPage />} />}
           >
             <Route path="account" element={<UserAccount />}></Route>
             <Route path="info" element={<UserInfo />}></Route>
