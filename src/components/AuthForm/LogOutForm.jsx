@@ -1,18 +1,20 @@
 import css from "./AuthForm.module.scss";
-import { getUser, useUserActions } from "../../helpers/user.actions";
+import { useUserActions } from "../../helpers/user.actions";
 import { useState } from "react";
 import { useUserContext } from "../../helpers/routs/UserLoginedContext";
 
 const LogOutForm = () => {
-  const { setUserLogined } = useUserContext();
+  const userContext = useUserContext();
+  const setUserLogined = userContext?.setUserLogined;
 
   const [error, setError] = useState('');
   const userAction = useUserActions();
 
   const handleSubmit = async () => {
+    console.log(123);
     await userAction
-      .logout(setUserLogined)
-      .then(() => setUserLogined(false))
+      .logout()
+      .then(() => setUserLogined?.(false))
       .catch((err) => {
         err.response ? setError(err.response.data.message) : setError(err.message)
       })

@@ -5,7 +5,6 @@ import Error from '../../components/Error/Error';
 
 export const PrivateRoute = ({ component: Component }) => { 
   const user = getUser();
-  console.log(user);
   return user && user.status === 'ACTIVE' && user.role === 'CLIENT' ? (
     Component
   ) : (
