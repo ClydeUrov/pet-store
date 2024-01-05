@@ -1,11 +1,11 @@
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { emailSchema } from "../../helpers/schemes";
-import Button from "../CustomButton/Button";
 import { useState } from "react";
 import axiosService from "../../helpers/axios";
+import { FaAngleLeft } from "react-icons/fa";
 
-const ResetPassword = ({ setModalState, host }) => {
+const PasswordReset = ({ setModalState, host }) => {
   const [error, setError] = useState(null);
 
   const handleSubmit = async (values) => {
@@ -13,9 +13,11 @@ const ResetPassword = ({ setModalState, host }) => {
 
     try {
       const path = `${host}/pet-store`;
-      await axiosService.post(
-        `/auth/forgot-password?email=${email}&path=${path}`
-      );
+      await axiosService
+        .post(`/auth/forgot-password?email=${email}&path=${path}`)
+        .then(() =>
+          localStorage.setItem("userEmail", JSON.stringify({ email: email }))
+        );
     } catch (err) {
       setError(
         err.response
@@ -57,25 +59,24 @@ const ResetPassword = ({ setModalState, host }) => {
               />
               <ErrorMessage name="email" component="p" className={css.error} />
             </div>
+
+            {error && <p className={css.errorMes}>{error}</p>}
+
             <button
               className={css.button}
-              style={{ padding: "10px 10px", margin: "10px" }}
               onClick={handleSubmit}
             >
               Reset password
             </button>
 
-            <Button
-              text={`Return to Log In`}
-              onClickHandler={() => setModalState(3)}
-              buttonSize={"cancel"}
-            />
+            <button type="button" onClick={() => setModalState(3)} className={css.return_button}>
+              <FaAngleLeft /> Return to log in
+            </button>
           </Form>
         )}
       </Formik>
-      {error && <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>}
     </div>
   );
 };
 
-export default ResetPassword;
+export default PasswordReset;

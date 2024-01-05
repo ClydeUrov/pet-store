@@ -14,7 +14,7 @@ import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
-import ResetPassword from "../../components/AuthForm/ResetPassword";
+import PasswordReset from "../../components/AuthForm/PasswordReset";
 
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
@@ -224,7 +224,7 @@ const Header = () => {
           <Modal
             onClose={toggleModal}
             title={modalTitles[modalState]}
-            disabledBack={modalState === 6 ? true : false}
+            // disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
               <RegisterForm
@@ -242,7 +242,7 @@ const Header = () => {
               <LogInForm setModalState={setModalState} onClose={toggleModal} />
             )}
             {modalState === 5 && (
-              <ResetPassword
+              <PasswordReset
                 setModalState={setModalState}
                 host={window.location.host}
               />
@@ -250,7 +250,7 @@ const Header = () => {
             {modalState === 6 && (
               <PasswordRecovery
                 setModalState={setModalState}
-                host={window.location.host}
+                token={token}
               />
             )}
           </Modal>

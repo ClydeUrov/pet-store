@@ -7,7 +7,6 @@ import Sort from "../../../Sort/Sort";
 import { NavLink } from "react-router-dom";
 import Loader from "../../../Loader/Loader";
 import ProductCards from "./ProductCards";
-import Button from "../../../CustomButton/Button";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -52,8 +51,6 @@ const Products = () => {
     setPage(1);
   }, []);
 
-  console.log("ASK fetcher")
-
   return (
     <div className={css.productContainer}>
       <div className={css.firstLine}>
@@ -66,9 +63,6 @@ const Products = () => {
             onChange={handleInputChange}
           />
         </div>
-        <Button text={"Create"} buttonSize="cancel">
-
-        </Button>
         <NavLink to={"create"} type="button" className={css.topButton}>
           Create
         </NavLink>
