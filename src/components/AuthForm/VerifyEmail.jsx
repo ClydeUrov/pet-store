@@ -64,7 +64,7 @@ const VerifyEmail = ({ host, setModalState }) => {
           )}
         </div>
       ) : userEmail.email ? (
-        <div>
+        <div style={{fontSize: "large"}}>
           To verify your email, we've sent a link to <b>{userEmail.email}</b>{" "}
           <span className={css.change} onClick={() => setModalState(1)} >
             (Change)
@@ -72,7 +72,7 @@ const VerifyEmail = ({ host, setModalState }) => {
           <br /><br />
           Please check your inbox (or spam folder) and click on the provided
           confirmation link.
-          <br /><br />
+          <br />
           {isTimerActive && !error && (
             `If the message did not arrive, try again in ${secondsRemaining} seconds`
           )}

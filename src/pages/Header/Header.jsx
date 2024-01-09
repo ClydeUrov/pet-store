@@ -23,6 +23,7 @@ import {
   UserLoginLogoutSubscribe,
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
+import Cart from "../../components/Cart/Cart";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
@@ -67,8 +68,9 @@ const Header = () => {
 
   useEffect(() => {
     if (token) {
+      let inRegistration = JSON.parse(localStorage.getItem("userEmail"));
       toggleModal();
-      setModalState(user ? 4 : 6);
+      setModalState(inRegistration.PawSomeRegistarion ? 4 : 6);
     }
   }, [token]);
 
@@ -134,7 +136,7 @@ const Header = () => {
                 setOpenItems([]);
               }}
             >
-              <NavLink to={`/catalogue/All`}>
+              <NavLink to={`/catalogue/All`} style={{ whiteSpace: "nowrap" }}>
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
@@ -185,9 +187,9 @@ const Header = () => {
               <FaRegHeart size={32} />
             </NavLink>
 
-            <NavLink to="/cart" className={styles.option}>
+            <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
               <FiShoppingCart size={32} />
-            </NavLink>
+            </div>
 
             {user && userIsLogined ? (
               <NavLink
@@ -214,7 +216,11 @@ const Header = () => {
       </header>
 
       {showModal &&
-        (modalState === 4 ? (
+        (modalState === "Cart" ? (
+          <Cart
+            toggleModal={toggleModal}
+          />
+        ) : modalState === 4 ? (
           <VerifyCheck
             token={token}
             setModalState={setModalState}

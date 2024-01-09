@@ -10,6 +10,8 @@ const VerifyCheck = ({ token, setModalState, toggleModal }) => {
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(userEmail);
+
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -63,7 +65,7 @@ const VerifyCheck = ({ token, setModalState, toggleModal }) => {
             </button>
             {isErrorOpen && <p>{error}</p>}
             <p>
-              To verify your email, we`ve sent a link to {userEmail.email}{" "}
+              Something went wrong while the verification request to your email was being processed {userEmail?.email}{" "}
               <span className={css.change} onClick={() => setModalState(1)}>
                 (Change)
               </span>
@@ -74,7 +76,7 @@ const VerifyCheck = ({ token, setModalState, toggleModal }) => {
           </>
         ) : (
           <>
-            <p>Account successfully registered, please login!</p>
+            <p style={{fontSize: "large"}}>Account successfully registered, please login!</p>
             <button onClick={() => setModalState(3)} className={css.button}>
               Switch to Log In form
             </button>

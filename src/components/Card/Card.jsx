@@ -22,6 +22,21 @@ const Card = ({ item, onClick }) => {
     return;
   };
 
+  const handleAddToCart = () => {
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const data = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      ...(item.priceWithDiscount && { discount: item.priceWithDiscount }),
+      image: item.mainImage.filePath,
+      quantity: 1,
+    }
+    const newCart = [...existingCart, data];
+
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  }
+
   return (
     <li className={styles.item}>
       <Link to={`/catalogue/products/${item.id}`}>
@@ -82,7 +97,11 @@ const Card = ({ item, onClick }) => {
           )}
         </div>
         <div className={styles.cardButtons}>
-          <Button text={"Add to cart"} isDisabled={item.notAvailable} />
+          <Button 
+            text={"Add to cart"} 
+            onClickHandler={() => handleAddToCart()} 
+            isDisabled={!item.notAvailable} 
+          />
 
           <button
             type="button"

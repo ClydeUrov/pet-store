@@ -23,19 +23,26 @@ const RegisterForm = ({ setModalState, host }) => {
     setIsLoading(true);
     try {
       await userActions.register(formData, path);
-      localStorage.setItem("userEmail", JSON.stringify({email: formData.email}));
+      localStorage.setItem(
+        "userEmail",
+        JSON.stringify({ email: formData.email, PawSomeRegistarion: true })
+      );
       setModalState(2);
     } catch (err) {
       if (err.response) {
         if (err.response.status === 403) {
           const userData = {
             email: formData.email,
-            message: err.response.data.message
+            message: err.response.data.message,
           };
           localStorage.setItem("userEmail", JSON.stringify(userData));
           setModalState(2);
-        } else { setError(err.response.data.message) }
-      } else { setError(err.message) }
+        } else {
+          setError(err.response.data.message);
+        }
+      } else {
+        setError(err.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +56,7 @@ const RegisterForm = ({ setModalState, host }) => {
           firstName: "",
           lastName: "",
           email: "",
-          birthDate: undefined,
+          birthDate: "",
           password: "",
           consentToProcessData: false,
           rememberMe: false,
@@ -221,9 +228,7 @@ const RegisterForm = ({ setModalState, host }) => {
               </label>
             </div>
 
-            {error && (
-              <p className={css.errorMes}>{error}</p>
-            )}
+            {error && <p className={css.errorMes}>{error}</p>}
 
             <button type="submit" className={css.button}>
               {isLoading && (
