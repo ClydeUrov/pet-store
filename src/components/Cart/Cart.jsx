@@ -3,11 +3,13 @@ import css from "./Cart.module.scss";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import CardinCart from "./CardinCart";
 import Modal from "../Modal/Modal";
+import { useNavigate } from "react-router-dom";
 
-const Cart = ({ toggleModal }) => {
+const Cart = ({ user, toggleModal, setModalState }) => {
   const [products, setProducts] = useState([]);
   const [amount, setAmount] = useState(0);
   const { constants } = useConstants();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setProducts(JSON.parse(localStorage.getItem("cart")));
@@ -43,7 +45,7 @@ const Cart = ({ toggleModal }) => {
               {constants[1].value} {amount.toFixed(2)}
             </p>
           </div>
-          <button>Checkout</button>
+          <button onClick={() => user ? navigate('order') : setModalState(3)}>Checkout</button>
         </div>
       </div>
     </Modal>

@@ -53,9 +53,6 @@
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 20px;
-  // padding: 5px;
-  // border: 0.5px solid $outstock-btn;
-  // border-radius: 20px;
 
   & > .picture {
     flex: 0.33;
@@ -63,7 +60,7 @@
     height: 128px;
 
     & > img {
-      padding: 5px;
+      padding: 8px;
       height: 100%;
       object-fit: contain;
     }
@@ -126,4 +123,30 @@
     font-weight: 600;
     font-family: 'Lato', sans-serif;
   }
+}
+
+.cardPriceBox {
+  display: flex;
+  column-gap: 0.6rem;
+  margin: 0.6rem 0 0rem 0;
+}
+
+.cardPrice {
+  color: $text-color;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.33;
+}
+
+.cardPriceNot {
+  color: #5f5f5f;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: line-through;
+  text-align: right;
+}
+
+.product_price_with_discount {
+  color: $error-color;
 }

@@ -218,7 +218,9 @@ const Header = () => {
       {showModal &&
         (modalState === "Cart" ? (
           <Cart
+            user={user}
             toggleModal={toggleModal}
+            setModalState={setModalState}
           />
         ) : modalState === 4 ? (
           <VerifyCheck

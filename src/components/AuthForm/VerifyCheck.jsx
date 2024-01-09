@@ -10,8 +10,6 @@ const VerifyCheck = ({ token, setModalState, toggleModal }) => {
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(userEmail);
-
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
