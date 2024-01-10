@@ -14,7 +14,7 @@ import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
-import ResetPassword from "../../components/AuthForm/ResetPassword";
+import PasswordReset from "../../components/AuthForm/PasswordReset";
 
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
@@ -23,6 +23,7 @@ import {
   UserLoginLogoutSubscribe,
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
+import Cart from "../../components/Cart/Cart";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
@@ -67,8 +68,9 @@ const Header = () => {
 
   useEffect(() => {
     if (token) {
+      let inRegistration = JSON.parse(localStorage.getItem("userEmail"));
       toggleModal();
-      setModalState(user ? 4 : 6);
+      setModalState(inRegistration.PawSomeRegistarion ? 4 : 6);
     }
   }, [token]);
 
@@ -134,7 +136,7 @@ const Header = () => {
                 setOpenItems([]);
               }}
             >
-              <NavLink to={`/catalogue/All`}>
+              <NavLink to={`/catalogue/All`} style={{ whiteSpace: "nowrap" }}>
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
@@ -185,9 +187,9 @@ const Header = () => {
               <FaRegHeart size={32} />
             </NavLink>
 
-            <NavLink to="/cart" className={styles.option}>
+            <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
               <FiShoppingCart size={32} />
-            </NavLink>
+            </div>
 
             {user && userIsLogined ? (
               <NavLink
@@ -214,7 +216,13 @@ const Header = () => {
       </header>
 
       {showModal &&
-        (modalState === 4 ? (
+        (modalState === "Cart" ? (
+          <Cart
+            user={user}
+            toggleModal={toggleModal}
+            setModalState={setModalState}
+          />
+        ) : modalState === 4 ? (
           <VerifyCheck
             token={token}
             setModalState={setModalState}
@@ -224,7 +232,7 @@ const Header = () => {
           <Modal
             onClose={toggleModal}
             title={modalTitles[modalState]}
-            disabledBack={modalState === 6 ? true : false}
+            // disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
               <RegisterForm
@@ -242,7 +250,7 @@ const Header = () => {
               <LogInForm setModalState={setModalState} onClose={toggleModal} />
             )}
             {modalState === 5 && (
-              <ResetPassword
+              <PasswordReset
                 setModalState={setModalState}
                 host={window.location.host}
               />
@@ -250,7 +258,7 @@ const Header = () => {
             {modalState === 6 && (
               <PasswordRecovery
                 setModalState={setModalState}
-                host={window.location.host}
+                token={token}
               />
             )}
           </Modal>

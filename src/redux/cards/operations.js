@@ -69,13 +69,10 @@ export const getAllCards = createAsyncThunk(
     if (sortMethod) url += `&sort=${sortMethod}`;
     if (nameLike) url += `&nameLike=${nameLike}`;
     if (notAvailable) url += `&notAvailable=false`;
-    console.log(price, maxPrice)
     if (price && price.length !== 0) {
       if(price[0]) url += `&minPrice=${price[0]}`;
       if(price[1] !== Math.round(maxPrice)) url += `&maxPrice=${price[1]}`;
     }
-
-    console.log(url);
 
     return dataAction(url, "GET", thunkAPI);
   }

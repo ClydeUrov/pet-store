@@ -74,14 +74,10 @@ function useUserActions() {
   function register(data, path) {
     return axios
       .post(`${baseURL}auth/register?path=${path}`, data)
-      .then((res) => {
-        setUserData(res.data);
-      });
   }
 
   // Logout the user
   function logout() {
-    console.log(321);
     return axiosService
       .post(`${baseURL}auth/logout`, {
         headers: {

@@ -1,9 +1,8 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useRef } from "react";
+import React from "react";
 import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
-import Cart from "../pages/Cart/Cart";
 import Catalog from "../pages/Catalog/Catalog";
 import Error from "../components/Error/Error";
 import Homepage from "../pages/Homepage/Homepage";
@@ -55,7 +54,6 @@ const App = () => {
             path="/catalogue/products/:productId"
             element={<ProductPage />}
           />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route
             path="/user"

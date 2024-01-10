@@ -33,11 +33,24 @@ const LogInForm = ({ onClose, setModalState }) => {
       resetForm();
       onClose();
     } catch (err) {
-      err.response.status === 401
-        ? setError("Unauthorized, please register")
-        : err.response && err.response.data
-        ? setError(err.response.data.message)
-        : setError(err.message);
+      let errorMessage;
+
+      if (err.response) {
+        errorMessage = err.response.status === 401
+          ? "Unauthorized, please register"
+          : err.response.status === 403
+          ? (
+            <span>
+              This account is already registered, please{' '}
+              <span className={css.change} onClick={() => setModalState(2)}>verify</span>
+              {' '}your email
+            </span>
+          ) : err.response.data.message;
+      } else {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +139,7 @@ const LogInForm = ({ onClose, setModalState }) => {
           </div>
 
           {error && (
-            <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
+            <p className={css.errorMes}>{error}</p>
           )}
 
           <button type="submit" className={css.button}>
