@@ -1,9 +1,8 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useRef } from "react";
+import React from "react";
 import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
-import Cart from "../pages/Cart/Cart";
 import Catalog from "../pages/Catalog/Catalog";
 import Error from "../components/Error/Error";
 import Homepage from "../pages/Homepage/Homepage";
@@ -18,16 +17,29 @@ import Users from "../components/AdminFolder/Users/Users";
 import AdminContentRoute from "../helpers/routs/AdminContentRoute";
 import UpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct";
 import CreateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateProduct";
+import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
-const UserAccount = lazy(() => import("../components/UserAccount/UserAccount"));
-const UserInfo = lazy(() => import("../components/UserInfo/UserInfo"));
-const UserOrdersAll = lazy(() => import("../components/UserOrdersAll/UserOrdersAll") );
-const UserOrderItem = lazy(() => import("../components/UserOrderItem/UserOrderItem") );
-const UserReviews = lazy(() => import("../components/UserReviews/UserReviews"));
+const UserAccount = lazy(() =>
+  import("../components/UserFolder/UserAccount/UserAccount")
+);
+const UserInfo = lazy(() =>
+  import("../components/UserFolder/UserInfo/UserInfo")
+);
+const UserOrdersAll = lazy(() =>
+  import("../components/UserFolder/UserOrdersAll/UserOrdersAll")
+);
+const UserOrderItem = lazy(() =>
+  import("../components/UserFolder/UserOrderItem/UserOrderItem")
+);
+const UserReviews = lazy(() =>
+  import("../components/UserFolder/UserReviews/UserReviews")
+);
 
 const Orders = lazy(() => import("../components/AdminFolder/Orders/Orders"));
-const AdminProfile = lazy(() => import("../components/AdminFolder/AdminProfile/AdminProfile") );
+const AdminProfile = lazy(() =>
+  import("../components/AdminFolder/AdminProfile/AdminProfile")
+);
 
 const App = () => {
   return (
@@ -42,11 +54,10 @@ const App = () => {
             path="/catalogue/products/:productId"
             element={<ProductPage />}
           />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route
             path="/user"
-            element={<PrivateRoute redirectTo="/" component={<UserPage />} />}
+            element={<PrivateRoute component={<UserPage />} />}
           >
             <Route path="account" element={<UserAccount />}></Route>
             <Route path="info" element={<UserInfo />}></Route>
@@ -66,9 +77,13 @@ const App = () => {
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserProfile />} />
           <Route path="account" element={<AdminProfile />} />
+          <Route path="settings" element={<Constants />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
           <Route path="products/create" element={<CreateProduct />} />
-          <Route path="products/update/:productId" element={<UpdateProduct />} />
+          <Route
+            path="products/update/:productId"
+            element={<UpdateProduct />}
+          />
         </Route>
       </Routes>
       <ToastContainer />

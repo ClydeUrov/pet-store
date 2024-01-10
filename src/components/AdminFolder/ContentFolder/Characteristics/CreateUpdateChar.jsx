@@ -6,9 +6,9 @@ import {
   AiOutlineDownload,
 } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useAdminActions } from "../../../../helpers/user.actions";
 
 const CreateUpdate = ({
-  adminActions,
   title,
   action,
   setField,
@@ -20,8 +20,10 @@ const CreateUpdate = ({
   setCharacteristics,
 }) => {
   const [error, setError] = useState(null);
+  const adminActions = useAdminActions();
 
   const handleCreateOrUpdate = async () => {
+    console.log(editingItem);
     try {
       if (editingItem) {
         console.log(field.name);
@@ -69,16 +71,19 @@ const CreateUpdate = ({
             success: "Created successfully",
           }
         );
-        let newItem = { ...response.data };
+        console.log(response)
+        let newItem = { ...response };
 
         if (field.image) {
+          console.log(field.image)
           const formData = new FormData();
           formData.append("image", field.image);
           const imageResponse = await adminActions.create(
-            `${action}/${response.data.id}/image`,
+            `${action}/${response.id}/image`,
             formData
           );
-          newItem = { ...newItem, image: imageResponse.data };
+          console.log(imageResponse)
+          newItem = { ...newItem, image: imageResponse };
         }
         await setCharacteristics((prevCharacteristics) => [
           ...prevCharacteristics,
@@ -147,7 +152,7 @@ const CreateUpdate = ({
                 }}
                 style={{ borderRadius: "5px" }}
               >
-                <option value="" />
+                <option key="init" value="" />
                 {characteristics.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.id} {category.name}

@@ -1,14 +1,12 @@
 import { useState } from "react";
-// import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-//import { useSelector } from 'react-redux';
 import { CheckboxIcon } from "../../icons/icons";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaLogIn } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
-//import { logIn } from '../../redux/auth/operations';
+
+import { RotatingLines } from "react-loader-spinner";
 
 const initialValues = {
   email: "",
@@ -17,9 +15,9 @@ const initialValues = {
 };
 
 const LogInForm = ({ onClose, setModalState }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
-  // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -27,130 +25,149 @@ const LogInForm = ({ onClose, setModalState }) => {
     setPasswordShow(!passwordShow);
   };
 
-  //   const handleSubmit = async (formData, { resetForm }) => {
-  //    // const { error } = await login(formData);
-  //     if (error) {
-  //       setIsError({
-  //         message: error.data.message,
-  //         additionalInfo: error.data.additionalInfo,
-  //       });
-  //       resetForm();
-  //       return;
-  //     } else {
-  //       navigate('/user');
-  //     }
-  //   };
-
   const handleSubmit = async (formData, { resetForm }) => {
-    await userActions
-      .login(formData)
-      .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError(err.message)
-      });
+    setIsLoading(true);
 
-    resetForm();
-    onClose();
+    try {
+      await userActions.login(formData);
+      resetForm();
+      onClose();
+    } catch (err) {
+      let errorMessage;
+
+      if (err.response) {
+        errorMessage = err.response.status === 401
+          ? "Unauthorized, please register"
+          : err.response.status === 403
+          ? (
+            <span>
+              This account is already registered, please{' '}
+              <span className={css.change} onClick={() => setModalState(2)}>verify</span>
+              {' '}your email
+            </span>
+          ) : err.response.data.message;
+      } else {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+
     return;
   };
 
   return (
-    <>
-      <Formik
-        validationSchema={schemaLogIn}
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      >
-        {(props) => (
-          <Form className={css.form}>
-            <div className={css.input__wrapper}>
-              <label htmlFor="email" className={css.label}>
-                E-mail
-              </label>
-              <Field
-                className={
-                  props.touched.email && props.errors.email
-                    ? `${css.invalid} ${css.input}`
-                    : `${css.input}`
-                }
-                name="email"
-                id="email"
-                type="email"
-                required
-              />
-              <ErrorMessage name="email" component="p" className={css.error} />
-            </div>
+    <Formik
+      validationSchema={schemaLogIn}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+    >
+      {({ values, touched, errors }) => (
+        <Form className={css.form}>
+          <div className={css.input__wrapper}>
+            <label htmlFor="email" className={css.label}>
+              E-mail
+            </label>
+            <Field
+              className={`${
+                touched.email && errors.email
+                  ? `${css.invalid} ${css.input}`
+                  : css.input
+              }`}
+              name="email"
+              id="email"
+              type="email"
+              required
+            />
+            <ErrorMessage name="email" component="p" className={css.error} />
+          </div>
 
-            <div className={css.input__wrapper}>
-              <label htmlFor="password" className={css.label}>
-                Password
-              </label>
-              <Field
-                className={
-                  props.touched.password && props.errors.password
-                    ? `${css.invalid} ${css.input}`
-                    : `${css.input}`
-                }
-                name="password"
-                id="password"
-                type={passwordShow ? "text" : "password"}
-                required
-              />
-              <button
-                type="button"
-                id="visibilityBtn"
-                className={css.iconPassword}
-                onClick={togglePassword}
-              >
-                {passwordShow ? (
-                  <MdOutlineVisibility size={24} />
-                ) : (
-                  <MdOutlineVisibilityOff size={24} />
-                )}
-              </button>
-              <ErrorMessage
-                name="password"
-                component="p"
-                className={css.error}
-              />
-            </div>
+          <div className={css.input__wrapper}>
+            <label htmlFor="password" className={css.label}>
+              Password
+            </label>
+            <Field
+              className={`${
+                touched.password && errors.password
+                  ? `${css.invalid} ${css.input}`
+                  : css.input
+              }`}
+              name="password"
+              id="password"
+              type={passwordShow ? "text" : "password"}
+              required
+            />
+            <button
+              type="button"
+              id="visibilityBtn"
+              className={css.iconPassword}
+              onClick={togglePassword}
+            >
+              {passwordShow ? (
+                <MdOutlineVisibility size={24} />
+              ) : (
+                <MdOutlineVisibilityOff size={24} />
+              )}
+            </button>
+            <ErrorMessage name="password" component="p" className={css.error} />
+          </div>
 
-            <div className={css.checkbox__wrapper_login}>
-              <label className={css.checkbox}>
-                {props.values.rememberMe ? (
-                  <div className={css.checkbox__icon_true}>
-                    <CheckboxIcon />
-                  </div>
-                ) : (
-                  <div className={css.checkbox__icon_false}>
-                    <CheckboxIcon />
-                  </div>
-                )}
-                <Field
-                  className={css.checkbox__field}
-                  type="checkbox"
-                  name="rememberMe"
-                  id="rememberMe"
+          <div className={css.checkbox__wrapper_login}>
+            <label className={css.checkbox}>
+              {values.rememberMe ? (
+                <div className={css.checkbox__icon_true}>
+                  <CheckboxIcon />
+                </div>
+              ) : (
+                <div className={css.checkbox__icon_false}>
+                  <CheckboxIcon />
+                </div>
+              )}
+              <Field
+                className={css.checkbox__field}
+                type="checkbox"
+                name="rememberMe"
+                id="rememberMe"
+              />
+              <span className={css.checkbox__text}>Remember me</span>
+            </label>
+            <p onClick={() => setModalState(5)} className={css.forgot_password}>
+              Forgot password?
+            </p>
+          </div>
+
+          {error && (
+            <p className={css.errorMes}>{error}</p>
+          )}
+
+          <button type="submit" className={css.button}>
+            {isLoading && (
+              <span style={{ marginRight: "20px" }}>
+                <RotatingLines
+                  strokeColor="#ffffff"
+                  strokeWidth="3"
+                  animationDuration="0.75"
+                  width="40"
+                  height="1"
+                  visible={true}
                 />
-                <span className={css.checkbox__text}>Remember me</span>
-              </label>
-              <p>
-                <a href="/" className={css.forgot_password}>
-                  Forgot password?
-                </a>
-              </p>
-            </div>
-            {error && <p style={{color:"red", marginBottom:"20px"}}>{error}</p>}
+              </span>
+            )}
+            <p>Log in</p>
+          </button>
 
-            <button type="submit" className={css.button}>
-              Log in
-            </button>
-            <button type="submit" className={css.link} onClick={() => setModalState(1)}>
-              Sign Up
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </>
+          <button
+            type="submit"
+            className={css.link}
+            onClick={() => setModalState(1)}
+          >
+            Sign Up
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

@@ -15,7 +15,9 @@
 }
 
 .container {
-  max-width: 1200px;
+  // max-width: 1200px;
+  padding-left: 8vw;
+  padding-right: 8vw;
   display: flex;
   margin: 0 auto;
   flex-direction: column;

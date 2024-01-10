@@ -55,6 +55,7 @@
 
 .forgot_password {
   color: #618499;
+  height: 30px;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.77;
@@ -68,32 +69,83 @@
   border-bottom: 1px solid #234e69;
 }
 
-.button {
-  padding: 16px 0;
-  margin-bottom: 16px;
-  text-align: center;
-  background-color: $main-color;
-  border: none;
-  border-radius: 999px;
-  box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
-
-  color: $btn-text;
-
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.14;
-
-  outline-color: transparent;
+.button, .openError, .errorSpan {
   cursor: pointer;
 }
 
-.button:hover {
-  background-color: $hover-color;
+.button {
+  width: 90%;
+  height: 45px;
+  padding: 10px;
+  margin: 30px auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffad4d;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0px 1px 2px 9px rgba(198, 228, 246, 0.15);
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+  outline-color: transparent;
+
+  &:hover,
+  &:focus {
+    background-color: $hover-color;
+  }
+
+  &:focus {
+    background-color: $focus-color;
+  }
 }
 
-.button:focus {
-  background-color: $focus-color;
+.return_button {
+  padding: 10px;
+  width: 50%;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-evenly;
+  cursor: pointer;
 }
+
+.errorMes {
+  color: red;
+  margin-bottom: 20px;
+  font-size: large;
+}
+
+.change {
+  color: blue;
+  cursor: pointer;
+  
+  &:hover {
+    color: lightblue;
+  }
+}
+
+.openError {
+  margin-bottom: 15px;
+  border: none;
+  background: none;
+  font-style: italic;
+
+  &:hover {
+    color: $main-color;
+  }
+}
+
+.errorSpan {
+  color: blue;
+
+  &:hover {
+    color: lightblue;
+  }
+}
+
 
 .link {
   text-align: center;
@@ -115,14 +167,9 @@
   color: $focus-color;
 }
 
-.checkbox__wrapper {
-  margin-bottom: 32px;
-}
-
 .checkbox__wrapper_login {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 32px;
 }
 
 .checkbox__field {

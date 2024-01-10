@@ -4,19 +4,25 @@ import { NavLink } from "react-router-dom";
 import { AiOutlineDown, AiOutlineRight } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import css from "./LeftSide.module.scss";
-import { useUserActions } from "../../../helpers/user.actions";
+import Modal from "../../Modal/Modal";
+import LogOutForm from "../../AuthForm/LogOutForm";
 
 const LeftSide = () => {
   const [activeItem, setActiveItem] = useState({href: "orders", text: "Orders"});
   const [isContentListOpen, setIsContentListOpen] = useState(false);
   const { constants } = useConstants();
 
-  const userAction = useUserActions();
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   const navItems = [
     { href: "orders", text: "Orders" },
     { href: "content", text: "Content" },
     { href: "users", text: "Users" },
+    { href: "settings", text: "Settings"},
     { href: "account", text: "My profile" },
     { href: "logout", text: "Log out" },
   ];
@@ -31,12 +37,7 @@ const LeftSide = () => {
     { href: "ages", text: "Ages"},
     { href: "sizes", text: "Sizes"},
     { href: "prescriptions", text: "Prescriptions"},
-    { href: "constants", text: "Constants"},
   ];
-
-  const handleLogout = () => {
-    userAction.logout()
-  }
 
   return (
     <div>
@@ -82,7 +83,7 @@ const LeftSide = () => {
                 )}
               </div>
             ) : href === "logout" ? (
-              <span onClick={handleLogout} className={css.logout}>
+              <span onClick={toggleModal} className={css.logout}>
                 <FiLogOut style={{ marginRight: "10px" }} /> {text}
               </span>
             ) : (
@@ -97,6 +98,11 @@ const LeftSide = () => {
           </div>
         ))}
       </div>
+      {showModal && (
+        <Modal onClose={toggleModal}>
+          <LogOutForm />
+        </Modal>
+      )}
     </div>
   );
 };

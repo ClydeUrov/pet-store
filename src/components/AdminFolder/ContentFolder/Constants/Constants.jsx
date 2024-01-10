@@ -7,9 +7,11 @@ import Modal from "../../../Modal/Modal";
 import ConfirmDeletion from "../ConfirmDeletion";
 import { toast } from "react-toastify";
 import { useAdminActions } from "../../../../helpers/user.actions";
+import { useConstants } from "../../../../helpers/routs/ConstantsProvider";
 
 const Constants = () => {
-  const [constants, setConstants] = useState({});
+  const { constants, updateConstants } = useConstants();
+
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("");
   const [error, setError] = useState(null);
@@ -18,35 +20,43 @@ const Constants = () => {
   const adminActions = useAdminActions();
 
   useEffect(() => {
+    setLoading(true);
     axiosService.get(`/constants`)
       .then((resp) => {
-        setLoading(false)
-        setConstants(resp.data)
-        setCurrency(resp.data[1].value)
+        setLoading(false);
+        updateConstants(resp.data);
+        setCurrency(resp.data[1].value);
       })
-      .catch((error) => setError(error.message));
-  }, [])
+      .catch((err) => 
+        err.response ? setError(err.response.data.message) : setError(err.message)
+      );
+  }, []);
 
   const updateItem = ({ key, data }) => {
     const formData = new FormData();
     formData.append("value", data);
 
     const updatePromise = key === 'LOGO'
-      ? adminActions.update(`/constants/${key}`, formData)
+      ? adminActions.update(`constants/${key}`, formData)
         .then((resp) => {
-          setConstants([
+          updateConstants([
             {
               key: key,
               value: {
-                id: resp.data.id,
-                filePath: resp.data.filePath,
-                fileName: resp.data.fileName,
+                id: resp.id,
+                filePath: resp.filePath,
+                fileName: resp.fileName,
               },
             },
             constants[1],
           ]);
         })
-      : adminActions.update(`/constants/${key}`, formData)
+      : adminActions
+        .update(`constants/${key}`, formData)
+        .then(() => updateConstants([
+          constants[0],
+          {key: key, value: data}
+        ]))
 
     toast.promise(updatePromise, {
       success: "Updated successfully",
@@ -59,7 +69,7 @@ const Constants = () => {
     if (constants[0].key === "LOGO") {
       adminActions.delete(`/constants/${constants[0].key}/image`)
         .then(() => {
-          setConstants([
+          updateConstants([
             { key: constants[0].key, value: {} },
             constants[1],
           ]);
@@ -72,7 +82,7 @@ const Constants = () => {
   return (
     <section>
       <div className={css.firstLine}>
-        <p>Constants</p>
+        <p>Settings</p>
       </div>
         {loading ? (
           <Loader />

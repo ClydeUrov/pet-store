@@ -1,0 +1,140 @@
+@import "../../../variables.scss";
+
+.title {
+  color: $text-color;
+
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.33;
+
+  margin-bottom: 24px;
+}
+
+.order_info {
+  display: flex;
+  margin-bottom: 32px;
+}
+
+.order_list {
+  width: 50%;
+  margin-right: 10px;
+}
+
+.order_list_item {
+  display: grid;
+  grid-template-columns: 32% 68%;
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  line-height: 1.71;
+}
+
+.order_item_title {
+  color: $second-text-color;
+  font-weight: 500;
+  margin-right: 16px;
+}
+
+.order_item_text {
+  color: $text-color;
+  font-weight: 400;
+}
+
+.img_cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  overflow: hidden;
+  background-color: #f4f6fa;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img {
+  display: block;
+  width: 64px;
+  min-height: 64px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  border-bottom: 1px solid #a3a3a3;
+  margin-bottom: 16px;
+}
+
+.table_header {
+  color: $text-color;
+  padding: 0 0 4px 0;
+  text-align: left;
+  border-bottom: 1px solid #a3a3a3;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.71;
+}
+
+.table_row {
+}
+
+.table_data {
+  color: $text-color;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.71;
+
+  padding: 6px 0 6px 0;
+}
+
+.order_payment_title {
+  color: $second-text-color;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.71;
+}
+
+.order_payment_text {
+  color: $text-color;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.71;
+}
+
+.order_total_title {
+  color: $second-text-color;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.order_total_text {
+  color: $text-color;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.71;
+}
+
+.order_all {
+  margin-left: auto;
+  width: 50%;
+}
+
+.order_all_item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order_all_item:not(:last-child) {
+  margin-bottom: 4px;
+}

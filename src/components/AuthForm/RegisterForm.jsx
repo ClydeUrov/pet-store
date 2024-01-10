@@ -1,19 +1,16 @@
 import { useState } from "react";
-// import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-//import { useSelector } from 'react-redux';
 import { CheckboxIcon } from "../../icons/icons";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import css from "./AuthForm.module.scss";
 import { ErrorMessage, Form, Formik, Field } from "formik";
 import { schemaSignUp } from "../../helpers/schemes";
 import { useUserActions } from "../../helpers/user.actions";
-//import { register } from '../../redux/auth/operations';
+import { RotatingLines } from "react-loader-spinner";
 
-const RegisterForm = ({ onClick, setModalState, host }) => {
+const RegisterForm = ({ setModalState, host }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userActions = useUserActions();
-  // const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -21,18 +18,34 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
     setPasswordShow(!passwordShow);
   };
 
-  const handleSubmit = async (formData, { resetForm }) => {
+  const handleSubmit = async (formData) => {
     const path = `${host}/pet-store`;
-
-    await userActions
-      .register(formData, path)
-      .then(() => {
-        resetForm();
-        onClick(formData.email);
-      })
-      .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError(err.message);
-    });
+    setIsLoading(true);
+    try {
+      await userActions.register(formData, path);
+      localStorage.setItem(
+        "userEmail",
+        JSON.stringify({ email: formData.email, PawSomeRegistarion: true })
+      );
+      setModalState(2);
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 403) {
+          const userData = {
+            email: formData.email,
+            message: err.response.data.message,
+          };
+          localStorage.setItem("userEmail", JSON.stringify(userData));
+          setModalState(2);
+        } else {
+          setError(err.response.data.message);
+        }
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -43,7 +56,7 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
           firstName: "",
           lastName: "",
           email: "",
-          birthDate: undefined,
+          birthDate: "",
           password: "",
           consentToProcessData: false,
           rememberMe: false,
@@ -67,7 +80,11 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
                 type="text"
                 required
               />
-              <ErrorMessage name="firstName" component="p" className={css.error} />
+              <ErrorMessage
+                name="firstName"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -83,11 +100,13 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
                 name="lastName"
                 id="lastName"
                 type="text"
-                //    placeholder=""
-
                 required
               />
-              <ErrorMessage name="lastName" component="p" className={css.error} />
+              <ErrorMessage
+                name="lastName"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -123,7 +142,11 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
                 type="date"
                 required
               />
-              <ErrorMessage name="birthDate" component="p" className={css.error} />
+              <ErrorMessage
+                name="birthDate"
+                component="p"
+                className={css.error}
+              />
             </div>
 
             <div className={css.input__wrapper}>
@@ -153,11 +176,12 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
                   <MdOutlineVisibilityOff size={24} />
                 )}
               </button>
-              <ErrorMessage name="password" component="p" className={css.error} />
+              <ErrorMessage
+                name="password"
+                component="p"
+                className={css.error}
+              />
             </div>
-            {error && (
-              <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
-            )}
 
             <div className={css.checkbox__wrapper}>
               <label className={css.checkbox}>
@@ -180,7 +204,7 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
                 />
 
                 <span className={css.checkbox__text}>
-                  I agree to the processing of my data.
+                  I agree to processing of my data.
                 </span>
               </label>
 
@@ -204,10 +228,28 @@ const RegisterForm = ({ onClick, setModalState, host }) => {
               </label>
             </div>
 
+            {error && <p className={css.errorMes}>{error}</p>}
+
             <button type="submit" className={css.button}>
-              Sign Up
+              {isLoading && (
+                <span style={{ marginRight: "20px" }}>
+                  <RotatingLines
+                    strokeColor="#ffffff"
+                    strokeWidth="3"
+                    animationDuration="0.75"
+                    width="40"
+                    height="1"
+                    visible={true}
+                  />
+                </span>
+              )}
+              <p>Sign Up</p>
             </button>
-            <button type="submit" className={css.link} onClick={() => setModalState(3)}>
+            <button
+              type="submit"
+              className={css.link}
+              onClick={() => setModalState(3)}
+            >
               Already have an account? Log in
             </button>
           </Form>

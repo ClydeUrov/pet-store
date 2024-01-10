@@ -4,34 +4,36 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
-import Modal from "../../components/Modal/Modal";
 import RegisterForm from "../../components/AuthForm/RegisterForm";
 import LogInForm from "../../components/AuthForm/LoginForm";
 import { useState } from "react";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { fetchAllCategories } from "../../helpers/api";
 import VerifyEmail from "../../components/AuthForm/VerifyEmail";
 import VerifyCheck from "../../components/AuthForm/VerifyCheck";
-
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
+import PasswordReset from "../../components/AuthForm/PasswordReset";
 
 import { getUser } from "../../helpers/user.actions";
-
+import Modal from "../../components/Modal/Modal";
+import PasswordRecovery from "../../components/AuthForm/PasswordRecovery";
+import {
+  UserLoginLogoutSubscribe,
+  UserLoginLogoutUnsubscribe,
+} from "../../helpers/events/LoginLogout";
+import Cart from "../../components/Cart/Cart";
 
 const Header = () => {
-  const query = new URLSearchParams(window.location.search);
-  const token = query.get("token");
+  const token = new URLSearchParams(window.location.search).get("token");
 
   const { constants } = useConstants();
   const user = getUser();
 
-
+  const [userIsLogined, setUserIsLogined] = useState(!!user);
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState(null);
-  const [verifyEmail, setVerifyEmail] = useState(false);
 
   const { content: categories, isLoading: categoriesIsLoading } =
     useSelector(selectAllCategories);
@@ -42,9 +44,11 @@ const Header = () => {
 
   const modalTitles = {
     1: "Sign Up",
-    2: "Email verification",
+    2: "Email Verification",
     3: "Log in",
-    4: "User verification",
+    4: "Verify Email Address",
+    5: "Reset Password",
+    6: "Password Recovery",
   };
 
   const toggleModal = () => {
@@ -53,9 +57,20 @@ const Header = () => {
   };
 
   useEffect(() => {
+    UserLoginLogoutSubscribe("UserLogin", () => setUserIsLogined(true));
+    UserLoginLogoutSubscribe("UserLogout", () => setUserIsLogined(false));
+
+    return () => {
+      UserLoginLogoutUnsubscribe("UserLogin", () => setUserIsLogined(false));
+      UserLoginLogoutUnsubscribe("UserLogout", () => setUserIsLogined(true));
+    };
+  }, []);
+
+  useEffect(() => {
     if (token) {
+      let inRegistration = JSON.parse(localStorage.getItem("userEmail"));
       toggleModal();
-      setModalState(4);
+      setModalState(inRegistration.PawSomeRegistarion ? 4 : 6);
     }
   }, [token]);
 
@@ -121,7 +136,7 @@ const Header = () => {
                 setOpenItems([]);
               }}
             >
-              <NavLink to={`/catalogue/All`}>
+              <NavLink to={`/catalogue/All`} style={{ whiteSpace: "nowrap" }}>
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
@@ -158,10 +173,6 @@ const Header = () => {
                 </div>
               )}
             </div>
-
-            <NavLink to="/admin/orders" className={styles.catalogue}>
-              Admin
-            </NavLink>
             <div className={styles.search}>
               <input
                 type="text"
@@ -176,15 +187,15 @@ const Header = () => {
               <FaRegHeart size={32} />
             </NavLink>
 
-            <NavLink to="/cart" className={styles.option}>
+            <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
               <FiShoppingCart size={32} />
-            </NavLink>
+            </div>
 
-            {user ? (
-              <NavLink 
-                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"} 
-                className={styles.option} 
-                style={{backgroundColor:"#f4f6fa"}}
+            {user && userIsLogined ? (
+              <NavLink
+                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                className={styles.option}
+                style={{ backgroundColor: "#f4f6fa" }}
               >
                 {user.firstName.charAt(0)}
               </NavLink>
@@ -204,31 +215,54 @@ const Header = () => {
         </div>
       </header>
 
-      {showModal && (
-        <Modal onClose={toggleModal} title={modalTitles[modalState]}>
-          {modalState === 1 && (
-            <RegisterForm
-              onClick={(email) => {
-                setVerifyEmail(email);
-                setModalState(2);
-              }}
-              setModalState={setModalState}
-              host={window.location.host}
-            />
-          )}
-          {modalState === 2 && <VerifyEmail verifyEmail={verifyEmail} />}
-          {modalState === 3 && (
-            <LogInForm setModalState={setModalState} onClose={toggleModal} />
-          )}
-          {modalState === 4 && (
-            <VerifyCheck
-              token={token}
-              setModalState={setModalState}
-              host={window.location.host}
-            />
-          )}
-        </Modal>
-      )}
+      {showModal &&
+        (modalState === "Cart" ? (
+          <Cart
+            user={user}
+            toggleModal={toggleModal}
+            setModalState={setModalState}
+          />
+        ) : modalState === 4 ? (
+          <VerifyCheck
+            token={token}
+            setModalState={setModalState}
+            toggleModal={toggleModal}
+          />
+        ) : (
+          <Modal
+            onClose={toggleModal}
+            title={modalTitles[modalState]}
+            // disabledBack={modalState === 6 ? true : false}
+          >
+            {modalState === 1 && (
+              <RegisterForm
+                setModalState={setModalState}
+                host={window.location.host}
+              />
+            )}
+            {modalState === 2 && (
+              <VerifyEmail
+                host={window.location.host}
+                setModalState={setModalState}
+              />
+            )}
+            {modalState === 3 && (
+              <LogInForm setModalState={setModalState} onClose={toggleModal} />
+            )}
+            {modalState === 5 && (
+              <PasswordReset
+                setModalState={setModalState}
+                host={window.location.host}
+              />
+            )}
+            {modalState === 6 && (
+              <PasswordRecovery
+                setModalState={setModalState}
+                token={token}
+              />
+            )}
+          </Modal>
+        ))}
     </>
   );
 };
