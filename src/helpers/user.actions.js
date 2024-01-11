@@ -17,6 +17,10 @@ function useUserActions() {
     editProfile,
     editPassword,
     profile,
+    getCarts,
+    deleteCart,
+    deleteAllCarts,
+    postCarts
   };
 
   // Get profile
@@ -86,9 +90,35 @@ function useUserActions() {
       })
       .then(() => {
         localStorage.removeItem("auth");
+        localStorage.removeItem("cart");
         UserLoginLogoutPublish("UserLogout");
         navigate("/");
       });
+  }
+
+  async function getCarts() {
+    return await axios.get(`${baseURL}carts`, {
+      headers: { Authorization: "Bearer " + getAccessToken() },
+    }).then((resp) => resp.data)
+  }
+
+  async function postCarts(data) {
+    return await axios.post(`${baseURL}carts/items`, data, {
+      headers: { Authorization: "Bearer " + getAccessToken() },
+    }).then((resp) => resp.data)
+  }
+
+  function deleteCart(itemId) {
+    console.log("itemId", itemId)
+    return axios.delete(`${baseURL}carts/items/${itemId}`, {
+      headers: { Authorization: "Bearer " + getAccessToken() },
+    })
+  }
+
+  function deleteAllCarts() {
+    return axios.delete(`${baseURL}carts/items`, {
+      headers: { Authorization: "Bearer " + getAccessToken() },
+    })
   }
 }
 

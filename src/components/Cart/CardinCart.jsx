@@ -1,75 +1,104 @@
 import React, { useEffect, useState } from "react";
 import css from "./Cart.module.scss";
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { useUserActions } from "../../helpers/user.actions";
 
-const CardinCart = ({ product, constants, setProducts }) => {
+const CardinCart = ({ item, constants, setProductsQuantity, localProducts, setCarts, navigate, user }) => {
   const [totalCart, setTotalCart] = useState(
-    product.discount ? product.discount : product.price
+    item.product.priceWithDiscount
+      ? item.product.priceWithDiscount
+      : item.product.price
   );
-  const [quantity, setQuantity] = useState(1);
+  const userAction = useUserActions();
+  const [quantity, setQuantity] = useState(item.quantity);
 
   function handleChangeQuantity(action) {
     if (action === "+" && quantity < 100) {
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
-      updateProductQuantity(newQuantity);
+      const updatedCart = localProducts.map((cartItem) => {
+        if (cartItem.product.id === item.product.id) {
+          return { ...cartItem, quantity: newQuantity };
+        }
+        return cartItem;
+      });
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      setProductsQuantity(newQuantity);
     } else if (action === "-" && !(quantity === 1)) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
-      updateProductQuantity(newQuantity);
+      const updatedCart = localProducts.map((cartItem) => {
+        if (cartItem.product.id === item.product.id) {
+          return { ...cartItem, quantity: newQuantity };
+        }
+        return cartItem;
+      });
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      setProductsQuantity(newQuantity);
     }
-  }
-
-  function updateProductQuantity(newQuantity) {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const updatedCart = existingCart.map((existingProduct) => {
-      if (existingProduct.id === product.id) {
-        return { ...existingProduct, quantity: newQuantity };
-      }
-      return existingProduct;
-    });
-
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setProducts(updatedCart);
   }
 
   useEffect(() => {
     setTotalCart(
-      (product.discount ? product.discount : product.price) * quantity
+      (item.product.priceWithDiscount
+        ? item.product.priceWithDiscount
+        : item.product.price) * quantity
     );
-  }, [quantity, product.price, product.discount]);
+  }, [quantity, item.product.price, item.product.priceWithDiscount]);
 
   const handleDelete = (itemId) => {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const indexToRemove = existingCart.findIndex((item) => item.id === itemId);
-
-    if (indexToRemove !== -1) {
-      const updatedCart = [
-        ...existingCart.slice(0, indexToRemove),
-        ...existingCart.slice(indexToRemove + 1),
-      ];
+    console.log("item", item)
+    if (user) {
+      userAction
+        .deleteCart(itemId)
+        .then(() => {
+          const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+          const updatedCart = existingCart.filter((item) => item.product.id !== itemId);
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          setCarts(updatedCart);
+        })
+        .catch(error => {
+          console.error("Error deleting item from cart:", error);
+        });
+    } else {
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const updatedCart = existingCart.filter((item) => item.product.id !== itemId);
+      console.log(updatedCart);
 
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      setProducts(updatedCart);
+      setCarts(updatedCart);
     }
   };
 
   return (
     <div className={css.card}>
       <div className={css.picture}>
-        {product.image && <img src={product.image} alt="" />}
+        {item.product.mainImage.filePath && (
+          <img
+            src={item.product.mainImage.filePath} 
+            onClick={() => navigate(`/catalogue/products/${item.product.id}`)} 
+            alt="" 
+          />
+        )}
       </div>
       <div className={css.body}>
-        <p>{product.name}</p>
+        <p>{item.product.name}</p>
         <div className={css.cardPriceBox}>
-          <p className={css.cardPrice + " " + (product.discount ? css.product_price_with_discount : "")}>
-            {constants[1].value} {product.discount || product.price}
+          <p
+            className={
+              css.cardPrice +
+              " " +
+              (item.product.priceWithDiscount
+                ? css.product_price_with_discount
+                : "")
+            }
+          >
+            {constants[1].value}{" "}
+            {item.product.priceWithDiscount || item.product.price}
           </p>
-          {product.discount && (
+          {item.product.priceWithDiscount && (
             <p className={css.cardPriceNot}>
-              {constants[1].value} {product.price}
+              {constants[1].value} {item.product.price}
             </p>
           )}
         </div>
@@ -94,7 +123,7 @@ const CardinCart = ({ product, constants, setProducts }) => {
       <div className={css.end}>
         <AiOutlineDelete
           style={{ cursor: "pointer" }}
-          onClick={() => handleDelete(product.id)}
+          onClick={() => handleDelete(item.product.id)}
         />
         <span style={{ whiteSpace: "nowrap" }}>
           {constants[1].value} {totalCart.toFixed(2)}

@@ -118,6 +118,7 @@
         cursor: pointer;
         font-size: 35px;
         border-radius: 50%;
+        position: relative;
       }
       .option:hover {
         color: $hover-color;
@@ -132,4 +133,22 @@
 .option_btn {
   border: none;
   background-color: transparent;
+}
+
+.numberOfCartItemsWrapper {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+.numberOfCartItems {
+  color: #fff;
+  font-size: 16px;
+  background-color: $main-color;
+  border-radius: 999px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

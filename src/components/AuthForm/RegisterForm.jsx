@@ -34,6 +34,7 @@ const RegisterForm = ({ setModalState, host }) => {
           const userData = {
             email: formData.email,
             message: err.response.data.message,
+            PawSomeRegistarion: true
           };
           localStorage.setItem("userEmail", JSON.stringify(userData));
           setModalState(2);

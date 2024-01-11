@@ -24,17 +24,25 @@ const Card = ({ item, onClick }) => {
 
   const handleAddToCart = () => {
     const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-    const data = {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      ...(item.priceWithDiscount && { discount: item.priceWithDiscount }),
-      image: item.mainImage.filePath,
-      quantity: 1,
+    
+    const isItemInCart = existingCart.some((cartItem) => cartItem.product.id === item.id);
+  
+    if (!isItemInCart) {
+      const data = {
+        product: {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          ...(item.priceWithDiscount && { priceWithDiscount: item.priceWithDiscount }),
+          mainImage: { filePath: item.mainImage.filePath },
+        },
+        quantity: 1,
+      };
+  
+      const newCart = [...existingCart, data];
+  
+      localStorage.setItem('cart', JSON.stringify(newCart));
     }
-    const newCart = [...existingCart, data];
-
-    localStorage.setItem('cart', JSON.stringify(newCart));
   }
 
   return (
@@ -100,7 +108,7 @@ const Card = ({ item, onClick }) => {
           <Button 
             text={"Add to cart"} 
             onClickHandler={() => handleAddToCart()} 
-            isDisabled={!item.notAvailable} 
+            isDisabled={item.notAvailable} 
           />
 
           <button

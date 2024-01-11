@@ -51,6 +51,10 @@ const Header = () => {
     6: "Password Recovery",
   };
 
+  const [productsQuantity, setProductsQuantity] = useState(user ? user.countCartItems : 0);
+
+  console.log("productsQuantity", productsQuantity, user && user.countCartItems)
+
   const toggleModal = () => {
     setShowModal(!showModal);
     setModalState(null);
@@ -189,6 +193,11 @@ const Header = () => {
 
             <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
               <FiShoppingCart size={32} />
+              {productsQuantity !== 0 && (
+                <span className={styles.numberOfCartItemsWrapper}>
+                  <span className={styles.numberOfCartItems}>{productsQuantity}</span>
+                </span>
+              )}
             </div>
 
             {user && userIsLogined ? (
@@ -221,6 +230,8 @@ const Header = () => {
             user={user}
             toggleModal={toggleModal}
             setModalState={setModalState}
+            setProductsQuantity={setProductsQuantity}
+            productsQuantity={productsQuantity}
           />
         ) : modalState === 4 ? (
           <VerifyCheck
