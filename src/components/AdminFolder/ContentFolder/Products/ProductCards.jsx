@@ -54,8 +54,8 @@ const ProductCards = ({
           key={item.id}
           className={
             item.notAvailable
-              ? css.productRow
-              : `${css.productRow} ${css.notAvailable}`
+              ? `${css.productRow} ${css.notAvailable}`
+              : css.productRow
           }
         >
           <div className={css.picture}>
@@ -72,7 +72,7 @@ const ProductCards = ({
           </div>
           <div>{item.brand ? item.brand.name : "No brand"}</div>
           <div>{item.newArrival ? "Yes" : "No"}</div>
-          <div>{item.notAvailable ? "In stock" : "Out of stock"}</div>
+          <div>{item.notAvailable ? "Out of stock" : "In stock"}</div>
           <div>
             <NavLink to={`update/${item.id}`}><MdOutlineEdit /></NavLink>
             <AiOutlineDelete

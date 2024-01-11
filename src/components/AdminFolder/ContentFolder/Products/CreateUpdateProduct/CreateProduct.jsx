@@ -24,7 +24,7 @@ const CreateProduct = () => {
     prescription : [],
     size : [],
     weight : [],
-    notAvailable : [{id: 1, name: 'Available'}, {id: 2, name: 'Unavailable'}],
+    notAvailable : [{id: 1, name: 'Unavailable'}, {id: 2, name: 'Available'}],
   });
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const CreateProduct = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    if(values.notAvailable) { values.notAvailable = values.notAvailable.id === 1 ? true : false }
+    values.notAvailable = values.notAvailable.id === 1 ? true : false
     if(values.size) { values.productSize = values.size }
   
     try {

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getAccessToken } from "../../helpers/user.actions";
-import { fetchAllCategories } from "../../helpers/api";
+// import { fetchAllCategories } from "../../helpers/api";
 
 axios.defaults.baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com";
