@@ -46,7 +46,7 @@ const VerifyEmail = ({ host, setModalState }) => {
   return (
     <div className={css.verifyBlock}>
       {userEmail.message ? (
-        <div>
+        <div style={{fontSize: "large"}}>
           {userEmail.message}. <br />The message was sent to{' '}
           <b>{userEmail.email}</b>{' '}
           <span className={css.change} onClick={() => setModalState(1)} >
