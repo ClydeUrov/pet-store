@@ -51,7 +51,12 @@ const Constants = () => {
             constants[1],
           ]);
         })
-      : adminActions.update(`constants/${key}`, formData)
+      : adminActions
+        .update(`constants/${key}`, formData)
+        .then(() => updateConstants([
+          constants[0],
+          {key: key, value: data}
+        ]))
 
     toast.promise(updatePromise, {
       success: "Updated successfully",

@@ -28,10 +28,8 @@ function Favorites() {
 
     fetchWishList();
   }, []);
-  console.log(items);
   useEffect(() => {
     if (items.length === 0 && !isLoading) {
-      console.log("EFFECT IN FAVORITES");
       emptyWishList();
     }
   }, [items, items.length, isLoading]);

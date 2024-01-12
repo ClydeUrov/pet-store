@@ -1,6 +1,6 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
-import React, { useCallback } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import {
   selectBrands,

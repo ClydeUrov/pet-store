@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { fetchProductById, fetchProductCharacteristics } from "../../../../../helpers/api";
 import { updateCard } from "../../../../../redux/cards/operations";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { schemaAdminProducts } from "../../../../../helpers/schemes";
 
@@ -39,7 +39,7 @@ const UpdateProduct = () => {
     prescription : [],
     size : [],
     weight : [],
-    notAvailable : [{id: 1, name: 'Available'}, {id: 2, name: 'Unavailable'}],
+    notAvailable : [{id: 1, name: 'Unavailable'}, {id: 2, name: 'Available'}],
   });
 
   useEffect(() => {
@@ -62,9 +62,9 @@ const UpdateProduct = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    if(values.notAvailable) { values.notAvailable = values.notAvailable.id === 1 ? true : false }
+    values.notAvailable = values.notAvailable.id === 1 ? true : false
     if(values.size) { values.productSize = values.size }
-    if (mainImage) {values.mainImage = mainImage}
+    if(mainImage) {values.mainImage = mainImage}
   
     try {
       await toast.promise(dispatch(updateCard({ id: product.id, data: values })), {

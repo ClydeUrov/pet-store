@@ -5,7 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 
 const modalRoot = document.querySelector("#modal-root");
 
-const Modal = ({ title, children, onClose, disabledBack }) => {
+const Modal = ({ title, children, onClose, disabledBack, cart}) => {
   //  const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,8 +29,10 @@ const Modal = ({ title, children, onClose, disabledBack }) => {
 
   return createPortal(
     <div className={css.overlay} onClick={handleBackdropClick}>
-      {disabledBack ? <div>{children}</div> :
-        <div className={css.container}>
+      {disabledBack ? (
+        <div>{children}</div>
+      ) : (
+        <div className={cart ? `${css.cart_container} ${css.activeContainer}` : css.container}>
           <button className={css.icon} onClick={handleBackdropClick}>
             <RxCross1 size={20} onClick={handleBackdropClick} />
           </button>
@@ -38,7 +40,7 @@ const Modal = ({ title, children, onClose, disabledBack }) => {
 
           {children}
         </div>
-      }
+      )}
     </div>,
     modalRoot
   );

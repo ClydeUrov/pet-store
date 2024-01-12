@@ -22,15 +22,29 @@ const RegisterForm = ({ setModalState, host }) => {
     const path = `${host}/pet-store`;
     setIsLoading(true);
     try {
-      await userActions.register(formData, path).then(() => {
-        setModalState(2);
-      });
+      await userActions.register(formData, path);
+      localStorage.setItem(
+        "userEmail",
+        JSON.stringify({ email: formData.email, PawSomeRegistarion: true })
+      );
+      setModalState(2);
     } catch (err) {
-      err.response
-        ? setError(err.response.data.message)
-        : setError(err.message);
+      if (err.response) {
+        if (err.response.status === 403) {
+          const userData = {
+            email: formData.email,
+            message: err.response.data.message,
+            PawSomeRegistarion: true
+          };
+          localStorage.setItem("userEmail", JSON.stringify(userData));
+          setModalState(2);
+        } else {
+          setError(err.response.data.message);
+        }
+      } else {
+        setError(err.message);
+      }
     } finally {
-      localStorage.setItem("userEmail", formData.email);
       setIsLoading(false);
     }
   };
@@ -43,7 +57,7 @@ const RegisterForm = ({ setModalState, host }) => {
           firstName: "",
           lastName: "",
           email: "",
-          birthDate: undefined,
+          birthDate: "",
           password: "",
           consentToProcessData: false,
           rememberMe: false,
@@ -87,8 +101,6 @@ const RegisterForm = ({ setModalState, host }) => {
                 name="lastName"
                 id="lastName"
                 type="text"
-                //    placeholder=""
-
                 required
               />
               <ErrorMessage
@@ -171,9 +183,6 @@ const RegisterForm = ({ setModalState, host }) => {
                 className={css.error}
               />
             </div>
-            {error && (
-              <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
-            )}
 
             <div className={css.checkbox__wrapper}>
               <label className={css.checkbox}>
@@ -196,7 +205,7 @@ const RegisterForm = ({ setModalState, host }) => {
                 />
 
                 <span className={css.checkbox__text}>
-                  I agree to the processing of my data.
+                  I agree to processing of my data.
                 </span>
               </label>
 
@@ -219,6 +228,8 @@ const RegisterForm = ({ setModalState, host }) => {
                 <span className={css.checkbox__text}>Remember me</span>
               </label>
             </div>
+
+            {error && <p className={css.errorMes}>{error}</p>}
 
             <button type="submit" className={css.button}>
               {isLoading && (

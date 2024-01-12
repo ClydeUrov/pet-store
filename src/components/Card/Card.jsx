@@ -24,6 +24,29 @@ const Card = ({ item, favoriteItems, onChangeFavorites }) => {
     }
   };
 
+  const handleAddToCart = () => {
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    const isItemInCart = existingCart.some((cartItem) => cartItem.product.id === item.id);
+  
+    if (!isItemInCart) {
+      const data = {
+        product: {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          ...(item.priceWithDiscount && { priceWithDiscount: item.priceWithDiscount }),
+          mainImage: { filePath: item.mainImage.filePath },
+        },
+        quantity: 1,
+      };
+  
+      const newCart = [...existingCart, data];
+  
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    }
+  }
+
   return (
     <li className={styles.item}>
       <Link to={`/catalogue/products/${item.id}`}>
@@ -83,7 +106,11 @@ const Card = ({ item, favoriteItems, onChangeFavorites }) => {
           )}
         </div>
         <div className={styles.cardButtons}>
-          <Button text={"Add to cart"} isDisabled={item.notAvailable} />
+          <Button 
+            text={"Add to cart"} 
+            onClickHandler={() => handleAddToCart()} 
+            isDisabled={item.notAvailable} 
+          />
 
           <button
             type="button"

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axiosService from '../../helpers/axios';
+import React, { useState, useEffect } from "react";
+import axiosService from "../../helpers/axios";
 import css from "./AuthForm.module.scss";
 
-const VerifyEmail = ({host, setModalState}) => {
+const VerifyEmail = ({ host, setModalState }) => {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(60);
   const [error, setError] = useState(null);
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
   const startTimer = () => {
     setIsTimerActive(true);
@@ -33,9 +33,11 @@ const VerifyEmail = ({host, setModalState}) => {
     const path = `${host}/pet-store`;
 
     axiosService
-      .post(`/auth/resend-verification-link?email=${userEmail}&path=${path}`)
+      .post(`/auth/resend-verification-link?email=${userEmail.email}&path=${path}`)
       .catch((err) => {
-        err.response ? setError(err.response.data.message) : setError("Error resending verification link.");
+        err.response
+          ? setError(err.response.data.message)
+          : setError("Error resending verification link.");
       });
 
     startTimer();
@@ -43,31 +45,66 @@ const VerifyEmail = ({host, setModalState}) => {
 
   return (
     <div className={css.verifyBlock}>
-      <p>
-        To verify your email, we've sent a link to <b>{userEmail}</b>{" "}
-        <span style={{ color: "blue", cursor: 'pointer' }} onClick={() => setModalState(1)}>(Change)</span>
-        <br />
-        Please check your inbox (or spam folder) and click on the provided confirmation link.
-      </p>
-      {error && (
-        <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
-      )}
-      <p>
-        If the message did not arrive, you can
-        {isTimerActive ? (
-          `try again in ${secondsRemaining} seconds`
-        ) : (
-          <>
-            <br /><br />
-            <button
-              className={css.button}
-              onClick={handleResend}
-            >
-              Send again
+      {userEmail.message ? (
+        <div style={{fontSize: "large"}}>
+          {userEmail.message}. <br />The message was sent to{' '}
+          <b>{userEmail.email}</b>{' '}
+          <span className={css.change} onClick={() => setModalState(1)} >
+            (Change)
+          </span>
+          <br /><br />
+          {isTimerActive && !error && (
+            `If the message did not arrive, try again in ${secondsRemaining} seconds`
+          )}
+          {error && <p className={css.errorMes}>{error}</p>}
+          {!error && (
+            <button className={css.button} onClick={handleResend}>
+              Send verification link
             </button>
-          </>
-        )}
-      </p>
+          )}
+        </div>
+      ) : userEmail.email ? (
+        <div style={{fontSize: "large"}}>
+          To verify your email, we've sent a link to <b>{userEmail.email}</b>{" "}
+          <span className={css.change} onClick={() => setModalState(1)} >
+            (Change)
+          </span>
+          <br /><br />
+          Please check your inbox (or spam folder) and click on the provided
+          confirmation link.
+          <br />
+          {isTimerActive && !error && (
+            `If the message did not arrive, try again in ${secondsRemaining} seconds`
+          )}
+          {error && <p className={css.errorMes}>{error}</p>}
+          {!error && (
+            <>
+              <br />
+              <button className={css.button} onClick={handleResend}>
+                Send again
+              </button>
+            </>
+          )}
+        </div>
+      ) : (
+        <div>
+          {userEmail?.message} {' '}The message was sent to{' '}
+          {userEmail?.email ? userEmail?.email : "your e-male"}{' '}
+          <span className={css.change} onClick={() => setModalState(1)} >
+            (Change email)
+          </span>
+          <br /><br />
+          {isTimerActive && !error && (
+            `If the message did not arrive, try again in ${secondsRemaining} seconds`
+          )}
+          {error && <p className={css.errorMes}>{error}</p>}
+          {!error && (
+            <button className={css.button} onClick={handleResend}>
+              Send verification link
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

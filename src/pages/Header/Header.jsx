@@ -14,7 +14,7 @@ import VerifyCheck from "../../components/AuthForm/VerifyCheck";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllCategories } from "../../redux/cards/selectors";
 import { getAllCategories } from "../../redux/cards/operations";
-import ResetPassword from "../../components/AuthForm/ResetPassword";
+import PasswordReset from "../../components/AuthForm/PasswordReset";
 
 import { getUser } from "../../helpers/user.actions";
 import Modal from "../../components/Modal/Modal";
@@ -23,6 +23,7 @@ import {
   UserLoginLogoutSubscribe,
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
+import Cart from "../../components/Cart/Cart";
 import FavoriteIconInHeader from "../../components/FavoriteIconInHeader/FavoriteIconInHeader";
 
 const Header = () => {
@@ -51,6 +52,16 @@ const Header = () => {
     6: "Password Recovery",
   };
 
+  const [productsQuantity, setProductsQuantity] = useState(
+    user ? user.countCartItems : 0
+  );
+
+  console.log(
+    "productsQuantity",
+    productsQuantity,
+    user && user.countCartItems
+  );
+
   const toggleModal = () => {
     setShowModal(!showModal);
     setModalState(null);
@@ -68,8 +79,9 @@ const Header = () => {
 
   useEffect(() => {
     if (token) {
+      let inRegistration = JSON.parse(localStorage.getItem("userEmail"));
       toggleModal();
-      setModalState(user ? 4 : 6);
+      setModalState(inRegistration.PawSomeRegistarion ? 4 : 6);
     }
   }, [token]);
 
@@ -135,7 +147,7 @@ const Header = () => {
                 setOpenItems([]);
               }}
             >
-              <NavLink to={`/catalogue/All`}>
+              <NavLink to={`/catalogue/All`} style={{ whiteSpace: "nowrap" }}>
                 Catalogue{" "}
                 <IoIosArrowDown size={16} style={{ verticalAlign: "middle" }} />
               </NavLink>
@@ -184,9 +196,22 @@ const Header = () => {
           <div className={styles.options}>
             <FavoriteIconInHeader />
 
-            <NavLink to="/cart" className={styles.option}>
+            <div
+              onClick={() => {
+                toggleModal();
+                setModalState("Cart");
+              }}
+              className={styles.option}
+            >
               <FiShoppingCart size={32} />
-            </NavLink>
+              {productsQuantity !== 0 && (
+                <span className={styles.numberOfCartItemsWrapper}>
+                  <span className={styles.numberOfCartItems}>
+                    {productsQuantity}
+                  </span>
+                </span>
+              )}
+            </div>
 
             {user && userIsLogined ? (
               <NavLink
@@ -213,7 +238,15 @@ const Header = () => {
       </header>
 
       {showModal &&
-        (modalState === 4 ? (
+        (modalState === "Cart" ? (
+          <Cart
+            user={user}
+            toggleModal={toggleModal}
+            setModalState={setModalState}
+            setProductsQuantity={setProductsQuantity}
+            productsQuantity={productsQuantity}
+          />
+        ) : modalState === 4 ? (
           <VerifyCheck
             token={token}
             setModalState={setModalState}
@@ -223,7 +256,7 @@ const Header = () => {
           <Modal
             onClose={toggleModal}
             title={modalTitles[modalState]}
-            disabledBack={modalState === 6 ? true : false}
+            // disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
               <RegisterForm
@@ -241,16 +274,13 @@ const Header = () => {
               <LogInForm setModalState={setModalState} onClose={toggleModal} />
             )}
             {modalState === 5 && (
-              <ResetPassword
+              <PasswordReset
                 setModalState={setModalState}
                 host={window.location.host}
               />
             )}
             {modalState === 6 && (
-              <PasswordRecovery
-                setModalState={setModalState}
-                host={window.location.host}
-              />
+              <PasswordRecovery setModalState={setModalState} token={token} />
             )}
           </Modal>
         ))}
