@@ -206,7 +206,7 @@ const Header = () => {
                 className={styles.option}
                 style={{ backgroundColor: "#f4f6fa" }}
               >
-                {user.firstName.charAt(0)}
+                {user?.firstName.charAt(0)}
               </NavLink>
             ) : (
               <button

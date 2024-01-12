@@ -19,12 +19,23 @@ export const schemaSignUp = yup.object().shape({
       "Correct format: mail@ukr.net or mail@gmail.com"
     )
     .required("Email is required!"),
+  birthDate: yup
+    .date()
+    .max(new Date(), 'Birth date cannot be in the future')
+    .required('Birth date is required'),
   password: yup
     .string()
     .matches(/^[^\s]*$/, "Must not contain spaces!")
     .min(7, "Minimum 7 characters!")
     .max(32, "Password must contain no more than 32 characters!")
     .required("Password is required!"),
+  confirm: yup
+    .string()
+    .oneOf(
+      [yup.ref("password"), null],
+      "Confirm password must match the password!"
+    )
+    .required("Required!"),
 });
 
 export const schemaLogIn = yup.object().shape({

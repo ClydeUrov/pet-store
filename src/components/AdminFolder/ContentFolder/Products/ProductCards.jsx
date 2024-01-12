@@ -8,13 +8,13 @@ import { MdOutlineEdit } from "react-icons/md";
 import { deleteCard } from "../../../../redux/cards/operations";
 import { useState } from "react";
 import css from "./Products.module.scss";
-import { NavLink } from "react-router-dom";
 
 const ProductCards = ({
   allCards,
   setPage,
   dispatch,
   setPrevLength,
+  setUpdateProduct
 }) => {
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
@@ -74,7 +74,7 @@ const ProductCards = ({
           <div>{item.newArrival ? "Yes" : "No"}</div>
           <div>{item.notAvailable ? "Out of stock" : "In stock"}</div>
           <div>
-            <NavLink to={`update/${item.id}`}><MdOutlineEdit /></NavLink>
+            <p onClick={() => setUpdateProduct(item)} ><MdOutlineEdit /></p>
             <AiOutlineDelete
               onClick={() => {
                 setDeleteItemId(item.id);

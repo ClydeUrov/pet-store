@@ -36,9 +36,12 @@ const Constants = () => {
     const formData = new FormData();
     formData.append("value", data);
 
+    console.log(formData, data)
+
     const updatePromise = key === 'LOGO'
       ? adminActions.update(`constants/${key}`, formData)
         .then((resp) => {
+          console.log("resp", resp);
           updateConstants([
             {
               key: key,
@@ -67,7 +70,7 @@ const Constants = () => {
 
   const handleConfirmDeletion = () => {
     if (constants[0].key === "LOGO") {
-      adminActions.delete(`/constants/${constants[0].key}/image`)
+      adminActions.deleteAction(`constants/${constants[0].key}/image`)
         .then(() => {
           updateConstants([
             { key: constants[0].key, value: {} },

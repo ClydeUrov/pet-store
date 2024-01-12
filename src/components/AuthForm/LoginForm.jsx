@@ -37,7 +37,7 @@ const LogInForm = ({ onClose, setModalState }) => {
 
       if (err.response) {
         errorMessage = err.response.status === 401
-          ? "Unauthorized, please register"
+          ? err.response.data.message
           : err.response.status === 403
           ? (
             <span>

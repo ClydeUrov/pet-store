@@ -4,26 +4,15 @@ import DownloadImages from "./DownloadImages";
 import FormikField from "../../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
 import { useEffect, useState } from "react";
-import { fetchProductById, fetchProductCharacteristics } from "../../../../../helpers/api";
+import { fetchProductCharacteristics } from "../../../../../helpers/api";
 import { updateCard } from "../../../../../redux/cards/operations";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { schemaAdminProducts } from "../../../../../helpers/schemes";
 
-const UpdateProduct = () => {
-  const { productId } = useParams();
+const UpdateProduct = ({ product, setUpdateProduct, fetchData }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [error, setError] = useState(null);
-
-  const [product, setProduct] = useState(useSelector(
-    state => state.cards.items.content.find(item => item.id === parseInt(productId))
-  ));
-
-  if (!product) {
-    setProduct(fetchProductById(productId))
-  }
 
   const [mainImage, setMainImage] = useState(
     product.mainImage ? { id: product.mainImage.id, url: product.mainImage.filePath } : null
@@ -72,7 +61,8 @@ const UpdateProduct = () => {
         success: "Product updated successfully",
         error: "The product was not updated",
       })
-      navigate("/admin/products/");
+      setUpdateProduct(null);
+      fetchData();
     } catch (err) {
       err.response ? setError(err.response.data.message) : setError(err.message)
     }
@@ -141,7 +131,7 @@ const UpdateProduct = () => {
           {error && <p>{error}</p>}
           <div className={css.buttons}>
             <button type="submit" >Update</button>
-            <button type="button" onClick={() => navigate('/admin/products/')} >Cancel</button>
+            <button type="button" onClick={() => setUpdateProduct(null)} >Cancel</button>
           </div>
         </Form>
         )}

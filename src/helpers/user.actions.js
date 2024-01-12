@@ -91,32 +91,32 @@ function useUserActions() {
       .then(() => {
         localStorage.removeItem("auth");
         localStorage.removeItem("cart");
+        localStorage.removeItem("constants");
         UserLoginLogoutPublish("UserLogout");
         navigate("/");
       });
   }
 
   async function getCarts() {
-    return await axios.get(`${baseURL}carts`, {
+    return await axiosService.get(`${baseURL}carts`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     }).then((resp) => resp.data)
   }
 
   async function postCarts(data) {
-    return await axios.post(`${baseURL}carts/items`, data, {
+    return await axiosService.post(`${baseURL}carts/items`, data, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     }).then((resp) => resp.data)
   }
 
   function deleteCart(itemId) {
-    console.log("itemId", itemId)
-    return axios.delete(`${baseURL}carts/items/${itemId}`, {
+    return axiosService.delete(`${baseURL}carts/items/${itemId}`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     })
   }
 
   function deleteAllCarts() {
-    return axios.delete(`${baseURL}carts/items`, {
+    return axiosService.delete(`${baseURL}carts/items`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     })
   }
@@ -140,6 +140,7 @@ function useAdminActions() {
     create: (path, data) => sendRequest("post", path, data),
     update: (path, data) => sendRequest("put", path, data),
     deleteAction: (path) => sendRequest("delete", path),
+    updateStatus: (path) => sendRequest("patch", path),
   };
 }
 

@@ -29,7 +29,9 @@ const CardsList = ({setPage}) => {
           />
         </div>
       ) : (
-        <Loader />
+        <div style={{margin: "100px"}}>
+          <Loader />
+        </div>
       )}
     </>
   )
