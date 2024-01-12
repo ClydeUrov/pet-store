@@ -175,12 +175,23 @@
 
   border: none;
   background-color: transparent;
-  cursor: pointer;
   outline-color: transparent;
+
+  &.full {
+    color: $main-color;
+  }
 }
 
 .favourite_icon:hover {
   color: $hover-color;
+}
+
+.allowed {
+  cursor: pointer;
+}
+
+.notAllowed {
+  cursor: not-allowed;
 }
 
 .link_list {

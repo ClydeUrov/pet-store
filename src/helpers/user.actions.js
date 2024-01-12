@@ -8,6 +8,10 @@ const baseURL =
 
 function useUserActions() {
   const navigate = useNavigate();
+  // const { getWishList } = useWishList();
+  // const { getItem: getLocalWishList, setItem } = useLocalStorage(
+  //   keyForLocalStorage.WISH_LIST
+  // );
   // const baseURL = process.env.REACT_APP_API_URL;
 
   return {
@@ -17,6 +21,8 @@ function useUserActions() {
     editProfile,
     editPassword,
     profile,
+    getUser,
+    getAccessToken,
   };
 
   // Get profile
@@ -58,16 +64,24 @@ function useUserActions() {
 
   // Login the user
   function login(data) {
-    return axios.post(`${baseURL}auth/login`, data).then((res) => {
-      setUserData(res.data);
-      UserLoginLogoutPublish("UserLogin");
-      if (res.data.userDto.role === "CLIENT") {
-        navigate("user/account");
-      }
-      if (res.data.userDto.role === "ADMIN") {
-        navigate("admin/orders");
-      }
-    });
+    return axios
+      .post(`${baseURL}auth/login`, data)
+      .then((res) => {
+        setUserData(res.data);
+        UserLoginLogoutPublish("UserLogin");
+        if (res.data.userDto.role === "CLIENT") {
+          navigate("user/account");
+        }
+        if (res.data.userDto.role === "ADMIN") {
+          navigate("admin/orders");
+        }
+        return res.data;
+      })
+      .then((data) => {
+        // const localWishLish = getLocalWishList();
+        // const APIWishList = getWishList();
+        // setItem([...new Set([...localWishLish, ...APIWishList])]);
+      });
   }
 
   // Login the user

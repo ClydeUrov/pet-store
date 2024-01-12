@@ -1,25 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Card.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import { selectFavorites } from "../../redux/cards/selectors";
+
 import { StarRating } from "../StarRatings/StarRatings";
 import { Link } from "react-router-dom";
 import Button from "../CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
-const Card = ({ item, onClick }) => {
+const Card = ({ item, favoriteItems, onChangeFavorites }) => {
   const { constants } = useConstants();
-  const favorites = useSelector(selectFavorites);
+  const [isLoadingWishList, setIsLoadingWishList] = useState(false);
 
-  const handleAddOrDeleteFavorite = () => {
-    if (!favorites.find((favorite) => favorite.id === item.id)) {
-      console.log("This item has been successfully added to favorites!");
+  const isFavorite = favoriteItems.find((i) => i.id === item.id) ? true : false;
 
-      return;
+  const handleAddOrDeleteFavorite = async () => {
+    try {
+      setIsLoadingWishList(true);
+      await onChangeFavorites(item);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoadingWishList(false);
     }
-    console.log("This item was successfully removed from favorites!");
-    return;
   };
 
   return (
@@ -28,7 +30,6 @@ const Card = ({ item, onClick }) => {
         <div className={styles.img_cover}>
           {item.mainImage ? (
             <img
-              onClick={onClick}
               className={styles.itemImg}
               src={item.mainImage.filePath}
               alt={item.name}
@@ -87,9 +88,11 @@ const Card = ({ item, onClick }) => {
           <button
             type="button"
             onClick={handleAddOrDeleteFavorite}
-            className={styles.favoriteBox}
+            className={`${styles.favoriteBox} ${isFavorite && styles.full} ${
+              isLoadingWishList ? styles.isLoading : styles.notLoading
+            }`}
           >
-            {!favorites.find((favorite) => favorite.id === item.id) ? (
+            {!isFavorite ? (
               <AiOutlineHeart size={44} />
             ) : (
               <AiFillHeart size={44} />

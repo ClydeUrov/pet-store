@@ -1,0 +1,33 @@
+@import "../../../src/variables";
+
+.red_heart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 35px;
+  border-radius: 50%;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #494949;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 35px;
+  border-radius: 50%;
+}
+.option:hover {
+  color: $hover-color;
+}
+.option:focus {
+  color: $focus-color;
+}

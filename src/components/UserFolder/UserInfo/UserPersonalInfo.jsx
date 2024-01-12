@@ -37,7 +37,7 @@ export const UserPersonalInfo = () => {
             {
               pending: "Personal information changing in progress",
               success: "Personal information was changed",
-              error: "Personal information not change, try again",
+              error: "Personal information not changed, try again",
             }
           );
         } catch (e) {

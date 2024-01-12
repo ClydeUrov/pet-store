@@ -134,8 +134,18 @@
   color: #1b1b1b;
   border: none;
   background-color: transparent;
-  cursor: pointer;
   outline-color: transparent;
+
+  &.full {
+    color: $main-color;
+  }
+}
+.notLoading {
+  cursor: pointer;
+}
+
+.isLoading {
+  cursor: not-allowed;
 }
 
 .favoriteBox:hover {

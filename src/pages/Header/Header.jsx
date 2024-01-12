@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
@@ -23,6 +23,7 @@ import {
   UserLoginLogoutSubscribe,
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
+import FavoriteIconInHeader from "../../components/FavoriteIconInHeader/FavoriteIconInHeader";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
@@ -181,9 +182,7 @@ const Header = () => {
           </div>
 
           <div className={styles.options}>
-            <NavLink to="/favorites" className={styles.option}>
-              <FaRegHeart size={32} />
-            </NavLink>
+            <FavoriteIconInHeader />
 
             <NavLink to="/cart" className={styles.option}>
               <FiShoppingCart size={32} />

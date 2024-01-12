@@ -44,7 +44,7 @@
         cursor: pointer;
         position: relative;
         display: inline-block;
-        
+
         font-size: 21px;
         font-weight: 600;
         line-height: 1.33;
@@ -70,8 +70,8 @@
         position: absolute;
         background-color: #fff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        border-radius: 0px 20px 20px 20px ;
-        cursor:auto;
+        border-radius: 0px 20px 20px 20px;
+        cursor: auto;
         transition: opacity 0.3s ease, transform 0.3s ease;
         min-width: 400px;
         max-width: 900px;
@@ -84,7 +84,7 @@
         display: flex;
         flex-direction: row;
         li {
-          width:auto;
+          width: auto;
           display: flex;
           flex-direction: row;
         }
@@ -104,8 +104,21 @@
     .options {
       display: flex;
       align-items: center;
-      justify-content:center;
+      justify-content: center;
       gap: 18px;
+
+      .red_heart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: red;
+        height: 40px;
+        width: 40px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 35px;
+        border-radius: 50%;
+      }
 
       .option {
         display: flex;

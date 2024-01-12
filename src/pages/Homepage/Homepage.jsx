@@ -1,6 +1,6 @@
 import style from "../../App/App.module.scss";
 import css from "./Homepage.module.scss";
-import React from "react";
+import React, { useCallback } from "react";
 import { useState, useEffect } from "react";
 import {
   selectBrands,
@@ -8,23 +8,45 @@ import {
   selectOnSale,
 } from "../../redux/cards/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllCategories,
-  getBrands,
-  getOnSale,
-} from "../../redux/cards/operations";
+import { getBrands, getOnSale } from "../../redux/cards/operations";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
+
+import useWishList from "../../helpers/wishList.actions";
+import {
+  emptyWishList,
+  smthInWishList,
+} from "../../helpers/events/LoginLogout";
+import { toast } from "react-toastify";
 
 const Homepage = () => {
   const [slidesPerView, setSlidesPerView] = useState(
     Math.floor(window.innerWidth / 300)
   );
-
   const cardsOnSale = useSelector(selectOnSale);
   const mainCategories = useSelector(selectMainCategories);
   const brands = useSelector(selectBrands);
   const dispatch = useDispatch();
+  const [wishList, setWishList] = useState(false);
+  const { getWishList, deleteOneItemWishList, postItemInWishList } =
+    useWishList();
+
+  useEffect(() => {
+    async function fetchWishList() {
+      const wishList = await getWishList();
+      setWishList(wishList.data.products);
+    }
+
+    fetchWishList();
+  }, []);
+
+  useEffect(() => {
+    if (wishList.length === 1) {
+      smthInWishList();
+    } else if (wishList.length === 0) {
+      emptyWishList();
+    }
+  }, [wishList.length]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -37,14 +59,6 @@ const Homepage = () => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (mainCategories.content.length || mainCategories.isLoading) {
-  //     return;
-  //   }
-
-  //   dispatch(getAllCategories());
-  // }, [dispatch, mainCategories]);
 
   useEffect(() => {
     if (brands.content.length || brands.isLoading) return;
@@ -60,9 +74,32 @@ const Homepage = () => {
   if (
     cardsOnSale.content.length === 0 ||
     mainCategories.content.length === 0 ||
-    brands.content.length === 0
+    brands.content.length === 0 ||
+    !wishList
   ) {
     return;
+  }
+
+  async function handleChangeFavorites(item) {
+    if (!!wishList.find((i) => i.id === item.id)?.id) {
+      try {
+        await toast.promise(deleteOneItemWishList(item.id), {
+          error: "Sorry, something went wrong",
+        });
+        setWishList((items) => items.filter((i) => i.id !== item.id));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await toast.promise(postItemInWishList(item.id), {
+          error: "Sorry, something went wrong",
+        });
+        setWishList((items) => [...items, item]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   return (
@@ -71,6 +108,8 @@ const Homepage = () => {
         <MainSliderForCategories items={mainCategories.content} />
         <div className={css.three_swipers}>
           <SliderForHomepage
+            onChangeFavorites={handleChangeFavorites}
+            favoriteItems={wishList}
             items={cardsOnSale.content}
             title="Your Pet Will Love These"
             type="saleSlider"
@@ -78,6 +117,8 @@ const Homepage = () => {
           />
 
           <SliderForHomepage
+            onChangeFavorites={handleChangeFavorites}
+            favoriteItems={wishList}
             items={cardsOnSale.content}
             title="On Sale"
             type="saleSlider"
