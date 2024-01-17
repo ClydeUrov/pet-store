@@ -51,9 +51,15 @@ const Header = () => {
     6: "Password Recovery",
   };
 
-  const [productsQuantity, setProductsQuantity] = useState(user ? user.countCartItems : 0);
+  const [productsQuantity, setProductsQuantity] = useState(
+    user ? user.countCartItems : 0
+  );
 
-  console.log("productsQuantity", productsQuantity, user && user.countCartItems)
+  console.log(
+    "productsQuantity",
+    productsQuantity,
+    user && user.countCartItems
+  );
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -191,18 +197,26 @@ const Header = () => {
               <FaRegHeart size={32} />
             </NavLink>
 
-            <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
+            <div
+              onClick={() => {
+                toggleModal();
+                setModalState("Cart");
+              }}
+              className={styles.option}
+            >
               <FiShoppingCart size={32} />
               {productsQuantity !== 0 && (
                 <span className={styles.numberOfCartItemsWrapper}>
-                  <span className={styles.numberOfCartItems}>{productsQuantity}</span>
+                  <span className={styles.numberOfCartItems}>
+                    {productsQuantity}
+                  </span>
                 </span>
               )}
             </div>
 
             {user && userIsLogined ? (
               <NavLink
-                to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                to={user?.role === "ADMIN" ? "/admin/orders" : "/user/account"}
                 className={styles.option}
                 style={{ backgroundColor: "#f4f6fa" }}
               >
@@ -267,10 +281,7 @@ const Header = () => {
               />
             )}
             {modalState === 6 && (
-              <PasswordRecovery
-                setModalState={setModalState}
-                token={token}
-              />
+              <PasswordRecovery setModalState={setModalState} token={token} />
             )}
           </Modal>
         ))}
