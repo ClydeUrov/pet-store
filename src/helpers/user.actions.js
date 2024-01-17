@@ -65,8 +65,8 @@ function useUserActions() {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
       UserLoginLogoutPublish("UserLogin");
-      console.log(res);
-      console.log(res);
+      console.log("LOGIN FUNC", res);
+
       if (res.data.user.role === "CLIENT") {
         navigate("user/account");
       }
@@ -172,6 +172,7 @@ function getRefreshToken() {
 
 // Set the access, token and user property
 function setUserData(data) {
+  console.log("SET USER DATA", data);
   localStorage.setItem(
     "auth",
     JSON.stringify({
