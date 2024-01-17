@@ -20,6 +20,7 @@ const Constants = () => {
   const adminActions = useAdminActions();
 
   useEffect(() => {
+    console.log(191);
     setLoading(true);
     axiosService.get(`/constants`)
       .then((resp) => {
@@ -36,12 +37,9 @@ const Constants = () => {
     const formData = new FormData();
     formData.append("value", data);
 
-    console.log(formData, data)
-
     const updatePromise = key === 'LOGO'
       ? adminActions.update(`constants/${key}`, formData)
         .then((resp) => {
-          console.log("resp", resp);
           updateConstants([
             {
               key: key,

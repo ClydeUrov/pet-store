@@ -7,6 +7,7 @@ import { StarRating } from "../StarRatings/StarRatings";
 import { Link } from "react-router-dom";
 import Button from "../CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
+import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 
 const Card = ({ item, onClick }) => {
   const { constants } = useConstants();
@@ -42,6 +43,8 @@ const Card = ({ item, onClick }) => {
       const newCart = [...existingCart, data];
   
       localStorage.setItem('cart', JSON.stringify(newCart));
+
+      CartAddEventPublish({ action: '+', id: [item.id] });
     }
   }
 

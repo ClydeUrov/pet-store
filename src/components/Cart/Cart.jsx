@@ -6,58 +6,28 @@ import Modal from "../Modal/Modal";
 import { useNavigate } from "react-router-dom";
 import { useUserActions } from "../../helpers/user.actions";
 
-const Cart = ({ user, toggleModal, setModalState, setProductsQuantity, productsQuantity }) => {
-  const [amount, setAmount] = useState(0);
+const Cart = ({ user, toggleModal, setModalState, productsQuantity }) => {
   const { constants } = useConstants();
   const navigate = useNavigate();
   const userActions = useUserActions();
 
+  const [totalAmount, setTotalAmount] = useState(0);
   const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
   const [carts, setCarts] = useState(localProducts || []);
+  console.log(productsQuantity);
 
   useEffect(() => {
-    const postBack = async () => {
-      try {
-        const userProducts = await userActions.getCarts() || { items: [] };
-        const combinedProducts = combineProducts(userProducts.items, localProducts);
-        updateLocalStorageAndState(combinedProducts);
-      } catch (error) {
-        console.error("Error fetching data from the backend:", error);
-      }
-    };
-  
-    const postLocal = async () => {
-      try {
-        localProducts && setProductsAndAmount(localProducts);
-        const userProducts = await userActions.getCarts() || { items: [] };
-        console.log("userProducts", userProducts);
-        const userProductIds = userProducts.items.map((item) => item.product.id);
-    
-        const data = localProducts
-          .filter((localProduct) => !userProductIds.includes(localProduct.product.id))
-          .map((localProduct) => ({
-            product: {
-              id: localProduct.product.id,
-            },
-            quantity: localProduct.quantity,
-          }));
-    
-        if (data.length > 0) {
-          console.log("!!!data.length!!!", data.length);
-          await userActions.postCarts(data);
-        }
-        console.log("satCarts");
-        if (carts.length !== localProducts.length) {
-          setCarts(localProducts);
-        }
-      } catch (error) {
-        console.error("Error getting or posting carts:", error);
-      }
-    };
-  
-    const combineProducts = (userProducts, localProducts) => {
-      const combinedProducts = [
-        ...userProducts.map((item) => ({
+    const combineCart = async () => {
+      CalculateTotalAmount();
+      const userProducts = await userActions.getCarts().catch((e) => console.log(e)) || { items: [] };
+      const dataForLocal = userProducts.items
+        .filter(
+          (userProduct) =>
+            !localProducts.some(
+              (localProduct) => userProduct.product.id === localProduct.product.id
+            )
+        )
+        .map((item) => ({
           product: {
             id: item.product.id,
             name: item.product.name,
@@ -68,60 +38,90 @@ const Cart = ({ user, toggleModal, setModalState, setProductsQuantity, productsQ
             mainImage: { filePath: item.product.mainImage.filePath },
           },
           quantity: item.quantity,
-        })),
-        ...localProducts,
-      ];
-  
-      return combinedProducts.filter(
-        (product, index, self) =>
-          index === self.findIndex((p) => p.product.id === product.product.id)
-      );
-    };
-  
-    const updateLocalStorageAndState = (products) => {
-      localStorage.setItem("cart", JSON.stringify(products));
-      setProductsAndAmount(products);
-      if (carts.length !== products.length) {
-        console.log(carts, products)
-        setCarts(products);
-      }
-    };
-  
-    const setProductsAndAmount = (products) => {
-      console.log("!!!@#$")
-      if (productsQuantity !== products.length) {
-        console.log("$%^&", productsQuantity, products.length)
-        setProductsQuantity(products.length);
+        }));
+
+      if (dataForLocal.length > 0) {
+        console.log(1234)
+        const combinedProducts = combineProducts(dataForLocal, localProducts);
+        localStorage.setItem("cart", JSON.stringify(combinedProducts));
+        setCarts(combinedProducts);
+        CalculateTotalAmount(combinedProducts)
       }
 
-      const totalAmount = products.reduce((acc, item) => {
-        let price = item.product.priceWithDiscount
-          ? item.product.priceWithDiscount
-          : item.product.price;
-        return acc + price * item.quantity;
-      }, 0);
-  
-      setAmount(totalAmount);
-    };
+      console.log(userProducts.items);
+      const idsNotInList = productsQuantity.filter(id => !userProducts.items.some(item => item.product.id === id));
+      console.log("idsNotInList", idsNotInList);
+      if (idsNotInList.length > 0) {
+        const dataForBack = localProducts
+          .filter(
+            (localProduct) =>
+              !userProducts.items.some(
+                (userProduct) => userProduct.product.id === localProduct.product.id
+              ) ||
+              userProducts.items.some(
+                (userProduct) => userProduct.quantity !== localProduct.quantity
+              )
+          )
+          .map((item) => ({
+            product: {
+              id: item.product.id,
+            },
+            quantity: item.quantity,
+          }));
 
-    console.log("!!!", productsQuantity, localProducts.length)
-  
-    if (user && productsQuantity > localProducts.length) {
-      console.log(1);
-      postBack();
-    } if (user && productsQuantity <= localProducts.length) {
-      console.log(2)
-      postLocal()
-    } if (!user) {
-      console.log(3)
-      updateLocalStorageAndState(localProducts)
+        if (dataForBack.length > 0) {
+          console.log(4321)
+          await userActions.postCarts(dataForBack);
+        }
+      }
     }
-  }, [user, localProducts, setProductsQuantity, setCarts]);
+      
+    if (user) {
+      combineCart()
+    } else {
+      CalculateTotalAmount(localProducts)
+    }
+  }, []);
+
+  function combineProducts (userProducts, localProducts) {
+    const combinedProducts = [
+      ...userProducts.map((item) => ({
+        product: {
+          id: item.product.id,
+          name: item.product.name,
+          price: item.product.price,
+          ...(item.product.priceWithDiscount && {
+            priceWithDiscount: item.product.priceWithDiscount,
+          }),
+          mainImage: { filePath: item.product.mainImage.filePath },
+        },
+        quantity: item.quantity,
+      })),
+      ...localProducts,
+    ];
+
+    return combinedProducts.filter(
+      (product, index, self) =>
+        index === self.findIndex((p) => p.product.id === product.product.id)
+    );
+  };
+
+  function CalculateTotalAmount(products) {
+    const itemsToCalculate = products || localProducts;
+    const totalAmount = itemsToCalculate.reduce((acc, item) => {
+      let price = item.product.priceWithDiscount
+        ? item.product.priceWithDiscount
+        : item.product.price;
+      return acc + price * item.quantity;
+    }, 0);
+
+    setTotalAmount(totalAmount);
+  }
 
   return (
-    <Modal onClose={toggleModal} title={"Cart"} cart={true}>
+    <Modal onClose={toggleModal} title={"Cart"} cart={true} productsQuantity={productsQuantity.length}>
       <div className={css.cartSection}>
-        <div>
+        <div className={css.cartList}>
           {carts.length > 0 &&
             carts.map((item) => (
               <CardinCart
@@ -131,17 +131,15 @@ const Cart = ({ user, toggleModal, setModalState, setProductsQuantity, productsQ
                 localProducts={carts}
                 setCarts={setCarts}
                 constants={constants}
-                setProductsQuantity={setProductsQuantity}
                 navigate={navigate}
+                CalculateTotalAmount={CalculateTotalAmount}
               />
             ))}
         </div>
         <div className={css.bottom}>
           <div className={css.total}>
             <p>Total:</p>{" "}
-            <p>
-              {constants[1].value} {amount.toFixed(2)}
-            </p>
+            <p>{constants[1].value} {totalAmount.toFixed(2)}</p>
           </div>
           <button onClick={() => user ? (navigate("order"), toggleModal()) : setModalState(3) } >
             Checkout

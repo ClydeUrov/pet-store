@@ -24,6 +24,7 @@ import {
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
 import Cart from "../../components/Cart/Cart";
+import { CartAddEventSubscribe, CartAddEventUnSubscribe } from "../../helpers/events/CartEvent";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
@@ -51,9 +52,30 @@ const Header = () => {
     6: "Password Recovery",
   };
 
-  const [productsQuantity, setProductsQuantity] = useState(user ? user.countCartItems : 0);
+  const [productsQuantity, setProductsQuantity] = useState([]);
 
-  console.log("productsQuantity", productsQuantity, user && user.countCartItems)
+  useEffect(() => {
+    function handleSomething(num) {
+      console.log(num.detail.action, num.detail.ids);
+    
+      setProductsQuantity((prevQuantity) => {
+        if (num.detail.action === '+') {
+          return Array.from(new Set([...prevQuantity, ...num.detail.ids]));
+        } else if (num.detail.action === '-') {
+          return prevQuantity.filter((id) => !num.detail.ids.includes(id));
+        } else if (num.detail.action === 'exit') {
+          return [];
+        }
+    
+        return prevQuantity;
+      });
+    }
+    CartAddEventSubscribe(handleSomething)
+
+    return () => {
+      CartAddEventUnSubscribe(handleSomething)
+    };
+  }, []);
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -193,9 +215,9 @@ const Header = () => {
 
             <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
               <FiShoppingCart size={32} />
-              {productsQuantity !== 0 && (
+              {productsQuantity.length > 0 && (
                 <span className={styles.numberOfCartItemsWrapper}>
-                  <span className={styles.numberOfCartItems}>{productsQuantity}</span>
+                  <span className={styles.numberOfCartItems}>{productsQuantity.length}</span>
                 </span>
               )}
             </div>

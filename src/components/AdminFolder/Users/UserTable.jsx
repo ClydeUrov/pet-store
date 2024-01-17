@@ -3,7 +3,6 @@ import Pagination from '../../Pagination/Pagination';
 import css from './Users.module.scss';
 import Modal from '../../Modal/Modal';
 import { LiaUserCheckSolid, LiaUserTimesSolid } from "react-icons/lia";
-import { useAdminActions } from '../../../helpers/user.actions';
 
 const ChangeStatus = ({ onConfirm, status }) => {
   const handleSubmit = (e) => {
@@ -59,7 +58,9 @@ const UserTable = ({ allUsers, setPage, adminAction }) => {
         <p>Created on</p>
         <p></p>
       </div>
-      {allUsers.content.map((item) => (
+      {error 
+        ? <p>{error}</p> 
+        : allUsers.content.map((item) => (
         <div
           key={item.id}
           className={css.productRow}

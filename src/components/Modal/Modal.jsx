@@ -5,7 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 
 const modalRoot = document.querySelector("#modal-root");
 
-const Modal = ({ title, children, onClose, disabledBack, cart}) => {
+const Modal = ({ title, children, onClose, disabledBack, cart, productsQuantity}) => {
   //  const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Modal = ({ title, children, onClose, disabledBack, cart}) => {
           <button className={css.icon} onClick={handleBackdropClick}>
             <RxCross1 size={20} onClick={handleBackdropClick} />
           </button>
-          {title ? <h2 className={css.title}>{title}</h2> : null}
+          {title ? <h2 className={css.title}>{title} {productsQuantity ? <p>{productsQuantity}</p> : null}</h2> : null}
 
           {children}
         </div>
