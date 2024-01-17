@@ -7,11 +7,19 @@ import useWishList from "../../helpers/wishList.actions";
 import Loader from "../../components/Loader/Loader";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { toast } from "react-toastify";
+import { useUserActions } from "../../helpers/user.actions";
 
 function Favorites() {
   const { getWishList, deleteOneItemWishList } = useWishList();
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { postCarts } = useUserActions();
+  const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
+    return items.every((el) => el.notAvailable);
+  });
+
+  console.log(isAvaibleBtn);
+  console.log(items);
 
   useEffect(() => {
     async function fetchWishList() {
@@ -19,6 +27,7 @@ function Favorites() {
         setIsLoading(true);
         const wishList = await getWishList();
         setItems(wishList.data.products);
+        setIsAvaibleBtn(items.every((el) => !el.notAvailable));
       } catch (error) {
         console.log(error);
       } finally {
@@ -28,11 +37,14 @@ function Favorites() {
 
     fetchWishList();
   }, []);
+
   useEffect(() => {
     if (items.length === 0 && !isLoading) {
       emptyWishList();
     }
   }, [items, items.length, isLoading]);
+
+  if (isLoading) return <Loader />;
 
   async function handleDeleteItem(id) {
     try {
@@ -46,7 +58,29 @@ function Favorites() {
     }
   }
 
-  if (isLoading) return <Loader />;
+  function handleAddAllToCart() {
+    try {
+      setIsAvaibleBtn(true);
+      toast.promise(
+        () =>
+          postCarts(
+            items.map((item) => ({
+              product: {
+                id: item.id,
+              },
+              quantity: 1,
+            }))
+          ),
+        {
+          error: "Happend some problem with adding items to card 😔",
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsAvaibleBtn(false);
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -77,7 +111,14 @@ function Favorites() {
             ))}
           </div>
           <div className={styles.btn_wrapper}>
-            <button className={styles.btn}>Add all to Cart</button>
+            <button
+              onClick={handleAddAllToCart}
+              className={`${
+                isAvaibleBtn ? styles.btn : styles.not_avaible_btn
+              }`}
+            >
+              Add all to Cart
+            </button>
           </div>
         </>
       ) : (

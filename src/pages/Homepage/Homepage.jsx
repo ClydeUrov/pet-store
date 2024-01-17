@@ -31,10 +31,19 @@ const Homepage = () => {
   const { getWishList, deleteOneItemWishList, postItemInWishList } =
     useWishList();
 
+  // toast("ZALUPA");
   useEffect(() => {
     async function fetchWishList() {
-      const wishList = await getWishList();
-      setWishList(wishList.data.products);
+      try {
+        const wishList = await getWishList();
+        setWishList(wishList.data.products);
+      } catch (error) {
+        toast.error(
+          error?.response?.status === 401
+            ? `something went wrong with loading your "wish list", please logout and login again. 🙏`
+            : `something wrong with loading your wish list`
+        );
+      }
     }
 
     fetchWishList();

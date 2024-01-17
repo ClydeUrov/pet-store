@@ -37,7 +37,8 @@
   justify-content: center;
   align-items: center;
 }
-.btn {
+.btn,
+.not_avaible_btn {
   margin: 5rem 0;
   width: 30%;
   padding: 0.4rem 2rem;
@@ -46,13 +47,24 @@
   border: none;
   border-radius: 999px;
   height: 8vh;
-  background-color: $main-color;
+}
 
+.btn {
+  background-color: $main-color;
   &:hover {
     cursor: pointer;
     background-color: $hover-color;
   }
 }
+
+.not_avaible_btn {
+  background-color: $outstock-btn;
+
+  &:hover {
+    cursor: not-allowed;
+  }
+}
+
 .items_wrapper {
   height: 20rem;
   overflow-y: auto;

@@ -216,6 +216,7 @@ const Header = () => {
             {user && userIsLogined ? (
               <NavLink
                 to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                // to="/user/account"
                 className={styles.option}
                 style={{ backgroundColor: "#f4f6fa" }}
               >

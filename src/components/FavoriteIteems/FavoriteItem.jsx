@@ -3,6 +3,8 @@ import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import styles from "./FavoriteItem.module.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
+import { useUserActions } from "../../helpers/user.actions";
+import { toast } from "react-toastify";
 function FavoriteItem({
   price,
   imgSrc,
@@ -13,14 +15,35 @@ function FavoriteItem({
   id,
 }) {
   const correctname = name.length > 90 ? name.slice(0, 35) + "..." : name;
-  // const correctname = name;
   const [isLoading, setIsLoading] = useState(false);
+  const { postCarts } = useUserActions();
 
   const { constants } = useConstants();
   async function handleDelete() {
     setIsLoading(true);
     await onDelete(id);
     setIsLoading(false);
+  }
+
+  async function handleAddOneItemToCart(item) {
+    try {
+      await toast.promise(
+        () =>
+          postCarts([
+            {
+              product: {
+                id: item.id,
+              },
+              quantity: 1,
+            },
+          ]),
+        {
+          error: "Happend some problem with adding this item to card 😔",
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -53,7 +76,11 @@ function FavoriteItem({
       </span>
       <div className={styles.buttton_cont}>
         <button
-          className={!notAvailable ? styles.avaible_btn : styles.unAvaible_btn}
+          className={
+            !notAvailable && !isLoading
+              ? styles.avaible_btn
+              : styles.unAvaible_btn
+          }
         >
           Add to Cart
         </button>
