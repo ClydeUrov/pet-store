@@ -7,7 +7,8 @@ import useWishList from "../../helpers/wishList.actions";
 import Loader from "../../components/Loader/Loader";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { toast } from "react-toastify";
-import { useUserActions } from "../../helpers/user.actions";
+import { getUser, useUserActions } from "../../helpers/user.actions";
+import { setWishListLS } from "../../helpers/wishListLS";
 
 function Favorites() {
   const { getWishList, deleteOneItemWishList } = useWishList();
@@ -18,13 +19,11 @@ function Favorites() {
     return items.every((el) => el.notAvailable);
   });
 
-  console.log(isAvaibleBtn);
-  console.log(items);
-
   useEffect(() => {
     async function fetchWishList() {
       try {
         setIsLoading(true);
+
         const wishList = await getWishList();
         setItems(wishList.data.products);
         setIsAvaibleBtn(items.every((el) => !el.notAvailable));
@@ -34,8 +33,11 @@ function Favorites() {
         setIsLoading(false);
       }
     }
-
-    fetchWishList();
+    if (getUser()) {
+      fetchWishList();
+    } else {
+      getWishList();
+    }
   }, []);
 
   useEffect(() => {
@@ -48,13 +50,20 @@ function Favorites() {
 
   async function handleDeleteItem(id) {
     try {
-      await toast.promise(deleteOneItemWishList(id), {
-        error: "Sorry, something went wrong",
-      });
-      setItems((items) => items.filter((el) => el.id !== id));
+      setIsAvaibleBtn(true);
+      const corrWishList = items.filter((el) => el.id !== id);
+      if (getUser()) {
+        await toast.promise(deleteOneItemWishList(id), {
+          error: "Sorry, something went wrong",
+        });
+      } else {
+        setWishListLS(corrWishList);
+      }
+      setItems(corrWishList);
     } catch (error) {
       console.log(error);
     } finally {
+      setIsAvaibleBtn(false);
     }
   }
 

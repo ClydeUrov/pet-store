@@ -18,6 +18,8 @@ import {
   smthInWishList,
 } from "../../helpers/events/LoginLogout";
 import { toast } from "react-toastify";
+import { getUser } from "../../helpers/user.actions";
+import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 const Homepage = () => {
   const [slidesPerView, setSlidesPerView] = useState(
@@ -31,7 +33,8 @@ const Homepage = () => {
   const { getWishList, deleteOneItemWishList, postItemInWishList } =
     useWishList();
 
-  // toast("ZALUPA");
+  console.log(getWishListLS(), wishList);
+
   useEffect(() => {
     async function fetchWishList() {
       try {
@@ -45,8 +48,12 @@ const Homepage = () => {
         );
       }
     }
-
-    fetchWishList();
+    if (getUser()) {
+      fetchWishList();
+    } else {
+      setWishList(getWishListLS() || []);
+    }
+    console.log(wishList, getWishListLS());
   }, []);
 
   useEffect(() => {
@@ -92,19 +99,29 @@ const Homepage = () => {
   async function handleChangeFavorites(item) {
     if (!!wishList.find((i) => i.id === item.id)?.id) {
       try {
-        await toast.promise(deleteOneItemWishList(item.id), {
-          error: "Sorry, something went wrong",
-        });
-        setWishList((items) => items.filter((i) => i.id !== item.id));
+        const corrWishList = wishList.filter((i) => i.id !== item.id);
+        if (getUser()) {
+          await toast.promise(deleteOneItemWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishListLS(corrWishList);
+        }
+        setWishList(corrWishList);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        await toast.promise(postItemInWishList(item.id), {
-          error: "Sorry, something went wrong",
-        });
-        setWishList((items) => [...items, item]);
+        const corrWishList = [...wishList, item];
+        if (getUser()) {
+          await toast.promise(postItemInWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishList(corrWishList);
+        }
+        setWishList(corrWishList);
       } catch (error) {
         console.log(error);
       }

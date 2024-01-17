@@ -1,12 +1,10 @@
 import axios from "axios";
-import { useUserActions } from "./user.actions";
+import { getAccessToken, useUserActions } from "./user.actions";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
 
 function useWishList() {
-  const { getAccessToken } = useUserActions();
-
   return {
     getWishList,
     postItemInWishList,
