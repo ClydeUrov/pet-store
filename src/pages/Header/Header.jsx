@@ -213,11 +213,19 @@ const Header = () => {
               <FaRegHeart size={32} />
             </NavLink>
 
-            <div onClick={() => {toggleModal(); setModalState("Cart")}} className={styles.option}>
+            <div
+              onClick={() => {
+                toggleModal();
+                setModalState("Cart");
+              }}
+              className={styles.option}
+            >
               <FiShoppingCart size={32} />
               {productsQuantity.length > 0 && (
                 <span className={styles.numberOfCartItemsWrapper}>
-                  <span className={styles.numberOfCartItems}>{productsQuantity.length}</span>
+                  <span className={styles.numberOfCartItems}>
+                    {productsQuantity.length}
+                  </span>
                 </span>
               )}
             </div>
@@ -265,7 +273,6 @@ const Header = () => {
           <Modal
             onClose={toggleModal}
             title={modalTitles[modalState]}
-            // disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
               <RegisterForm
@@ -289,10 +296,7 @@ const Header = () => {
               />
             )}
             {modalState === 6 && (
-              <PasswordRecovery
-                setModalState={setModalState}
-                token={token}
-              />
+              <PasswordRecovery setModalState={setModalState} token={token} />
             )}
           </Modal>
         ))}

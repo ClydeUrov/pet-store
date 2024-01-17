@@ -21,7 +21,7 @@ function useUserActions() {
     getCarts,
     deleteCart,
     deleteAllCarts,
-    postCarts
+    postCarts,
   };
 
   // Get profile
@@ -66,10 +66,10 @@ function useUserActions() {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
       UserLoginLogoutPublish("UserLogin");
-      if (res.data.user.role === "CLIENT") {
+      if (res.data.userDto.role === "CLIENT") {
         navigate("user/account");
       }
-      if (res.data.user.role === "ADMIN") {
+      if (res.data.userDto.role === "ADMIN") {
         navigate("admin/orders");
       }
     });
@@ -77,8 +77,7 @@ function useUserActions() {
 
   // Login the user
   function register(data, path) {
-    return axios
-      .post(`${baseURL}auth/register?path=${path}`, data)
+    return axios.post(`${baseURL}auth/register?path=${path}`, data);
   }
 
   // Logout the user
@@ -114,13 +113,13 @@ function useUserActions() {
   function deleteCart(itemId) {
     return axiosService.delete(`${baseURL}carts/items/${itemId}`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
-    })
+    });
   }
 
   function deleteAllCarts() {
     return axiosService.delete(`${baseURL}carts/items`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
-    })
+    });
   }
 }
 
@@ -170,6 +169,7 @@ function getRefreshToken() {
 
 // Set the access, token and user property
 function setUserData(data) {
+  console.log("SET USER DATA", data);
   localStorage.setItem(
     "auth",
     JSON.stringify({
@@ -178,8 +178,6 @@ function setUserData(data) {
       user: data.user,
     })
   );
-
-  console.log(data.cart);
 
   if (data.cart.items.length > 0) {
     let carts = [];
