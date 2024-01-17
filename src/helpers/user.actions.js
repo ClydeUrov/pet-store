@@ -20,7 +20,7 @@ function useUserActions() {
     getCarts,
     deleteCart,
     deleteAllCarts,
-    postCarts
+    postCarts,
   };
 
   // Get profile
@@ -65,10 +65,12 @@ function useUserActions() {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
       UserLoginLogoutPublish("UserLogin");
-      if (res.data.userDto.role === "CLIENT") {
+      console.log(res);
+      console.log(res);
+      if (res.data.user.role === "CLIENT") {
         navigate("user/account");
       }
-      if (res.data.userDto.role === "ADMIN") {
+      if (res.data.user.role === "ADMIN") {
         navigate("admin/orders");
       }
     });
@@ -76,8 +78,7 @@ function useUserActions() {
 
   // Login the user
   function register(data, path) {
-    return axios
-      .post(`${baseURL}auth/register?path=${path}`, data)
+    return axios.post(`${baseURL}auth/register?path=${path}`, data);
   }
 
   // Logout the user
@@ -97,28 +98,32 @@ function useUserActions() {
   }
 
   async function getCarts() {
-    return await axios.get(`${baseURL}carts`, {
-      headers: { Authorization: "Bearer " + getAccessToken() },
-    }).then((resp) => resp.data)
+    return await axios
+      .get(`${baseURL}carts`, {
+        headers: { Authorization: "Bearer " + getAccessToken() },
+      })
+      .then((resp) => resp.data);
   }
 
   async function postCarts(data) {
-    return await axios.post(`${baseURL}carts/items`, data, {
-      headers: { Authorization: "Bearer " + getAccessToken() },
-    }).then((resp) => resp.data)
+    return await axios
+      .post(`${baseURL}carts/items`, data, {
+        headers: { Authorization: "Bearer " + getAccessToken() },
+      })
+      .then((resp) => resp.data);
   }
 
   function deleteCart(itemId) {
-    console.log("itemId", itemId)
+    console.log("itemId", itemId);
     return axios.delete(`${baseURL}carts/items/${itemId}`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
-    })
+    });
   }
 
   function deleteAllCarts() {
     return axios.delete(`${baseURL}carts/items`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
-    })
+    });
   }
 }
 
@@ -172,7 +177,7 @@ function setUserData(data) {
     JSON.stringify({
       access: data.accessToken,
       refresh: data.refreshToken,
-      user: data.userDto,
+      user: data.user,
     })
   );
 }
