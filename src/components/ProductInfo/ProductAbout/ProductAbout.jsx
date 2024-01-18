@@ -13,6 +13,8 @@ const ProductAbout = ({ product }) => {
     brand,
     prescription,
     contraindications,
+    material,
+    color,
   } = product;
 
   return (
@@ -97,6 +99,28 @@ const ProductAbout = ({ product }) => {
                       <span className={css.line}></span>
                     </td>
                     <td className={css.table_data}>{contraindications}</td>
+                  </>
+                )}
+              </tr>
+              <tr className={css.table_row}>
+                {material && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Material</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{material.name}</td>
+                  </>
+                )}
+              </tr>
+              <tr className={css.table_row}>
+                {color && (
+                  <>
+                    <td className={css.table_title}>
+                      <p className={css.table_title_box}>Color</p>
+                      <span className={css.line}></span>
+                    </td>
+                    <td className={css.table_data}>{color.name}</td>
                   </>
                 )}
               </tr>

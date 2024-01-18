@@ -8,9 +8,12 @@ import {
   smthInWishListSubscribe,
   smthInWishListUnsubscribe,
 } from "../../helpers/events/LoginLogout";
+import { getWishListLS } from "../../helpers/wishListLS";
 
 function FavoriteIconInHeader() {
-  const [favorites, setFavorites] = useState(true);
+  const [favorites, setFavorites] = useState(
+    getWishListLS().length ? true : false
+  );
 
   useEffect(() => {
     function handleEmpty() {

@@ -1,13 +1,13 @@
 export { getWishListLS, setWishListLS };
 
-const wishListNoUser = "wishListNoUser";
+const wishList = "wishList";
 
 function getWishListLS() {
-  const wishList = localStorage.getItem(wishListNoUser);
-
-  return JSON.parse(wishList);
+  const dataLS = localStorage.getItem(wishList);
+  if (!dataLS) return [];
+  return JSON.parse(dataLS);
 }
 
 function setWishListLS(items) {
-  localStorage.setItem(wishListNoUser, JSON.stringify(items));
+  localStorage.setItem(wishList, JSON.stringify(items));
 }
