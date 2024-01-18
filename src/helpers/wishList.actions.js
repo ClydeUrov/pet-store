@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken, useUserActions } from "./user.actions";
+import { getAccessToken } from "./user.actions";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";

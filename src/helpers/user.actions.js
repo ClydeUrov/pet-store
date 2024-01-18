@@ -64,10 +64,10 @@ function useUserActions() {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
       UserLoginLogoutPublish("UserLogin");
-      if (res.data.userDto.role === "CLIENT") {
+      if (res.data.user.role === "CLIENT") {
         navigate("user/account");
       }
-      if (res.data.userDto.role === "ADMIN") {
+      if (res.data.user.role === "ADMIN") {
         navigate("admin/orders");
       }
     });

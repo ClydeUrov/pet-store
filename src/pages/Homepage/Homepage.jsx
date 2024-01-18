@@ -33,8 +33,6 @@ const Homepage = () => {
   const { getWishList, deleteOneItemWishList, postItemInWishList } =
     useWishList();
 
-  console.log(getWishListLS(), wishList);
-
   useEffect(() => {
     async function fetchWishList() {
       try {
@@ -53,7 +51,6 @@ const Homepage = () => {
     } else {
       setWishList(getWishListLS() || []);
     }
-    console.log(wishList, getWishListLS());
   }, []);
 
   useEffect(() => {
@@ -107,19 +104,20 @@ const Homepage = () => {
         } else {
           setWishListLS(corrWishList);
         }
-        setWishList(corrWishList);
+        setWishListLS(corrWishList);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
         const corrWishList = [...wishList, item];
+
         if (getUser()) {
           await toast.promise(postItemInWishList(item.id), {
             error: "Sorry, something went wrong",
           });
         } else {
-          setWishList(corrWishList);
+          setWishListLS(corrWishList);
         }
         setWishList(corrWishList);
       } catch (error) {

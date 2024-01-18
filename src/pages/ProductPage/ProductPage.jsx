@@ -31,6 +31,8 @@ import {
 import { getOnSale } from "../../redux/cards/operations";
 import Loader from "../../components/Loader/Loader";
 import { toast } from "react-toastify";
+import { getUser } from "../../helpers/user.actions";
+import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 const ProductPage = () => {
   const [showAboutPage, setShowAboutPage] = useState(true);
@@ -46,7 +48,7 @@ const ProductPage = () => {
   const { productId } = useParams();
   const { getWishList, deleteOneItemWishList, postItemInWishList } =
     useWishList();
-  const [favoriteItems, setFavoriteItems] = useState(false);
+  const [favoriteItems, setFavoriteItems] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [favoriteIsLoading, setFavoriteIsLoading] = useState(false);
@@ -59,11 +61,6 @@ const ProductPage = () => {
         setIsLoading(true);
         const wishList = await getWishList();
         setFavoriteItems(wishList.data.products);
-        setIsFavorite(() =>
-          wishList.data.products.find((i) => i.id === product?.id)
-            ? true
-            : false
-        );
       } catch (error) {
         console.log(error);
       } finally {
@@ -71,8 +68,14 @@ const ProductPage = () => {
       }
     }
 
-    fetchWishList();
-  }, []);
+    if (getUser()) {
+      fetchWishList();
+    } else {
+      setFavoriteItems(getWishListLS() || []);
+      setIsLoading(false);
+    }
+    setIsFavorite(!!favoriteItems.find((i) => i.id === product?.id));
+  }, [favoriteItems, product?.id]);
 
   useEffect(() => {
     if (favoriteItems.length >= 1) {
@@ -139,10 +142,15 @@ const ProductPage = () => {
     if (!!favoriteItems.find((i) => i.id === item.id)?.id) {
       try {
         setFavoriteIsLoading(true);
-        await toast.promise(deleteOneItemWishList(item.id), {
-          error: "Sorry, something went wrong",
-        });
-        setFavoriteItems((items) => items.filter((i) => i.id !== item.id));
+        const corrWishList = favoriteItems.filter((i) => i.id !== item.id);
+        if (getUser()) {
+          await toast.promise(deleteOneItemWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishListLS(corrWishList);
+        }
+        setFavoriteItems(corrWishList);
         setIsFavorite(false);
       } catch (error) {
         console.log(error);
@@ -152,10 +160,16 @@ const ProductPage = () => {
     } else {
       try {
         setFavoriteIsLoading(true);
-        await toast.promise(postItemInWishList(item.id), {
-          error: "Sorry, something went wrong",
-        });
-        setFavoriteItems((items) => [...items, item]);
+        const corrWishList = [...favoriteItems, item];
+
+        if (getUser()) {
+          await toast.promise(postItemInWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishListLS(corrWishList);
+        }
+        setFavoriteItems(corrWishList);
         setIsFavorite(true);
       } catch (error) {
         console.log(error);

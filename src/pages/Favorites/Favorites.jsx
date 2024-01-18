@@ -8,7 +8,7 @@ import Loader from "../../components/Loader/Loader";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { toast } from "react-toastify";
 import { getUser, useUserActions } from "../../helpers/user.actions";
-import { setWishListLS } from "../../helpers/wishListLS";
+import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 function Favorites() {
   const { getWishList, deleteOneItemWishList } = useWishList();
@@ -26,7 +26,6 @@ function Favorites() {
 
         const wishList = await getWishList();
         setItems(wishList.data.products);
-        setIsAvaibleBtn(items.every((el) => !el.notAvailable));
       } catch (error) {
         console.log(error);
       } finally {
@@ -36,9 +35,15 @@ function Favorites() {
     if (getUser()) {
       fetchWishList();
     } else {
-      getWishList();
+      setItems(getWishListLS());
+      setIsLoading(false);
     }
   }, []);
+
+  useEffect(
+    () => setIsAvaibleBtn(!items.some((el) => el.notAvailable)),
+    [items]
+  );
 
   useEffect(() => {
     if (items.length === 0 && !isLoading) {
@@ -50,7 +55,6 @@ function Favorites() {
 
   async function handleDeleteItem(id) {
     try {
-      setIsAvaibleBtn(true);
       const corrWishList = items.filter((el) => el.id !== id);
       if (getUser()) {
         await toast.promise(deleteOneItemWishList(id), {
@@ -62,14 +66,11 @@ function Favorites() {
       setItems(corrWishList);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsAvaibleBtn(false);
     }
   }
 
   function handleAddAllToCart() {
     try {
-      setIsAvaibleBtn(true);
       toast.promise(
         () =>
           postCarts(
@@ -86,8 +87,6 @@ function Favorites() {
       );
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsAvaibleBtn(false);
     }
   }
 

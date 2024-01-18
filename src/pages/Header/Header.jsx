@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
