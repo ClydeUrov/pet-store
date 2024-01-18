@@ -89,7 +89,7 @@ function useUserActions() {
         },
       })
       .then(() => {
-        CartAddEventPublish({ action: 'exit', id: [] });
+        CartAddEventPublish({ action: "exit", id: [] });
         localStorage.removeItem("auth");
         localStorage.removeItem("cart");
         localStorage.removeItem("constants");
@@ -99,15 +99,19 @@ function useUserActions() {
   }
 
   async function getCarts() {
-    return await axiosService.get(`${baseURL}carts`, {
-      headers: { Authorization: "Bearer " + getAccessToken() },
-    }).then((resp) => resp.data)
+    return await axiosService
+      .get(`${baseURL}carts`, {
+        headers: { Authorization: "Bearer " + getAccessToken() },
+      })
+      .then((resp) => resp.data);
   }
 
   async function postCarts(data) {
-    return await axiosService.post(`${baseURL}carts/items`, data, {
-      headers: { Authorization: "Bearer " + getAccessToken() },
-    }).then((resp) => resp.data)
+    return await axiosService
+      .post(`${baseURL}carts/items`, data, {
+        headers: { Authorization: "Bearer " + getAccessToken() },
+      })
+      .then((resp) => resp.data);
   }
 
   function deleteCart(itemId) {
@@ -181,7 +185,7 @@ function setUserData(data) {
   if (data.cart.items.length > 0) {
     let carts = [];
     let ids = [];
-    const localProducts = JSON.parse(localStorage.getItem("cart")) || []
+    const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
 
     data.cart.items.forEach((item) => {
       const productData = {
@@ -189,7 +193,9 @@ function setUserData(data) {
           id: item.product.id,
           name: item.product.name,
           price: item.product.price,
-          ...(item.product.priceWithDiscount && { priceWithDiscount: item.product.priceWithDiscount }),
+          ...(item.product.priceWithDiscount && {
+            priceWithDiscount: item.product.priceWithDiscount,
+          }),
           mainImage: { filePath: item.product.mainImage.filePath },
         },
         quantity: item.quantity,
@@ -198,11 +204,13 @@ function setUserData(data) {
       ids.push(item.product.id);
     });
 
-    const additionalProducts = localProducts.filter((item) => !ids.includes(item.product.id));
+    const additionalProducts = localProducts.filter(
+      (item) => !ids.includes(item.product.id)
+    );
     carts = carts.concat(additionalProducts);
 
-    localStorage.setItem('cart', JSON.stringify(carts));
-    CartAddEventPublish({ action: '+', id: ids });
+    localStorage.setItem("cart", JSON.stringify(carts));
+    CartAddEventPublish({ action: "+", id: ids });
   }
 }
 

@@ -1,6 +1,5 @@
-import React from 'react'
-import style from './Button.module.scss'
-
+import React from "react";
+import style from "./Button.module.scss";
 
 const Button = ({ type, text, onClickHandler, isDisabled, buttonSize }) => {
   const buttonClassName = isDisabled ? style.btnDisabled : style.button;
@@ -10,10 +9,16 @@ const Button = ({ type, text, onClickHandler, isDisabled, buttonSize }) => {
     color: buttonSize === "cancel" ? "#ffad4d" : null,
   };
   return (
-    <button type={type} className={buttonClassName} style={buttonStyle} onClick={() => onClickHandler()} disabled={isDisabled}>
+    <button
+      type={type}
+      className={buttonClassName}
+      style={buttonStyle}
+      disabled={isDisabled}
+      onClick={onClickHandler}
+    >
       {text}
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

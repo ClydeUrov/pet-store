@@ -1,0 +1,15 @@
+@import "../../../src/variables";
+
+.wrapper {
+  min-height: 40vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #a3a3a3;
+  & h3 {
+    color: #a3a3a3;
+    font-size: 2rem;
+  }
+}

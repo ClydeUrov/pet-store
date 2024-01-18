@@ -1,7 +1,5 @@
 import css from "./UserPage.module.scss";
 import { useState } from "react";
-// import { useState, useEffect } from 'react';
-// import { useSelector } from 'react-redux';
 import Modal from "../../components/Modal/Modal";
 import LogOutForm from "../../components/AuthForm/LogOutForm";
 

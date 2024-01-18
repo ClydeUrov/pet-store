@@ -7,8 +7,8 @@ import {
   AiOutlinePlus,
   AiOutlineMinus,
 } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import { selectAllItems, selectFavorites } from "../../redux/cards/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllItems } from "../../redux/cards/selectors";
 import { fetchProductById } from "../../helpers/api";
 import { useState, useEffect } from "react";
 import { selectOnSale } from "../../redux/cards/selectors";
@@ -23,6 +23,17 @@ import StarRatingNew from "../../components/StarRatings/StarRatingNew";
 import { useParams } from "react-router-dom";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
+import useWishList from "../../helpers/wishList.actions";
+import {
+  smthInWishList,
+  emptyWishList,
+} from "../../helpers/events/LoginLogout";
+import { getOnSale } from "../../redux/cards/operations";
+import Loader from "../../components/Loader/Loader";
+import { toast } from "react-toastify";
+import { getUser } from "../../helpers/user.actions";
+import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
+
 const ProductPage = () => {
   const [showAboutPage, setShowAboutPage] = useState(true);
   const [showInstructionsPage, setShowInstructionsPage] = useState(false);
@@ -35,11 +46,44 @@ const ProductPage = () => {
     Math.floor(window.innerWidth / 300)
   );
   const { productId } = useParams();
-
-  const favorites = useSelector(selectFavorites);
+  const { getWishList, deleteOneItemWishList, postItemInWishList } =
+    useWishList();
+  const [favoriteItems, setFavoriteItems] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [favoriteIsLoading, setFavoriteIsLoading] = useState(false);
   const { content: cardsOnSale } = useSelector(selectOnSale);
-
   const [quantityOfItemToAddInCart, setQuantityOfItemToAddInCart] = useState(1);
+
+  useEffect(() => {
+    async function fetchWishList() {
+      try {
+        setIsLoading(true);
+        const wishList = await getWishList();
+        setFavoriteItems(wishList.data.products);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    if (getUser()) {
+      fetchWishList();
+    } else {
+      setFavoriteItems(getWishListLS() || []);
+      setIsLoading(false);
+    }
+    setIsFavorite(!!favoriteItems.find((i) => i.id === product?.id));
+  }, [favoriteItems, product?.id]);
+
+  useEffect(() => {
+    if (favoriteItems.length >= 1) {
+      smthInWishList();
+    } else if (favoriteItems.length === 0) {
+      emptyWishList();
+    }
+  }, [favoriteItems.length]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -53,6 +97,13 @@ const ProductPage = () => {
     };
   }, []);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (cardsOnSale.length || cardsOnSale.isLoading) return;
+    dispatch(getOnSale());
+  }, [dispatch, cardsOnSale]);
+
   useEffect(() => {
     if (
       cardsOnSale?.length > 0 &&
@@ -65,16 +116,18 @@ const ProductPage = () => {
     ) {
       setProduct(allItems.items.content.find((e) => e.id === +productId));
     } else {
+      setIsLoading(true);
       fetchProductById(productId)
         .then(setProduct)
+        .then(() => setIsLoading(false))
         .catch((error) => {
           console.log("Error", error);
         });
     }
   }, [productId, allItems.items, cardsOnSale]);
 
-  if (!product || !cardsOnSale) {
-    return;
+  if (!product || !cardsOnSale || !favoriteItems || isLoading) {
+    return <Loader />;
   }
 
   const productNoAvaible = product.notAvailable;
@@ -85,25 +138,46 @@ const ProductPage = () => {
       setQuantityOfItemToAddInCart((quantity) => quantity - 1);
   }
 
-  const handleAddOrDeleteFavorite = ({ item }) => {
-    // if (!isLogged) {
-    //   console.log('The user must be logged in to use this functionality!');
-    //   return
-    // toast.warn(
-    //   'The user must be logged in to use this functionality!'
-    // );
-    // }
-    // if (!favorites.find((favorite) => favorite.id === item.id)) {
-    //   console.log("This item has been successfully added to favorites!");
-    // dispatch(addToFavorite(item._id));
-    // toast.success(`This item has been successfully added to favorites!`);
-    //   return;
-    // }
-    console.log("This item was successfully removed from favorites!");
-    // dispatch(deleteFromFavorite(item._id));
-    // toast.success(`This item was successfully removed from favorites!`);
-    return;
-  };
+  async function handleAddOrDeleteFavorite(item) {
+    if (!!favoriteItems.find((i) => i.id === item.id)?.id) {
+      try {
+        setFavoriteIsLoading(true);
+        const corrWishList = favoriteItems.filter((i) => i.id !== item.id);
+        if (getUser()) {
+          await toast.promise(deleteOneItemWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishListLS(corrWishList);
+        }
+        setFavoriteItems(corrWishList);
+        setIsFavorite(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setFavoriteIsLoading(false);
+      }
+    } else {
+      try {
+        setFavoriteIsLoading(true);
+        const corrWishList = [...favoriteItems, item];
+
+        if (getUser()) {
+          await toast.promise(postItemInWishList(item.id), {
+            error: "Sorry, something went wrong",
+          });
+        } else {
+          setWishListLS(corrWishList);
+        }
+        setFavoriteItems(corrWishList);
+        setIsFavorite(true);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setFavoriteIsLoading(false);
+      }
+    }
+  }
 
   function handleSetStarRating(e) {
     console.log(`You set rating to ${e}`);
@@ -201,10 +275,13 @@ const ProductPage = () => {
                 isDisabled={productNoAvaible}
               />
               <button
-                onClick={handleAddOrDeleteFavorite}
-                className={css.favourite_icon}
+                onClick={() => handleAddOrDeleteFavorite(product)}
+                disabled={favoriteIsLoading}
+                className={`${css.favourite_icon} ${isFavorite && css.full} ${
+                  favoriteIsLoading ? css.notAllowed : css.allowed
+                }`}
               >
-                {!favorites.find((favorite) => favorite.id === product.id) ? (
+                {!isFavorite ? (
                   <AiOutlineHeart size={44} />
                 ) : (
                   <AiFillHeart size={44} />
@@ -260,6 +337,8 @@ const ProductPage = () => {
         </div>
 
         <SliderForHomepage
+          favoriteItems={favoriteItems}
+          onChangeFavorites={handleAddOrDeleteFavorite}
           onClick={handlerClickOnSaleItem}
           items={cardsOnSale}
           title="On Sale"

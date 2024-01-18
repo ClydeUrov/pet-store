@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
-import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
@@ -25,6 +24,7 @@ import {
 } from "../../helpers/events/LoginLogout";
 import Cart from "../../components/Cart/Cart";
 import { CartAddEventSubscribe, CartAddEventUnSubscribe } from "../../helpers/events/CartEvent";
+import FavoriteIconInHeader from "../../components/FavoriteIconInHeader/FavoriteIconInHeader";
 
 const Header = () => {
   const token = new URLSearchParams(window.location.search).get("token");
@@ -209,9 +209,7 @@ const Header = () => {
           </div>
 
           <div className={styles.options}>
-            <NavLink to="/favorites" className={styles.option}>
-              <FaRegHeart size={32} />
-            </NavLink>
+            <FavoriteIconInHeader />
 
             <div
               onClick={() => {
@@ -233,6 +231,7 @@ const Header = () => {
             {user && userIsLogined ? (
               <NavLink
                 to={user.role === "ADMIN" ? "/admin/orders" : "/user/account"}
+                // to="/user/account"
                 className={styles.option}
                 style={{ backgroundColor: "#f4f6fa" }}
               >
