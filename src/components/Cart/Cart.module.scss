@@ -133,7 +133,7 @@
 
 .cardPrice {
   color: $text-color;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.33;
 }
@@ -149,4 +149,21 @@
 
 .product_price_with_discount {
   color: $error-color;
+}
+
+.cartList {
+  height: 600px;
+  overflow-y: auto;
+  overflow-X: hidden;
+  padding: 0 10px;
+  width: 440px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #a5b1b2;
+    border-radius: 6px;
+  }
 }

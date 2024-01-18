@@ -3,8 +3,6 @@ import Pagination from '../../Pagination/Pagination';
 import css from './Users.module.scss';
 import Modal from '../../Modal/Modal';
 import { LiaUserCheckSolid, LiaUserTimesSolid } from "react-icons/lia";
-import axiosService from '../../../helpers/axios';
-import { useAdminActions } from '../../../helpers/user.actions';
 
 const ChangeStatus = ({ onConfirm, status }) => {
   const handleSubmit = (e) => {
@@ -26,8 +24,7 @@ const ChangeStatus = ({ onConfirm, status }) => {
   );
 }
 
-const UserTable = ({ allUsers, setPage }) => {
-  const adminAction = useAdminActions();
+const UserTable = ({ allUsers, setPage, adminAction }) => {
   const [isModal, setModal] = useState(false);
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState('');
@@ -37,9 +34,7 @@ const UserTable = ({ allUsers, setPage }) => {
       .updateStatus(
         `users/${selected.email}/status?status=${selected.status === "ACTIVE" ? "BLOCKED" : "ACTIVE"}`
       )
-      .then(closeModal())
       .catch((e) => {
-        console.log(e)
         e.response ? setError(e.response.data.message) : setError(e.message)
       })
 
@@ -63,7 +58,9 @@ const UserTable = ({ allUsers, setPage }) => {
         <p>Created on</p>
         <p></p>
       </div>
-      {allUsers.content.map((item) => (
+      {error 
+        ? <p>{error}</p> 
+        : allUsers.content.map((item) => (
         <div
           key={item.id}
           className={css.productRow}

@@ -23,6 +23,7 @@ import {
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
 import Cart from "../../components/Cart/Cart";
+import { CartAddEventSubscribe, CartAddEventUnSubscribe } from "../../helpers/events/CartEvent";
 import FavoriteIconInHeader from "../../components/FavoriteIconInHeader/FavoriteIconInHeader";
 
 const Header = () => {
@@ -51,15 +52,30 @@ const Header = () => {
     6: "Password Recovery",
   };
 
-  const [productsQuantity, setProductsQuantity] = useState(
-    user ? user.countCartItems : 0
-  );
+  const [productsQuantity, setProductsQuantity] = useState([]);
 
-  console.log(
-    "productsQuantity",
-    productsQuantity,
-    user && user.countCartItems
-  );
+  useEffect(() => {
+    function handleSomething(num) {
+      console.log(num.detail.action, num.detail.ids);
+    
+      setProductsQuantity((prevQuantity) => {
+        if (num.detail.action === '+') {
+          return Array.from(new Set([...prevQuantity, ...num.detail.ids]));
+        } else if (num.detail.action === '-') {
+          return prevQuantity.filter((id) => !num.detail.ids.includes(id));
+        } else if (num.detail.action === 'exit') {
+          return [];
+        }
+    
+        return prevQuantity;
+      });
+    }
+    CartAddEventSubscribe(handleSomething)
+
+    return () => {
+      CartAddEventUnSubscribe(handleSomething)
+    };
+  }, []);
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -203,10 +219,10 @@ const Header = () => {
               className={styles.option}
             >
               <FiShoppingCart size={32} />
-              {productsQuantity !== 0 && (
+              {productsQuantity.length > 0 && (
                 <span className={styles.numberOfCartItemsWrapper}>
                   <span className={styles.numberOfCartItems}>
-                    {productsQuantity}
+                    {productsQuantity.length}
                   </span>
                 </span>
               )}
@@ -219,7 +235,7 @@ const Header = () => {
                 className={styles.option}
                 style={{ backgroundColor: "#f4f6fa" }}
               >
-                {user.firstName.charAt(0)}
+                {user?.firstName.charAt(0)}
               </NavLink>
             ) : (
               <button
@@ -256,7 +272,6 @@ const Header = () => {
           <Modal
             onClose={toggleModal}
             title={modalTitles[modalState]}
-            // disabledBack={modalState === 6 ? true : false}
           >
             {modalState === 1 && (
               <RegisterForm

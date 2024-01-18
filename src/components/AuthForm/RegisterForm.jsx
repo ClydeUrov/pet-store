@@ -13,10 +13,7 @@ const RegisterForm = ({ setModalState, host }) => {
   const userActions = useUserActions();
 
   const [passwordShow, setPasswordShow] = useState(false);
-
-  const togglePassword = () => {
-    setPasswordShow(!passwordShow);
-  };
+  const [confirmPassword, setConfirmPassword] = useState(false);
 
   const handleSubmit = async (formData) => {
     const path = `${host}/pet-store`;
@@ -59,8 +56,8 @@ const RegisterForm = ({ setModalState, host }) => {
           email: "",
           birthDate: "",
           password: "",
+          confirm: "",
           consentToProcessData: false,
-          rememberMe: false,
         }}
         onSubmit={handleSubmit}
       >
@@ -169,7 +166,7 @@ const RegisterForm = ({ setModalState, host }) => {
                 type="button"
                 id="visibilityBtn"
                 className={css.iconPassword}
-                onClick={togglePassword}
+                onClick={() => setPasswordShow(!passwordShow)}
               >
                 {passwordShow ? (
                   <MdOutlineVisibility size={24} />
@@ -179,6 +176,40 @@ const RegisterForm = ({ setModalState, host }) => {
               </button>
               <ErrorMessage
                 name="password"
+                component="p"
+                className={css.error}
+              />
+            </div>
+
+            <div className={css.input__wrapper}>
+              <label htmlFor="confirm" className={css.label}>
+                Confirm Password
+              </label>
+              <Field
+                className={
+                  props.touched.password && props.errors.password
+                    ? `${css.invalid} ${css.input}`
+                    : `${css.input}`
+                }
+                name="confirm"
+                id="confirm"
+                type={confirmPassword ? "text" : "password"}
+                required
+              />
+              <button
+                type="button"
+                id="visibilityBtn"
+                className={css.iconPassword}
+                onClick={() => {setConfirmPassword(!confirmPassword)}}
+              >
+                {confirmPassword ? (
+                  <MdOutlineVisibility size={24} />
+                ) : (
+                  <MdOutlineVisibilityOff size={24} />
+                )}
+              </button>
+              <ErrorMessage
+                name="confirm"
                 component="p"
                 className={css.error}
               />
@@ -207,25 +238,6 @@ const RegisterForm = ({ setModalState, host }) => {
                 <span className={css.checkbox__text}>
                   I agree to processing of my data.
                 </span>
-              </label>
-
-              <label className={css.checkbox}>
-                {props.values.rememberMe ? (
-                  <div className={css.checkbox__icon_true}>
-                    <CheckboxIcon />
-                  </div>
-                ) : (
-                  <div className={css.checkbox__icon_false}>
-                    <CheckboxIcon />
-                  </div>
-                )}
-                <Field
-                  className={css.checkbox__field}
-                  type="checkbox"
-                  name="rememberMe"
-                  id="rememberMe"
-                />
-                <span className={css.checkbox__text}>Remember me</span>
               </label>
             </div>
 

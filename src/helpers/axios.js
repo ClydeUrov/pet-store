@@ -12,19 +12,14 @@ axiosService.interceptors.request.use(
 );
 
 // const refreshAuthLogic = async (failedRequest) => {
-//   console.log(123)
 //   return axios
-//     .post(
-//       "/refresh/",
-//       {
-//         refresh: getRefreshToken(),
+//     .post("/auth/refresh-token", {
+//       headers: {
+//         Authorization: `Bearer ${getRefreshToken()}`,
 //       },
-//       {
-//         baseURL: process.env.REACT_APP_API_URL,
-//       }
-//     )
+//     })
 //     .then((resp) => {
-//       const { access } = resp.data;
+//       const access = resp.data.accessToken;
 //       failedRequest.response.config.headers["Authorization"] =
 //         "Bearer " + access;
 //       localStorage.setItem(

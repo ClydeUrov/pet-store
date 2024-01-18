@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import css from "./Users.module.scss";
 import { useEffect, useState } from "react";
 import { useAdminActions } from "../../../helpers/user.actions";
@@ -6,9 +5,6 @@ import UserTable from "./UserTable";
 import Loader from "../../Loader/Loader";
 
 const Users = () => {
-  const { userId } = useParams();
-  console.log("Users", userId);
-
   const adminAction = useAdminActions()
   const [allUsers, setAllUsers] = useState([]);
 
@@ -23,10 +19,7 @@ const Users = () => {
     };
 
     fetchUsers();
-  }, []);
-
-  console.log(allUsers);
-
+  }, [adminAction]);
 
   return (
     <div className={css.userContainer}>
@@ -37,7 +30,7 @@ const Users = () => {
       {!allUsers || allUsers.length === 0 ? (
         <Loader />
       ) : (
-        <UserTable allUsers={allUsers} />
+        <UserTable allUsers={allUsers} adminAction={adminAction} />
       )}
       
     </div>

@@ -20,6 +20,7 @@ const Constants = () => {
   const adminActions = useAdminActions();
 
   useEffect(() => {
+    console.log(191);
     setLoading(true);
     axiosService.get(`/constants`)
       .then((resp) => {
@@ -67,7 +68,7 @@ const Constants = () => {
 
   const handleConfirmDeletion = () => {
     if (constants[0].key === "LOGO") {
-      adminActions.delete(`/constants/${constants[0].key}/image`)
+      adminActions.deleteAction(`constants/${constants[0].key}/image`)
         .then(() => {
           updateConstants([
             { key: constants[0].key, value: {} },

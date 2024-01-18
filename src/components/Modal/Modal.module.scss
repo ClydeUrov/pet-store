@@ -73,12 +73,23 @@
 //   }
 
 .title {
-  margin-bottom: 30px;
-
+  margin-bottom: 25px;
+  display: flex;
+  gap: 15px;
   font-size: 36px;
   font-weight: 600;
-  line-height: 1.33;
   color: $text-color;
+
+  & > p {
+    color: #fff;
+    font-size: 30px;
+    background-color: #ffad4d;
+    border-radius: 999px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .icon {
