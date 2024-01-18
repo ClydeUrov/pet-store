@@ -2,12 +2,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosService from "../helpers/axios";
 import { UserLoginLogoutPublish } from "./events/LoginLogout";
+import { CartAddEventPublish } from "./events/CartEvent";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
 
 function useUserActions() {
   const navigate = useNavigate();
+  // const baseURL = process.env.REACT_APP_API_URL;
 
   return {
     login,
@@ -87,15 +89,17 @@ function useUserActions() {
         },
       })
       .then(() => {
+        CartAddEventPublish({ action: "exit", id: [] });
         localStorage.removeItem("auth");
         localStorage.removeItem("cart");
+        localStorage.removeItem("constants");
         UserLoginLogoutPublish("UserLogout");
         navigate("/");
       });
   }
 
   async function getCarts() {
-    return await axios
+    return await axiosService
       .get(`${baseURL}carts`, {
         headers: { Authorization: "Bearer " + getAccessToken() },
       })
@@ -103,7 +107,7 @@ function useUserActions() {
   }
 
   async function postCarts(data) {
-    return await axios
+    return await axiosService
       .post(`${baseURL}carts/items`, data, {
         headers: { Authorization: "Bearer " + getAccessToken() },
       })
@@ -111,14 +115,13 @@ function useUserActions() {
   }
 
   function deleteCart(itemId) {
-    console.log("itemId", itemId);
-    return axios.delete(`${baseURL}carts/items/${itemId}`, {
+    return axiosService.delete(`${baseURL}carts/items/${itemId}`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     });
   }
 
   function deleteAllCarts() {
-    return axios.delete(`${baseURL}carts/items`, {
+    return axiosService.delete(`${baseURL}carts/items`, {
       headers: { Authorization: "Bearer " + getAccessToken() },
     });
   }
@@ -142,6 +145,7 @@ function useAdminActions() {
     create: (path, data) => sendRequest("post", path, data),
     update: (path, data) => sendRequest("put", path, data),
     deleteAction: (path) => sendRequest("delete", path),
+    updateStatus: (path) => sendRequest("patch", path),
   };
 }
 
@@ -174,9 +178,40 @@ function setUserData(data) {
     JSON.stringify({
       access: data.accessToken,
       refresh: data.refreshToken,
-      user: data.userDto,
+      user: data.user,
     })
   );
+
+  if (data.cart.items.length > 0) {
+    let carts = [];
+    let ids = [];
+    const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
+
+    data.cart.items.forEach((item) => {
+      const productData = {
+        product: {
+          id: item.product.id,
+          name: item.product.name,
+          price: item.product.price,
+          ...(item.product.priceWithDiscount && {
+            priceWithDiscount: item.product.priceWithDiscount,
+          }),
+          mainImage: { filePath: item.product.mainImage.filePath },
+        },
+        quantity: item.quantity,
+      };
+      carts.push(productData);
+      ids.push(item.product.id);
+    });
+
+    const additionalProducts = localProducts.filter(
+      (item) => !ids.includes(item.product.id)
+    );
+    carts = carts.concat(additionalProducts);
+
+    localStorage.setItem("cart", JSON.stringify(carts));
+    CartAddEventPublish({ action: "+", id: ids });
+  }
 }
 
 export {

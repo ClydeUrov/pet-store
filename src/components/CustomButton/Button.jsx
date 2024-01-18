@@ -14,6 +14,7 @@ const Button = ({ type, text, onClickHandler, isDisabled, buttonSize }) => {
       className={buttonClassName}
       style={buttonStyle}
       disabled={isDisabled}
+      onClick={onClickHandler}
     >
       {text}
     </button>

@@ -9,12 +9,12 @@ import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { toast } from "react-toastify";
 import { getUser, useUserActions } from "../../helpers/user.actions";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
+import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 
 function Favorites() {
   const { getWishList, deleteOneItemWishList } = useWishList();
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { postCarts } = useUserActions();
   const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
     return items.every((el) => el.notAvailable);
   });
@@ -23,7 +23,6 @@ function Favorites() {
     async function fetchWishList() {
       try {
         setIsLoading(true);
-
         const wishList = await getWishList();
         setItems(wishList.data.products);
       } catch (error) {
@@ -68,25 +67,69 @@ function Favorites() {
       console.log(error);
     }
   }
+  const AddToCart = (item) => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    const isItemInCart = existingCart.some(
+      (cartItem) => cartItem.product.id === item.id
+    );
+
+    if (!isItemInCart) {
+      const data = {
+        product: {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          ...(item.priceWithDiscount && {
+            priceWithDiscount: item.priceWithDiscount,
+          }),
+          mainImage: { filePath: item.mainImage.filePath },
+        },
+        quantity: 1,
+      };
+
+      const newCart = [...existingCart, data];
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      CartAddEventPublish({ action: "+", id: [item.id] });
+    }
+  };
+  async function handleAddOneItemToCart(item) {
+    AddToCart(item);
+  }
+  console.log(items);
   function handleAddAllToCart() {
-    try {
-      toast.promise(
-        () =>
-          postCarts(
-            items.map((item) => ({
-              product: {
-                id: item.id,
-              },
-              quantity: 1,
-            }))
-          ),
-        {
-          error: "Happend some problem with adding items to card 😔",
-        }
+    if (isAvaibleBtn) {
+      let carts = [];
+      let ids = [];
+      const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
+
+      items.forEach((item) => {
+        console.log(item);
+        const productData = {
+          product: {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            ...(item.priceWithDiscount && {
+              priceWithDiscount: item.priceWithDiscount,
+            }),
+            mainImage: { filePath: item.mainImage.filePath },
+          },
+          quantity: 1,
+        };
+        carts.push(productData);
+        ids.push(item.id);
+      });
+
+      const additionalProducts = localProducts.filter(
+        (item) => !ids.includes(item.product.id)
       );
-    } catch (error) {
-      console.log(error);
+      carts = carts.concat(additionalProducts);
+
+      localStorage.setItem("cart", JSON.stringify(carts));
+      CartAddEventPublish({ action: "+", id: ids });
     }
   }
 
@@ -114,6 +157,7 @@ function Favorites() {
                   price={item.price}
                   priceWithDiscount={item.priceWithDiscount}
                   onDelete={handleDeleteItem}
+                  onAddToCart={() => handleAddOneItemToCart(item)}
                 />
               </div>
             ))}
@@ -124,6 +168,7 @@ function Favorites() {
               className={`${
                 isAvaibleBtn ? styles.btn : styles.not_avaible_btn
               }`}
+              disabled={!isAvaibleBtn}
             >
               Add all to Cart
             </button>

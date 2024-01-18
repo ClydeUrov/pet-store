@@ -13,6 +13,7 @@ function FavoriteItem({
   priceWithDiscount,
   onDelete,
   id,
+  onAddToCart,
 }) {
   const correctname = name.length > 90 ? name.slice(0, 35) + "..." : name;
   const [isLoading, setIsLoading] = useState(false);
@@ -81,6 +82,7 @@ function FavoriteItem({
               ? styles.avaible_btn
               : styles.unAvaible_btn
           }
+          onClick={onAddToCart}
         >
           Add to Cart
         </button>
