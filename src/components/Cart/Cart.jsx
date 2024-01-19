@@ -14,7 +14,6 @@ const Cart = ({ user, toggleModal, setModalState, productsQuantity }) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
   const [carts, setCarts] = useState(localProducts || []);
-  console.log(productsQuantity);
 
   useEffect(() => {
     const combineCart = async () => {
@@ -41,38 +40,29 @@ const Cart = ({ user, toggleModal, setModalState, productsQuantity }) => {
         }));
 
       if (dataForLocal.length > 0) {
-        console.log(1234)
         const combinedProducts = combineProducts(dataForLocal, localProducts);
         localStorage.setItem("cart", JSON.stringify(combinedProducts));
         setCarts(combinedProducts);
         CalculateTotalAmount(combinedProducts)
       }
 
-      console.log(userProducts.items);
-      const idsNotInList = productsQuantity.filter(id => !userProducts.items.some(item => item.product.id === id));
-      console.log("idsNotInList", idsNotInList);
-      if (idsNotInList.length > 0) {
-        const dataForBack = localProducts
-          .filter(
-            (localProduct) =>
-              !userProducts.items.some(
-                (userProduct) => userProduct.product.id === localProduct.product.id
-              ) ||
-              userProducts.items.some(
-                (userProduct) => userProduct.quantity !== localProduct.quantity
-              )
+      const dataForBack = localProducts
+        .filter((localProduct) =>
+          userProducts.items.every(
+            (userProduct) =>
+              userProduct.product.id !== localProduct.product.id ||
+              userProduct.quantity !== localProduct.quantity
           )
-          .map((item) => ({
-            product: {
-              id: item.product.id,
-            },
-            quantity: item.quantity,
-          }));
+        )
+        .map((item) => ({
+          product: {
+            id: item.product.id,
+          },
+          quantity: item.quantity,
+        }));
 
-        if (dataForBack.length > 0) {
-          console.log(4321)
-          await userActions.postCarts(dataForBack);
-        }
+      if (dataForBack.length > 0) {
+        await userActions.postCarts(dataForBack);
       }
     }
       
