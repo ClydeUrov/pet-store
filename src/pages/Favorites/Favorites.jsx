@@ -3,41 +3,17 @@ import FavoriteItem from "../../components/FavoriteIteems/FavoriteItem";
 
 import styles from "./Favorites.module.scss";
 import EmptyWishList from "../../components/FavoriteIteems/EmptyWishList";
-import useWishList from "../../helpers/wishList.actions";
 import Loader from "../../components/Loader/Loader";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
-import { toast } from "react-toastify";
-import { getUser, useUserActions } from "../../helpers/user.actions";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 
 function Favorites() {
-  const { getWishList, deleteOneItemWishList } = useWishList();
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState(getWishListLS());
+  const [isLoading, setIsLoading] = useState(false);
   const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
     return items.every((el) => el.notAvailable);
   });
-
-  useEffect(() => {
-    async function fetchWishList() {
-      try {
-        setIsLoading(true);
-        const wishList = await getWishList();
-        setItems(wishList.data.products);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    if (getUser()) {
-      fetchWishList();
-    } else {
-      setItems(getWishListLS());
-      setIsLoading(false);
-    }
-  }, []);
 
   useEffect(
     () => setIsAvaibleBtn(!items.some((el) => el.notAvailable)),
@@ -48,20 +24,15 @@ function Favorites() {
     if (items.length === 0 && !isLoading) {
       emptyWishList();
     }
-  }, [items, items.length, isLoading]);
+  }, [items.length, isLoading]);
 
   if (isLoading) return <Loader />;
 
   async function handleDeleteItem(id) {
     try {
       const corrWishList = items.filter((el) => el.id !== id);
-      if (getUser()) {
-        await toast.promise(deleteOneItemWishList(id), {
-          error: "Sorry, something went wrong",
-        });
-      } else {
-        setWishListLS(corrWishList);
-      }
+
+      setWishListLS(corrWishList);
       setItems(corrWishList);
     } catch (error) {
       console.log(error);
@@ -98,7 +69,6 @@ function Favorites() {
   async function handleAddOneItemToCart(item) {
     AddToCart(item);
   }
-  console.log(items);
   function handleAddAllToCart() {
     if (isAvaibleBtn) {
       let carts = [];

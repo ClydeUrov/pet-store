@@ -23,7 +23,10 @@ import {
   UserLoginLogoutUnsubscribe,
 } from "../../helpers/events/LoginLogout";
 import Cart from "../../components/Cart/Cart";
-import { CartAddEventSubscribe, CartAddEventUnSubscribe } from "../../helpers/events/CartEvent";
+import {
+  CartAddEventSubscribe,
+  CartAddEventUnSubscribe,
+} from "../../helpers/events/CartEvent";
 import FavoriteIconInHeader from "../../components/FavoriteIconInHeader/FavoriteIconInHeader";
 
 const Header = () => {
@@ -52,28 +55,32 @@ const Header = () => {
     6: "Password Recovery",
   };
 
-  const [productsQuantity, setProductsQuantity] = useState([]);
+  const [productsQuantity, setProductsQuantity] = useState([
+    ...new Set(
+      JSON.parse(localStorage.getItem("cart")).map((e) => e.product.id)
+    ),
+  ]);
 
   useEffect(() => {
     function handleSomething(num) {
       console.log(num.detail.action, num.detail.ids);
-    
+
       setProductsQuantity((prevQuantity) => {
-        if (num.detail.action === '+') {
+        if (num.detail.action === "+") {
           return Array.from(new Set([...prevQuantity, ...num.detail.ids]));
-        } else if (num.detail.action === '-') {
+        } else if (num.detail.action === "-") {
           return prevQuantity.filter((id) => !num.detail.ids.includes(id));
-        } else if (num.detail.action === 'exit') {
+        } else if (num.detail.action === "exit") {
           return [];
         }
-    
+
         return prevQuantity;
       });
     }
-    CartAddEventSubscribe(handleSomething)
+    CartAddEventSubscribe(handleSomething);
 
     return () => {
-      CartAddEventUnSubscribe(handleSomething)
+      CartAddEventUnSubscribe(handleSomething);
     };
   }, []);
 
@@ -269,10 +276,7 @@ const Header = () => {
             toggleModal={toggleModal}
           />
         ) : (
-          <Modal
-            onClose={toggleModal}
-            title={modalTitles[modalState]}
-          >
+          <Modal onClose={toggleModal} title={modalTitles[modalState]}>
             {modalState === 1 && (
               <RegisterForm
                 setModalState={setModalState}

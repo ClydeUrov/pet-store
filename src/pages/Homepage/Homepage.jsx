@@ -11,14 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBrands, getOnSale } from "../../redux/cards/operations";
 import MainSliderForCategories from "../../components/MainSliderForCategories/MainSliderForCategories";
 import SliderForHomepage from "../../components/SliderForHomepage/SliderForHomepage";
-
-import useWishList from "../../helpers/wishList.actions";
 import {
   emptyWishList,
   smthInWishList,
 } from "../../helpers/events/LoginLogout";
-import { toast } from "react-toastify";
-import { getUser } from "../../helpers/user.actions";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 const Homepage = () => {
@@ -30,27 +26,9 @@ const Homepage = () => {
   const brands = useSelector(selectBrands);
   const dispatch = useDispatch();
   const [wishList, setWishList] = useState(false);
-  const { getWishList, deleteOneItemWishList, postItemInWishList } =
-    useWishList();
 
   useEffect(() => {
-    async function fetchWishList() {
-      try {
-        const wishList = await getWishList();
-        setWishList(wishList.data.products);
-      } catch (error) {
-        toast.error(
-          error?.response?.status === 401
-            ? `something went wrong with loading your "wish list", please logout and login again. 🙏`
-            : `something wrong with loading your wish list`
-        );
-      }
-    }
-    if (getUser()) {
-      fetchWishList();
-    } else {
-      setWishList(getWishListLS() || []);
-    }
+    setWishList(getWishListLS() || []);
   }, []);
 
   useEffect(() => {
@@ -97,13 +75,8 @@ const Homepage = () => {
     if (!!wishList.find((i) => i.id === item.id)?.id) {
       try {
         const corrWishList = wishList.filter((i) => i.id !== item.id);
-        if (getUser()) {
-          await toast.promise(deleteOneItemWishList(item.id), {
-            error: "Sorry, something went wrong",
-          });
-        } else {
-          setWishListLS(corrWishList);
-        }
+
+        setWishListLS(corrWishList);
         setWishListLS(corrWishList);
       } catch (error) {
         console.log(error);
@@ -112,13 +85,7 @@ const Homepage = () => {
       try {
         const corrWishList = [...wishList, item];
 
-        if (getUser()) {
-          await toast.promise(postItemInWishList(item.id), {
-            error: "Sorry, something went wrong",
-          });
-        } else {
-          setWishListLS(corrWishList);
-        }
+        setWishListLS(corrWishList);
         setWishList(corrWishList);
       } catch (error) {
         console.log(error);
