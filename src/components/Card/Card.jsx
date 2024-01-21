@@ -12,7 +12,7 @@ const Card = ({ item, favoriteItems, onChangeFavorites }) => {
   const { constants } = useConstants();
   const [isLoadingWishList, setIsLoadingWishList] = useState(false);
 
-  const isFavorite = favoriteItems.find((i) => i.id === item.id) ? true : false;
+  const isFavorite = favoriteItems?.find((i) => i.id === item.id) ? true : false;
 
   const handleAddOrDeleteFavorite = async () => {
     try {

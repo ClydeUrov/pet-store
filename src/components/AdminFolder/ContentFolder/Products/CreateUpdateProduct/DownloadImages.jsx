@@ -82,7 +82,7 @@ const DownloadImages = ({images, setImages, productId, mainImage, setMainImage})
           </label>
         </section>
         {[...Array(6)].map((_, index) => (
-        <section key={index}>
+        <section key={index} style={{marginLeft:"10px"}}>
           <div
             className={css.imageUploadWindow}
             onDrop={(e) =>{

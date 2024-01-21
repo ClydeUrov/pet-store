@@ -57,7 +57,7 @@ const Products = () => {
     <div className={css.productContainer}>
       {updateProduct ? (
         <UpdateProduct 
-          product={updateProduct}
+          prod={updateProduct}
           setUpdateProduct={setUpdateProduct}
           fetchData={fetchData}
         />
