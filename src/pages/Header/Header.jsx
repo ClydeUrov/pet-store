@@ -57,7 +57,7 @@ const Header = () => {
 
   const [productsQuantity, setProductsQuantity] = useState([
     ...new Set(
-      JSON.parse(localStorage.getItem("cart")).map((e) => e.product.id)
+      JSON.parse(localStorage.getItem("cart"))?.map((e) => e.product.id) || []
     ),
   ]);
 

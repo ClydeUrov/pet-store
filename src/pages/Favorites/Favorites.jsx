@@ -7,6 +7,7 @@ import Loader from "../../components/Loader/Loader";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
+import { getUser } from "../../helpers/user.actions";
 
 function Favorites() {
   const [items, setItems] = useState(getWishListLS());
@@ -14,6 +15,16 @@ function Favorites() {
   const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
     return items.every((el) => el.notAvailable);
   });
+  const user = getUser();
+
+  // useEffect(()=>{
+  //   function fetchWishList() {
+
+  //   }
+  //   if(user) {
+  //     setItems(getWishListLS() || []);
+  //   }
+  // },[])
 
   useEffect(
     () => setIsAvaibleBtn(!items.some((el) => el.notAvailable)),

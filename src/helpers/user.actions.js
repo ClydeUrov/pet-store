@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosService from "../helpers/axios";
 import { UserLoginLogoutPublish } from "./events/LoginLogout";
 import { CartAddEventPublish } from "./events/CartEvent";
+import { setWishListLS } from "./wishListLS";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
@@ -64,6 +65,7 @@ function useUserActions() {
   // Login the user
   function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
+      setWishListLS(res.data.wishList.products);
       setUserData(res.data);
       UserLoginLogoutPublish("UserLogin");
       if (res.data.user.role === "CLIENT") {
