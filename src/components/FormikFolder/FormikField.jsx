@@ -74,7 +74,7 @@ const FormikField = (props) => {
                 }
               }}
               className={touched && errors ? `${css.invalid} ${css.input}` : `${css.input}`}
-              value={values[name]?.id || ""}
+              value={values[name] ? values[name].id : ""}
             > 
               <option value={undefined}></option>
               {name === 'category' ? (

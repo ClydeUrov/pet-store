@@ -47,7 +47,8 @@ const CreateProduct = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    values.notAvailable = values.notAvailable.id === 1 ? true : false
+    console.log("values", values);
+    values.notAvailable = values.notAvailable?.id === 1 ? true : false
     if(values.size) { values.productSize = values.size }
   
     try {
@@ -56,8 +57,10 @@ const CreateProduct = () => {
         success: "Product created successfully!",
         error: "The product was not created",
       })
+      console.log(payload);
       navigate(`/admin/products/update/${payload.id}`)
     } catch (err) {
+      console.log(err)
       err.response ? setError(err.response.data.message) : setError(err.message)
     }
   };

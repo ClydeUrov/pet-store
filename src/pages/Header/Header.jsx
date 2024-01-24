@@ -55,11 +55,12 @@ const Header = () => {
     6: "Password Recovery",
   };
 
-  const [productsQuantity, setProductsQuantity] = useState([
-    ...new Set(
-      JSON.parse(localStorage.getItem("cart"))?.map((e) => e.product.id) || []
-    ),
-  ]);
+  const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+  const [productsQuantity, setProductsQuantity] = useState(
+    Array.isArray(cartData)
+      ? [...new Set(cartData.map((e) => e.product.id))]
+      : []
+  );
 
   useEffect(() => {
     function handleSomething(num) {

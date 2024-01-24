@@ -4,20 +4,48 @@ import DownloadImages from "./DownloadImages";
 import FormikField from "../../../../FormikFolder/FormikField";
 import { productInformation, additionalInformation } from './parameters';
 import { useEffect, useState } from "react";
-import { fetchProductCharacteristics } from "../../../../../helpers/api";
+import { fetchProductById, fetchProductCharacteristics } from "../../../../../helpers/api";
 import { updateCard } from "../../../../../redux/cards/operations";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { schemaAdminProducts } from "../../../../../helpers/schemes";
+import { useNavigate, useParams } from "react-router-dom";
 
-const UpdateProduct = ({ product, setUpdateProduct, fetchData }) => {
+const UpdateProduct = ({ prod, setUpdateProduct, fetchData }) => {
+  const { productId } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [product, setProduct] = useState(prod);
+  const [mainImage, setMainImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
 
-  const [mainImage, setMainImage] = useState(
-    product.mainImage ? { id: product.mainImage.id, url: product.mainImage.filePath } : null
-  );
-  const [images, setImages] = useState(product.images || []);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const fetchedProduct = await fetchProductById(productId);
+        console.log(fetchedProduct);
+        setProduct(fetchedProduct);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (!prod) {
+      fetchProduct();
+    }
+  }, [prod, productId]);
+
+  useEffect(() => {
+    if (product) {
+      setMainImage(
+        product.mainImage
+          ? { id: product.mainImage.id, url: product.mainImage.filePath }
+          : null
+      );
+      setImages(product.images || []);
+    }
+  }, [product]);
 
   const [characteristics, setCharacteristics] = useState({
     age : [],
@@ -61,8 +89,8 @@ const UpdateProduct = ({ product, setUpdateProduct, fetchData }) => {
         success: "Product updated successfully",
         error: "The product was not updated",
       })
-      setUpdateProduct(null);
-      fetchData();
+      setUpdateProduct ? setUpdateProduct(null) : navigate('/admin/products/')
+      fetchData && fetchData();
     } catch (err) {
       err.response ? setError(err.response.data.message) : setError(err.message)
     }
@@ -79,18 +107,19 @@ const UpdateProduct = ({ product, setUpdateProduct, fetchData }) => {
       />
       
       <Formik
+        enableReinitialize
         validationSchema={schemaAdminProducts}
         initialValues={{
-          name: product.name,
+          name: product?.name,
           description: product?.description || undefined,
           instructions: product?.instructions || undefined,
           contraindications: product?.contraindications || undefined,
           prescription: product?.prescription || undefined,
           priceWithDiscount: product?.priceWithDiscount || undefined,
-          price: product.price,
+          price: product?.price,
           age: product?.age || undefined,
           brand: product?.brand || undefined,
-          category: product.category,
+          category: product?.category,
           color: product?.color || undefined,
           material: product?.material || undefined,
           size: product?.productSize || undefined,
@@ -131,7 +160,7 @@ const UpdateProduct = ({ product, setUpdateProduct, fetchData }) => {
           {error && <p>{error}</p>}
           <div className={css.buttons}>
             <button type="submit" >Update</button>
-            <button type="button" onClick={() => setUpdateProduct(null)} >Cancel</button>
+            <button type="button" onClick={() => setUpdateProduct ? setUpdateProduct(null) : navigate('/admin/products/')} >Cancel</button>
           </div>
         </Form>
         )}

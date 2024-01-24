@@ -9,8 +9,8 @@ const Sort = ({setSortMethod, setIsOpen, isOpen }) => {
   const [sortName, setSortName] = useState("");
 
   const listBtn = [
-    { id: 0, sort: "price,desc", name: "Price (highest to lowest)" },
-    { id: 1, sort: "price,asc", name: "Price (lowest to highest)" },
+    { id: 0, sort: "currentPrice,desc", name: "Price (highest to lowest)" },
+    { id: 1, sort: "currentPrice,asc", name: "Price (lowest to highest)" },
     { id: 2, sort: "name,asc", name: "Name (A - Z)" },
     { id: 3, sort: "name,desc", name: "Name (Z - A)" },
   ];
