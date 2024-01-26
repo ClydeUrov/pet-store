@@ -8,6 +8,8 @@ import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 import { getUser } from "../../helpers/user.actions";
+import useWishList from "../../helpers/wishList.actions";
+const user = getUser();
 
 function Favorites() {
   const [items, setItems] = useState(getWishListLS());
@@ -15,16 +17,59 @@ function Favorites() {
   const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
     return items.every((el) => el.notAvailable);
   });
-  const user = getUser();
+  const useWish = useWishList();
 
-  // useEffect(()=>{
-  //   function fetchWishList() {
+  useEffect(() => {
+    async function fetchWishList() {
+      const LSList = getWishListLS();
+      const {
+        data: { products: APIList },
+      } = await useWish.getWishList();
+      const ids = [];
+      const addToAPI = [];
+      const deleteFromAPI = [];
+      const idFromAPI = APIList.map((el) => el.id);
+      const idFromLS = LSList.map((el) => el.id);
+      const uniqueArr = [];
+      LSList.concat(APIList).forEach((el) => {
+        if (!ids.includes(el.id)) {
+          ids.push(el.id);
+          uniqueArr.push(el);
+        }
+      });
+      ids.forEach((id) => {
+        if (!idFromAPI.includes(id)) addToAPI.push(id);
+      });
 
-  //   }
-  //   if(user) {
-  //     setItems(getWishListLS() || []);
-  //   }
-  // },[])
+      ids.forEach((id) => {
+        if (!idFromLS.includes(id) && idFromAPI.includes(id))
+          deleteFromAPI.push(id);
+      });
+
+      if (addToAPI.length) {
+        try {
+          await useWish.postItemInWishList(addToAPI);
+          setWishListLS(uniqueArr);
+          setItems(uniqueArr);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (deleteFromAPI.length) {
+        try {
+          await Promise.all(
+            deleteFromAPI.map((el) => useWish.deleteOneItemWishList(el))
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    if (user) {
+      fetchWishList();
+    }
+  }, []);
 
   useEffect(
     () => setIsAvaibleBtn(!items.some((el) => el.notAvailable)),
@@ -42,6 +87,8 @@ function Favorites() {
   async function handleDeleteItem(id) {
     try {
       const corrWishList = items.filter((el) => el.id !== id);
+
+      if (user) useWish.deleteOneItemWishList(id);
 
       setWishListLS(corrWishList);
       setItems(corrWishList);

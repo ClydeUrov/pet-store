@@ -28,7 +28,7 @@ const Homepage = () => {
   const [wishList, setWishList] = useState(false);
 
   useEffect(() => {
-    setWishList(getWishListLS() || []);
+    setWishList(getWishListLS());
   }, []);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const Homepage = () => {
         const corrWishList = wishList.filter((i) => i.id !== item.id);
 
         setWishListLS(corrWishList);
-        setWishListLS(corrWishList);
+        setWishList(corrWishList);
       } catch (error) {
         console.log(error);
       }

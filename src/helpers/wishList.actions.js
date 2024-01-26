@@ -18,8 +18,8 @@ function useWishList() {
     });
   }
 
-  function postItemInWishList(id) {
-    return axios.post(`${baseURL}wish-lists/items/${id}`, null, {
+  function postItemInWishList(arrOfId) {
+    return axios.post(`${baseURL}wish-lists/items`, arrOfId, {
       headers: {
         Authorization: "Bearer " + getAccessToken(),
       },

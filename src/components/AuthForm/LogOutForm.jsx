@@ -5,14 +5,26 @@ import { useState } from "react";
 const LogOutForm = () => {
   const [error, setError] = useState("");
   const userAction = useUserActions();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    await userAction.logout().catch((err) => {
+    try {
+      setIsLoading(true);
+      await userAction.logout();
+    } catch (err) {
       err.response
         ? setError(err.response.data.message)
         : setError(err.message);
-    });
+    } finally {
+      setIsLoading(false);
+    }
   };
+  //   await userAction.logout().catch((err) => {
+  //     err.response
+  //       ? setError(err.response.data.message)
+  //       : setError(err.message);
+  //   });
+  // };
 
   return (
     <>
@@ -24,8 +36,11 @@ const LogOutForm = () => {
       </p>
       <button
         type="submit"
-        className={css.logout__button}
+        className={`${css.logout__button} ${
+          !isLoading ? css.active : css.disabled
+        }`}
         onClick={handleSubmit}
+        disabled={isLoading}
       >
         Confirm
       </button>

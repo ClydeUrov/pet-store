@@ -1,10 +1,10 @@
 @import "..//../variables.scss";
 
 .verifyBlock p {
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-weight: 400;
-    font-family: "Lato, sans-serif"
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: "Lato, sans-serif";
 }
 
 .form {
@@ -69,7 +69,9 @@
   border-bottom: 1px solid #234e69;
 }
 
-.button, .openError, .errorSpan {
+.button,
+.openError,
+.errorSpan {
   cursor: pointer;
 }
 
@@ -121,7 +123,7 @@
 .change {
   color: blue;
   cursor: pointer;
-  
+
   &:hover {
     color: lightblue;
   }
@@ -145,7 +147,6 @@
     color: lightblue;
   }
 }
-
 
 .link {
   text-align: center;
@@ -281,7 +282,6 @@
   border: none;
   background-color: $main-color;
   box-shadow: 0px 1px 2px 0px rgba(198, 228, 246, 0.05);
-  cursor: pointer;
 
   color: $btn-text;
 
@@ -289,6 +289,14 @@
   font-weight: 800;
   line-height: 1.14;
   outline-color: transparent;
+
+  &.active {
+    cursor: pointer;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    background-color: $not-available;
+  }
 }
 
 .logout__button:hover {
