@@ -217,24 +217,28 @@ const Header = () => {
           </div>
 
           <div className={styles.options}>
-            <FavoriteIconInHeader />
+            {user?.role !== "ADMIN" && (
+              <>
+                <FavoriteIconInHeader />
 
-            <div
-              onClick={() => {
-                toggleModal();
-                setModalState("Cart");
-              }}
-              className={styles.option}
-            >
-              <FiShoppingCart size={32} />
-              {productsQuantity.length > 0 && (
-                <span className={styles.numberOfCartItemsWrapper}>
-                  <span className={styles.numberOfCartItems}>
-                    {productsQuantity.length}
-                  </span>
-                </span>
-              )}
-            </div>
+                <div
+                  onClick={() => {
+                    toggleModal();
+                    setModalState("Cart");
+                  }}
+                  className={styles.option}
+                >
+                  <FiShoppingCart size={32} />
+                  {productsQuantity.length > 0 && (
+                    <span className={styles.numberOfCartItemsWrapper}>
+                      <span className={styles.numberOfCartItems}>
+                        {productsQuantity.length}
+                      </span>
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
 
             {user && userIsLogined ? (
               <NavLink

@@ -23,7 +23,6 @@ import StarRatingNew from "../../components/StarRatings/StarRatingNew";
 import { useParams } from "react-router-dom";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
-import useWishList from "../../helpers/wishList.actions";
 import {
   smthInWishList,
   emptyWishList,
@@ -46,8 +45,7 @@ const ProductPage = () => {
     Math.floor(window.innerWidth / 300)
   );
   const { productId } = useParams();
-  const { getWishList, deleteOneItemWishList, postItemInWishList } =
-    useWishList();
+
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

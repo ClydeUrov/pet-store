@@ -27,7 +27,7 @@ const UserAccount = () => {
         <li className={css.item}>
           <p>Date of bithday</p>
           <p className={css.user__info}>
-            <span>{user.birthDate},</span>
+            <span>{user.birthDate}</span>
           </p>
         </li>
       </ul>

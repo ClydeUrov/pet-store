@@ -1,36 +1,41 @@
-import { useEffect, useState } from "react";
-import FavoriteItem from "../../components/FavoriteIteems/FavoriteItem";
-
 import styles from "./Favorites.module.scss";
+import FavoriteItem from "../../components/FavoriteIteems/FavoriteItem";
 import EmptyWishList from "../../components/FavoriteIteems/EmptyWishList";
-import Loader from "../../components/Loader/Loader";
+
+import { useEffect, useState } from "react";
 import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 import { getUser } from "../../helpers/user.actions";
-import useWishList from "../../helpers/wishList.actions";
+import {
+  clearAllWishList,
+  deleteOneItemWishList,
+  getWishList,
+  postItemInWishList,
+} from "../../helpers/wishList.actions";
+import { toast } from "react-toastify";
 const user = getUser();
 
 function Favorites() {
   const [items, setItems] = useState(getWishListLS());
-  const [isLoading, setIsLoading] = useState(false);
   const [isAvaibleBtn, setIsAvaibleBtn] = useState(() => {
+    if (user?.role === "ADMIN") return false;
     return items.every((el) => el.notAvailable);
   });
-  const useWish = useWishList();
 
   useEffect(() => {
     async function fetchWishList() {
       const LSList = getWishListLS();
       const {
         data: { products: APIList },
-      } = await useWish.getWishList();
+      } = await getWishList();
       const ids = [];
       const addToAPI = [];
       const deleteFromAPI = [];
       const idFromAPI = APIList.map((el) => el.id);
       const idFromLS = LSList.map((el) => el.id);
       const uniqueArr = [];
+
       LSList.concat(APIList).forEach((el) => {
         if (!ids.includes(el.id)) {
           ids.push(el.id);
@@ -46,9 +51,19 @@ function Favorites() {
           deleteFromAPI.push(id);
       });
 
+      if (addToAPI.length && deleteFromAPI.length) {
+        try {
+          await clearAllWishList();
+          await postItemInWishList(idFromLS);
+          return;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
       if (addToAPI.length) {
         try {
-          await useWish.postItemInWishList(addToAPI);
+          await postItemInWishList(addToAPI);
           setWishListLS(uniqueArr);
           setItems(uniqueArr);
         } catch (error) {
@@ -57,38 +72,43 @@ function Favorites() {
       }
       if (deleteFromAPI.length) {
         try {
-          await Promise.all(
-            deleteFromAPI.map((el) => useWish.deleteOneItemWishList(el))
-          );
+          if (!LSList.length) {
+            await clearAllWishList();
+          } else if (deleteFromAPI.length === 1) {
+            deleteOneItemWishList(deleteFromAPI[0]);
+          } else if (deleteFromAPI.length > 1) {
+            await clearAllWishList();
+            await postItemInWishList(idFromLS);
+          }
         } catch (error) {
           console.log(error);
         }
       }
     }
-
-    if (user) {
+    if (user?.role === "CLIENT") {
       fetchWishList();
     }
   }, []);
 
-  useEffect(
-    () => setIsAvaibleBtn(!items.some((el) => el.notAvailable)),
-    [items]
-  );
+  useEffect(() => {
+    if (user?.role === "ADMIN") {
+      setIsAvaibleBtn(false);
+    } else {
+      setIsAvaibleBtn(items.some((el) => !el.notAvailable));
+    }
+  }, [items]);
 
   useEffect(() => {
-    if (items.length === 0 && !isLoading) {
+    if (items.length === 0) {
       emptyWishList();
     }
-  }, [items.length, isLoading]);
-
-  if (isLoading) return <Loader />;
+  }, [items.length]);
 
   async function handleDeleteItem(id) {
     try {
       const corrWishList = items.filter((el) => el.id !== id);
 
-      if (user) useWish.deleteOneItemWishList(id);
+      if (user?.role === "CLIENT") deleteOneItemWishList(id);
 
       setWishListLS(corrWishList);
       setItems(corrWishList);
@@ -97,6 +117,7 @@ function Favorites() {
     }
   }
   const AddToCart = (item) => {
+    if (user?.role !== "CLIENT") return;
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const isItemInCart = existingCart.some(
@@ -124,32 +145,34 @@ function Favorites() {
       CartAddEventPublish({ action: "+", id: [item.id] });
     }
   };
-  async function handleAddOneItemToCart(item) {
-    AddToCart(item);
-  }
+
   function handleAddAllToCart() {
     if (isAvaibleBtn) {
+      if (items.some((item) => item.notAvailable)) {
+        toast.warning("We add to cart ONLY avaible items");
+      }
       let carts = [];
       let ids = [];
       const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
 
-      items.forEach((item) => {
-        console.log(item);
-        const productData = {
-          product: {
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            ...(item.priceWithDiscount && {
-              priceWithDiscount: item.priceWithDiscount,
-            }),
-            mainImage: { filePath: item.mainImage.filePath },
-          },
-          quantity: 1,
-        };
-        carts.push(productData);
-        ids.push(item.id);
-      });
+      items
+        .filter((item) => !item.notAvailable)
+        .forEach((item) => {
+          const productData = {
+            product: {
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              ...(item.priceWithDiscount && {
+                priceWithDiscount: item.priceWithDiscount,
+              }),
+              mainImage: { filePath: item.mainImage.filePath },
+            },
+            quantity: 1,
+          };
+          carts.push(productData);
+          ids.push(item.id);
+        });
 
       const additionalProducts = localProducts.filter(
         (item) => !ids.includes(item.product.id)
@@ -163,7 +186,16 @@ function Favorites() {
 
   return (
     <div className={styles.wrapper}>
-      <h3>My Wishlist</h3>
+      <div className={styles.header}>
+        <h3>My Wishlist</h3>
+        <button
+          onClick={handleAddAllToCart}
+          className={`${isAvaibleBtn ? styles.btn : styles.not_avaible_btn}`}
+          disabled={!isAvaibleBtn}
+        >
+          Add all to Cart
+        </button>
+      </div>
       {items.length ? (
         <>
           <div className={`${styles.table_head} ${styles.grid_container}`}>
@@ -173,33 +205,23 @@ function Favorites() {
             <span className={styles.align_center}>Unit price</span>
             <span></span>
           </div>
-          <div className={styles.items_wrapper}>
+          <div>
             {items.map((item) => (
               <div key={item.id} className={`${styles.grid_container}`}>
                 <FavoriteItem
-                  disabled={isLoading}
                   id={item.id}
                   name={item.name}
                   imgSrc={item.mainImage.filePath}
-                  notAvailable={item.notAvailable}
+                  notAvailable={
+                    user?.role === "CLIENT" ? item.notAvailable : true
+                  }
                   price={item.price}
                   priceWithDiscount={item.priceWithDiscount}
                   onDelete={handleDeleteItem}
-                  onAddToCart={() => handleAddOneItemToCart(item)}
+                  onAddToCart={() => AddToCart(item)}
                 />
               </div>
             ))}
-          </div>
-          <div className={styles.btn_wrapper}>
-            <button
-              onClick={handleAddAllToCart}
-              className={`${
-                isAvaibleBtn ? styles.btn : styles.not_avaible_btn
-              }`}
-              disabled={!isAvaibleBtn}
-            >
-              Add all to Cart
-            </button>
           </div>
         </>
       ) : (

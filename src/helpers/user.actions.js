@@ -4,6 +4,7 @@ import axiosService from "../helpers/axios";
 import { UserLoginLogoutPublish, smthInWishList } from "./events/LoginLogout";
 import { CartAddEventPublish } from "./events/CartEvent";
 import { getWishListLS, setWishListLS } from "./wishListLS";
+import { clearAllWishList, postItemInWishList } from "./wishList.actions";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
@@ -66,7 +67,8 @@ function useUserActions() {
   function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
-      setWishList(res.data.wishList.products);
+      if (res.data.user.role === "CLIENT")
+        setWishList(res.data.wishList.products);
       UserLoginLogoutPublish("UserLogin");
       if (res.data.user.role === "CLIENT") {
         navigate("user/account");
@@ -89,6 +91,9 @@ function useUserActions() {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
         },
+      })
+      .then(async () => {
+        if (getUser().role === "CLIENT") await updateWishListAPI();
       })
       .then(() => {
         CartAddEventPublish({ action: "exit", id: [] });
@@ -186,6 +191,17 @@ function setWishList(APIList) {
   });
   if (uniqueArr.length) smthInWishList();
   setWishListLS(uniqueArr);
+}
+
+async function updateWishListAPI() {
+  const LSList = getWishListLS().map((el) => el.id);
+
+  if (!LSList.length) {
+    await clearAllWishList();
+  } else {
+    await clearAllWishList();
+    await postItemInWishList(LSList);
+  }
 }
 
 // Set the access, token and user property
