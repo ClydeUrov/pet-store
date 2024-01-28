@@ -53,6 +53,8 @@ const Products = () => {
     setPage(1);
   }, []);
 
+  console.log("allCards", allCards);
+
   return (
     <div className={css.productContainer}>
       {updateProduct ? (

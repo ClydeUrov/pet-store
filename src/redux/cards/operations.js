@@ -61,7 +61,7 @@ export const getAllCards = createAsyncThunk(
       });
     }
 
-    if (urlCategory.length > 0 && urlCategory[0] !== "All") {
+    if (urlCategory?.length > 0 && urlCategory[0] !== "All") {
       console.log(urlCategory)
       url += `&categoryId=${urlCategory[1]}`
     }
