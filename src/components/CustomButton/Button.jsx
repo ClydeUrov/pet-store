@@ -4,7 +4,7 @@ import style from "./Button.module.scss";
 const Button = ({ type, text, onClickHandler, isDisabled, buttonSize }) => {
   const buttonClassName = isDisabled ? style.btnDisabled : style.button;
   const buttonStyle = {
-    width: buttonSize === "large" ? "85%" : "",
+    width: buttonSize === "large" ? "85%" : 'small' ? "35%" : "",
     backgroundColor: buttonSize === "cancel" ? "#fff" : null,
     color: buttonSize === "cancel" ? "#ffad4d" : null,
   };

@@ -116,23 +116,23 @@ const CardinCart = ({ item, constants, setCarts, navigate, user, CalculateTotalA
             </p>
           )}
         </div>
-        <div className={css.product_quantity}>
-          <button
-            type="button"
-            className={css.btn_quantity}
-            onClick={() => handleChangeQuantity("-")}
-          >
-            <AiOutlineMinus size={13} />
-          </button>
-          <p className={css.quantity}>{quantity}</p>
-          <button
-            type="button"
-            className={css.btn_quantity}
-            onClick={() => handleChangeQuantity("+")}
-          >
-            <AiOutlinePlus size={13} />
-          </button>
-        </div>
+          <div className={css.product_quantity}>
+            <button
+              type="button"
+              className={css.btn_quantity}
+              onClick={() => handleChangeQuantity("-")}
+            >
+              <AiOutlineMinus size={13} />
+            </button>
+            <p className={css.quantity}>{quantity}</p>
+            <button
+              type="button"
+              className={css.btn_quantity}
+              onClick={() => handleChangeQuantity("+")}
+            >
+              <AiOutlinePlus size={13} />
+            </button>
+          </div>
       </div>
       <div className={css.end}>
         <AiOutlineDelete

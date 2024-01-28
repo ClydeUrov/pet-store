@@ -18,6 +18,7 @@ import AdminContentRoute from "../helpers/routs/AdminContentRoute";
 import UpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct";
 import CreateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateProduct";
 import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
+import Order from "../pages/Order/Order";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() =>
@@ -65,6 +66,7 @@ const App = () => {
             <Route path="orders/:orderId" element={<UserOrderItem />}></Route>
             <Route path="reviews" element={<UserReviews />}></Route>
           </Route>
+          <Route path="/order" element={<Order />} />
 
           <Route path="/*" element={<Error />} />
         </Route>
