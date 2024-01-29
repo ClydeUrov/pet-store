@@ -7,11 +7,12 @@ import { emptyWishList } from "../../helpers/events/LoginLogout";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 import { getUser } from "../../helpers/user.actions";
-import {
+import useFetchWishList, {
   clearAllWishList,
   deleteOneItemWishList,
   getWishList,
   postItemInWishList,
+  refillWishList,
 } from "../../helpers/wishList.actions";
 import { toast } from "react-toastify";
 const user = getUser();
@@ -22,39 +23,20 @@ function Favorites() {
     if (user?.role === "ADMIN") return false;
     return items.every((el) => el.notAvailable);
   });
+  const { data } = useFetchWishList(getWishList);
 
   useEffect(() => {
+    if (!data.products) return;
     async function fetchWishList() {
       const LSList = getWishListLS();
-      const {
-        data: { products: APIList },
-      } = await getWishList();
-      const ids = [];
-      const addToAPI = [];
-      const deleteFromAPI = [];
-      const idFromAPI = APIList.map((el) => el.id);
+      const idFromAPI = data.products.map((el) => el.id);
       const idFromLS = LSList.map((el) => el.id);
-      const uniqueArr = [];
-
-      LSList.concat(APIList).forEach((el) => {
-        if (!ids.includes(el.id)) {
-          ids.push(el.id);
-          uniqueArr.push(el);
-        }
-      });
-      ids.forEach((id) => {
-        if (!idFromAPI.includes(id)) addToAPI.push(id);
-      });
-
-      ids.forEach((id) => {
-        if (!idFromLS.includes(id) && idFromAPI.includes(id))
-          deleteFromAPI.push(id);
-      });
+      const addToAPI = idFromLS.filter((id) => !idFromAPI.includes(id));
+      const deleteFromAPI = idFromAPI.filter((id) => !idFromLS.includes(id));
 
       if (addToAPI.length && deleteFromAPI.length) {
         try {
-          await clearAllWishList();
-          await postItemInWishList(idFromLS);
+          await refillWishList(idFromLS);
           return;
         } catch (error) {
           console.error(error);
@@ -64,8 +46,6 @@ function Favorites() {
       if (addToAPI.length) {
         try {
           await postItemInWishList(addToAPI);
-          setWishListLS(uniqueArr);
-          setItems(uniqueArr);
         } catch (error) {
           console.log(error);
         }
@@ -77,8 +57,7 @@ function Favorites() {
           } else if (deleteFromAPI.length === 1) {
             deleteOneItemWishList(deleteFromAPI[0]);
           } else if (deleteFromAPI.length > 1) {
-            await clearAllWishList();
-            await postItemInWishList(idFromLS);
+            await refillWishList(idFromLS);
           }
         } catch (error) {
           console.log(error);
@@ -88,7 +67,7 @@ function Favorites() {
     if (user?.role === "CLIENT") {
       fetchWishList();
     }
-  }, []);
+  }, [data.products]);
 
   useEffect(() => {
     if (user?.role === "ADMIN") {

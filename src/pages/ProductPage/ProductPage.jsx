@@ -29,8 +29,6 @@ import {
 } from "../../helpers/events/LoginLogout";
 import { getOnSale } from "../../redux/cards/operations";
 import Loader from "../../components/Loader/Loader";
-import { toast } from "react-toastify";
-import { getUser } from "../../helpers/user.actions";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 const ProductPage = () => {

@@ -4,7 +4,7 @@ import axiosService from "../helpers/axios";
 import { UserLoginLogoutPublish, smthInWishList } from "./events/LoginLogout";
 import { CartAddEventPublish } from "./events/CartEvent";
 import { getWishListLS, setWishListLS } from "./wishListLS";
-import { clearAllWishList, postItemInWishList } from "./wishList.actions";
+import { clearAllWishList, refillWishList } from "./wishList.actions";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
@@ -199,8 +199,7 @@ async function updateWishListAPI() {
   if (!LSList.length) {
     await clearAllWishList();
   } else {
-    await clearAllWishList();
-    await postItemInWishList(LSList);
+    await refillWishList(LSList);
   }
 }
 
