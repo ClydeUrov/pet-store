@@ -58,6 +58,10 @@
     flex: 0.33;
     width: 128px;
     height: 128px;
+    margin-right: 10px;
+    background-color: #F4F6FA;
+    border-radius: 5px;
+    text-align: -webkit-center;
 
     & > img {
       padding: 8px;
@@ -102,11 +106,13 @@
     margin: 10px 0;
 
     & > svg {
-      transform: scale(1.8);
+      transform: scale(1.6);
     }
 
     & > * {
       padding:3px;
+      font-size: 18px;
+      font-weight: 600;
     }
   }
 }
@@ -155,7 +161,7 @@
   height: 600px;
   overflow-y: auto;
   overflow-X: hidden;
-  padding: 0 10px;
+  padding-right: 10px;
   width: 440px;
 
   &::-webkit-scrollbar {
