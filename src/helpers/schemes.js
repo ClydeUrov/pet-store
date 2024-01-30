@@ -21,8 +21,8 @@ export const schemaSignUp = yup.object().shape({
     .required("Email is required!"),
   birthDate: yup
     .date()
-    .max(new Date(), 'Birth date cannot be in the future')
-    .required('Birth date is required'),
+    .max(new Date(), "Birth date cannot be in the future")
+    .required("Birth date is required"),
   password: yup
     .string()
     .matches(/^[^\s]*$/, "Must not contain spaces!")
@@ -54,40 +54,6 @@ export const schemaLogIn = yup.object().shape({
     .required("Password is required!"),
 });
 
-export const schemaUserPersonalInfo = yup.object().shape({
-  firsame: yup
-    .string()
-    .min(2, "Minimum 2 characters!")
-    .max(24, "Maximum 24 characters!")
-    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-']+$/, "Can only contain letters!")
-    .required("Required field!"),
-  surname: yup
-    .string()
-    .min(4, "Minimum 4 characters!")
-    .max(120, "Maximum 120 characters!")
-    .required("Required field!"),
-  email: yup
-    .string()
-    .matches(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Correct format: mail@ukr.net or mail@gmail.com"
-    )
-    .required("Required field!"),
-  password: yup
-    .string()
-    .matches(/^[^\s]*$/, "Must not contain spaces!")
-    .min(7, "Minimum 7 characters!")
-    .max(32, "Password must contain no more than 32 characters!")
-    .required("Password is required!"),
-  confirm: yup
-    .string()
-    .oneOf(
-      [yup.ref("password"), null],
-      "Confirm password must match the password!"
-    )
-    .required("Required!"),
-});
-
 export const schemaUserPassword = yup.object().shape({
   oldPassword: yup
     .string()
@@ -115,12 +81,13 @@ export const schemaUserPersonalInfoNew = yup.object().shape({
     .string()
     .min(2, "Minimum 2 characters!")
     .max(24, "Maximum 24 characters!")
-    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s\-']+$/, "Can only contain letters!")
+    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\-']+$/, "Can only contain letters!")
     .required("Required field!"),
   lastName: yup
     .string()
     .min(4, "Minimum 4 characters!")
     .max(120, "Maximum 120 characters!")
+    .matches(/^[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\-']+$/, "Can only contain letters!")
     .required("Required field!"),
 });
 
@@ -257,8 +224,8 @@ export const schemaAdminPassword = yup.object().shape({
 export const emailSchema = yup.object().shape({
   email: yup
     .string()
-    .email('Invalid email address')
-    .required('Email is required'),
+    .email("Invalid email address")
+    .required("Email is required"),
 });
 
 export const schemaForOrder = yup.object().shape({
@@ -275,16 +242,16 @@ export const schemaForOrder = yup.object().shape({
     .required("Required field!"),
   phoneNumber: yup
     .string()
-    .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, 'Invalid phone number')
-    .required('Required field!'),
+    .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, "Invalid phone number")
+    .required("Required field!"),
   email: yup
     .string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  city: yup.string().required('City is required'),
-  postalCode: yup.string().required('Postal Code is required'),
-  streetName: yup.string().required('Street is required'),
-  houseNumber: yup.string().required('House number is required'),
+    .email("Invalid email address")
+    .required("Email is required"),
+  city: yup.string().required("City is required"),
+  postalCode: yup.string().required("Postal Code is required"),
+  streetName: yup.string().required("Street is required"),
+  houseNumber: yup.string().required("House number is required"),
   apartment: yup.string().notRequired(),
   products: yup.array(),
   comment: yup.string().notRequired(),
