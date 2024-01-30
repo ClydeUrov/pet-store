@@ -19,6 +19,7 @@ import UpdateProduct from "../components/AdminFolder/ContentFolder/Products/Crea
 import CreateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/CreateProduct";
 import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
 import Order from "../pages/Order/Order";
+import { CloseButtonIcon } from "../components/Toasters/CustomToasters.js";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() =>
@@ -88,7 +89,15 @@ const App = () => {
           />
         </Route>
       </Routes>
-      <ToastContainer />
+      <ToastContainer
+        autoClose={3000}
+        position="top-center"
+        stacked
+        closeButton={() => <CloseButtonIcon />}
+        style={{
+          borderRadius: "2rem",
+        }}
+      />
     </>
   );
 };

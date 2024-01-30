@@ -28,7 +28,7 @@ function deleteOneItemWishList(id) {
 }
 
 function clearAllWishList() {
-  return axios.delete(`${baseURL}wish-lists/items`, {
+  return axios.delete(`${baseURL}wish-lists/items/all`, {
     headers: { Authorization: "Bearer " + getAccessToken() },
   });
 }

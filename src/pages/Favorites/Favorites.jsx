@@ -14,7 +14,7 @@ import useFetchWishList, {
   postItemInWishList,
   refillWishList,
 } from "../../helpers/wishList.actions";
-import { toast } from "react-toastify";
+import { WarningToast } from "../../components/Toasters/CustomToasters";
 const user = getUser();
 
 function Favorites() {
@@ -128,7 +128,7 @@ function Favorites() {
   function handleAddAllToCart() {
     if (isAvaibleBtn) {
       if (items.some((item) => item.notAvailable)) {
-        toast.warning("We add to cart ONLY avaible items");
+        WarningToast("We add to cart ONLY avaible items");
       }
       let carts = [];
       let ids = [];
@@ -192,7 +192,7 @@ function Favorites() {
                   name={item.name}
                   imgSrc={item.mainImage.filePath}
                   notAvailable={
-                    user?.role === "CLIENT" ? item.notAvailable : true
+                    user?.role !== "Admin" ? item.notAvailable : true
                   }
                   price={item.price}
                   priceWithDiscount={item.priceWithDiscount}
