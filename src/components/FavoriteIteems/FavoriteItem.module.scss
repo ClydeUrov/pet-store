@@ -1,15 +1,5 @@
 @import "../../../src/variables";
 
-// .wrapper {
-//   height: 8rem;
-//   width: 100%;
-//   //   display: flex;
-//   //   align-items: center;
-// }
-// .image_wrapper {
-//   height: 8rem;
-//   width: 8rem;
-// }
 .image {
   object-fit: contain;
   height: 8rem;
@@ -36,10 +26,7 @@
     cursor: not-allowed;
   }
 }
-// .image_descr {
-//   font-size: 1.4rem;
-//   width: 12.4rem;
-// }
+
 .description {
   width: 60%;
   padding-left: 1rem;
@@ -54,7 +41,6 @@ i {
   }
 }
 .buttton_cont {
-  // align-self: center;
   justify-self: center;
   & > .avaible_btn,
   .unAvaible_btn {
@@ -86,7 +72,7 @@ i {
 .avaible,
 .unAvaible,
 .price {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 400;
 }
 

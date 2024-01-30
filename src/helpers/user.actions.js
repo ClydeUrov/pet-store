@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosService from "../helpers/axios";
-import { UserLoginLogoutPublish } from "./events/LoginLogout";
+import { UserLoginLogoutPublish, smthInWishList } from "./events/LoginLogout";
 import { CartAddEventPublish } from "./events/CartEvent";
+import { getWishListLS, setWishListLS } from "./wishListLS";
+import { clearAllWishList, refillWishList } from "./wishList.actions";
 
 const baseURL =
   "https://online-zoo-store-backend-web-service.onrender.com/api/v1/";
@@ -65,6 +67,8 @@ function useUserActions() {
   function login(data) {
     return axios.post(`${baseURL}auth/login`, data).then((res) => {
       setUserData(res.data);
+      if (res.data.user.role === "CLIENT")
+        setWishList(res.data.wishList.products);
       UserLoginLogoutPublish("UserLogin");
       if (res.data.user.role === "CLIENT") {
         navigate("user/account");
@@ -88,9 +92,13 @@ function useUserActions() {
           Authorization: `Bearer ${getAccessToken()}`,
         },
       })
+      .then(async () => {
+        if (getUser().role === "CLIENT") await updateWishListAPI();
+      })
       .then(() => {
         CartAddEventPublish({ action: "exit", id: [] });
         localStorage.removeItem("auth");
+        localStorage.removeItem("wishList");
         localStorage.removeItem("cart");
         localStorage.removeItem("constants");
         UserLoginLogoutPublish("UserLogout");
@@ -169,6 +177,30 @@ function getAccessToken() {
 function getRefreshToken() {
   const auth = JSON.parse(localStorage.getItem("auth"));
   return auth.refresh;
+}
+
+function setWishList(APIList) {
+  const LSList = getWishListLS();
+  const ids = [];
+  const uniqueArr = [];
+  LSList.concat(APIList).forEach((el) => {
+    if (!ids.includes(el.id)) {
+      ids.push(el.id);
+      uniqueArr.push(el);
+    }
+  });
+  if (uniqueArr.length) smthInWishList();
+  setWishListLS(uniqueArr);
+}
+
+async function updateWishListAPI() {
+  const LSList = getWishListLS().map((el) => el.id);
+
+  if (!LSList.length) {
+    await clearAllWishList();
+  } else {
+    await refillWishList(LSList);
+  }
 }
 
 // Set the access, token and user property

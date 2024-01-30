@@ -3,8 +3,8 @@ import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import styles from "./FavoriteItem.module.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
-import { useUserActions } from "../../helpers/user.actions";
-import { toast } from "react-toastify";
+import { getUser } from "../../helpers/user.actions";
+
 function FavoriteItem({
   price,
   imgSrc,
@@ -17,34 +17,11 @@ function FavoriteItem({
 }) {
   const correctname = name.length > 90 ? name.slice(0, 35) + "..." : name;
   const [isLoading, setIsLoading] = useState(false);
-  const { postCarts } = useUserActions();
-
   const { constants } = useConstants();
   async function handleDelete() {
     setIsLoading(true);
     await onDelete(id);
     setIsLoading(false);
-  }
-
-  async function handleAddOneItemToCart(item) {
-    try {
-      await toast.promise(
-        () =>
-          postCarts([
-            {
-              product: {
-                id: item.id,
-              },
-              quantity: 1,
-            },
-          ]),
-        {
-          error: "Happend some problem with adding this item to card 😔",
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   return (

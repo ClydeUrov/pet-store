@@ -23,15 +23,12 @@ import StarRatingNew from "../../components/StarRatings/StarRatingNew";
 import { useParams } from "react-router-dom";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
-import useWishList from "../../helpers/wishList.actions";
 import {
   smthInWishList,
   emptyWishList,
 } from "../../helpers/events/LoginLogout";
 import { getOnSale } from "../../redux/cards/operations";
 import Loader from "../../components/Loader/Loader";
-import { toast } from "react-toastify";
-import { getUser } from "../../helpers/user.actions";
 import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
 
 const ProductPage = () => {
@@ -46,8 +43,7 @@ const ProductPage = () => {
     Math.floor(window.innerWidth / 300)
   );
   const { productId } = useParams();
-  const { getWishList, deleteOneItemWishList, postItemInWishList } =
-    useWishList();
+
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
