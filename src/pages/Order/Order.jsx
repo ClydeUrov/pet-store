@@ -1,17 +1,23 @@
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import css from "./Order.module.scss";
 import FormikField from "../../components/FormikFolder/FormikField";
 import { address, contactInformation, delivery } from "./parameters";
 import Button from "../../components/CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import OrderCard from "./OrderCard";
+import { getUser } from "../../helpers/user.actions";
+import { schemaForOrder } from "../../helpers/schemes";
 
 const Order = () => {
+  const localProducts = JSON.parse(localStorage.getItem("cart"));
+  const user = getUser();
+  const { constants } = useConstants();
+
   const handleSubmit = async (values) => {
+    // const productIds = localProducts.map((item) => item.product.id)
+    // values.products = productIds;
     console.log("values", values);
   };
-  const localProducts = JSON.parse(localStorage.getItem("cart"));
-  const { constants } = useConstants();
 
   function CalculateTotalAmount() {
     const totalWithDiscount = localProducts.reduce((acc, item) => {
@@ -31,36 +37,30 @@ const Order = () => {
     };
   }
 
-  const { totalWithDiscount, totalWithoutDiscount } = CalculateTotalAmount();
+  const { totalWithDiscount, totalWithoutDiscount } = localProducts.length > 0 && CalculateTotalAmount();
 
   return (
     <div className={css.content}>
       <div className={css.orderForm}>
         <Formik
-          // validationSchema={schemaAdminProducts}
+          validationSchema={schemaForOrder}
           initialValues={{
-            firstName: "",
-            lastName: undefined,
-            phoneNumber: undefined,
-            email: undefined,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: '+',
+            email: user.email,
             city: undefined,
             postalCode: undefined,
-            streetName: 0,
             houseNumber: undefined,
             apartment: undefined,
+            deliveryOption: undefined,
             comment: "",
           }}
           onSubmit={handleSubmit}
         >
           {({ values, setFieldValue }) => (
             <Form className={css.form}>
-              <h1
-                style={{
-                  marginTop: "40px",
-                  marginBottom: "10px",
-                  fontSize: "36px",
-                }}
-              >
+              <h1 className={css.title}>
                 Placing an order
               </h1>
               <section>
@@ -116,6 +116,7 @@ const Order = () => {
                         id="courierDelivery"
                       />
                       <label htmlFor="novaPoshta">Courier Delivery</label>
+                      <ErrorMessage name="deliveryBy" component="p" className={css.error} />
                     </div>
                   </div>
                 )}
@@ -127,6 +128,7 @@ const Order = () => {
                     id="ukrPoshta"
                   />
                   <label htmlFor="ukrPoshta">Ukr Poshta</label>
+                  <ErrorMessage name="deliveryOption" component="p" className={css.error} />
                 </div>
                 {values.deliveryOption === "ukrPoshta" && (
                   <div style={{ marginLeft: "18px" }}>
@@ -137,7 +139,7 @@ const Order = () => {
                         value="postOffice"
                         id="postOffice"
                       />
-                      <label htmlFor="novaPoshta">Post Office</label>
+                      <label htmlFor="ukrPoshta">Post Office</label>
                     </div>
                     <div className={css.radio}>
                       <Field
@@ -146,7 +148,8 @@ const Order = () => {
                         value="courierDelivery"
                         id="courierDelivery"
                       />
-                      <label htmlFor="novaPoshta">Courier Delivery</label>
+                      <label htmlFor="ukrPoshta">Courier Delivery</label>
+                      <ErrorMessage name="deliveryBy" component="p" className={css.error} />
                     </div>
                   </div>
                 )}
@@ -180,6 +183,7 @@ const Order = () => {
                     id="byCash"
                   />
                   <label htmlFor="byCash">By cash</label>
+                  <ErrorMessage name="payment" component="p" className={css.error} />
                 </div>
                 <div className={css.commentContainer}>
                   <label htmlFor="comment" className={css.label}>
@@ -192,15 +196,20 @@ const Order = () => {
                     placeholder="Enter text"
                     className={css.textarea}
                   />
+                  <ErrorMessage name="comment" component="p" className={css.error} />
                 </div>
               </section>
               <div style={{ marginTop: "40px" }}>
-                <Button
+                <button type="submit" >Create</button>
+                {/* <button type="submit" onClick={() => handleSubmit(values)}>Submit</button> */}
+                {/* <Button
+                  type="submit"
                   text={"Confirm order"}
                   onClickHandler={() => handleSubmit()}
                   buttonSize="small"
-                />
+                /> */}
               </div>
+              {/* <button type="submit" >Submit</button>  */}
             </Form>
           )}
         </Formik>
@@ -220,16 +229,18 @@ const Order = () => {
         <div className={css.totalPrice}>
           <p>Total price</p>
           <p>
-            {totalWithDiscount === totalWithoutDiscount ? (
-              totalWithoutDiscount.toFixed(2)
-            ) : (
-              <>
-                <span className={css.cardPriceNot}>
-                  {totalWithoutDiscount.toFixed(2)}
-                </span>{" "}
-                {totalWithDiscount.toFixed(2)}
-              </>
-            )}
+            {localProducts.length > 0 ? (
+              totalWithDiscount === totalWithoutDiscount ? (
+                totalWithoutDiscount.toFixed(2)
+              ) : (
+                <>
+                  <span className={css.cardPriceNot}>
+                    {totalWithoutDiscount.toFixed(2)}
+                  </span>{" "}
+                  {totalWithDiscount.toFixed(2)}
+                </>
+              )
+            ) : (0)}
           </p>
         </div>
       </div>

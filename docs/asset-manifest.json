@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/pet-store/static/css/main.d21644a4.css",
-    "main.js": "/pet-store/static/js/main.6c945f00.js",
+    "main.css": "/pet-store/static/css/main.2400eb37.css",
+    "main.js": "/pet-store/static/js/main.b203ec00.js",
     "static/css/41.96697ac5.chunk.css": "/pet-store/static/css/41.96697ac5.chunk.css",
     "static/js/41.a90d6f08.chunk.js": "/pet-store/static/js/41.a90d6f08.chunk.js",
     "static/css/244.a0765a5d.chunk.css": "/pet-store/static/css/244.a0765a5d.chunk.css",
-    "static/js/244.8338599c.chunk.js": "/pet-store/static/js/244.8338599c.chunk.js",
+    "static/js/244.01e43b58.chunk.js": "/pet-store/static/js/244.01e43b58.chunk.js",
     "static/css/511.6dcbaf51.chunk.css": "/pet-store/static/css/511.6dcbaf51.chunk.css",
     "static/js/511.fcd255fb.chunk.js": "/pet-store/static/js/511.fcd255fb.chunk.js",
     "static/css/905.579f1180.chunk.css": "/pet-store/static/css/905.579f1180.chunk.css",
@@ -14,8 +14,8 @@
     "static/js/600.28c6686c.chunk.js": "/pet-store/static/js/600.28c6686c.chunk.js",
     "static/css/396.27af358d.chunk.css": "/pet-store/static/css/396.27af358d.chunk.css",
     "static/js/396.aa17684d.chunk.js": "/pet-store/static/js/396.aa17684d.chunk.js",
-    "static/css/925.777a1521.chunk.css": "/pet-store/static/css/925.777a1521.chunk.css",
-    "static/js/925.32dba60d.chunk.js": "/pet-store/static/js/925.32dba60d.chunk.js",
+    "static/css/203.883c3fed.chunk.css": "/pet-store/static/css/203.883c3fed.chunk.css",
+    "static/js/203.ab94dd66.chunk.js": "/pet-store/static/js/203.ab94dd66.chunk.js",
     "static/css/180.44f0e8ce.chunk.css": "/pet-store/static/css/180.44f0e8ce.chunk.css",
     "static/js/180.2e2c9824.chunk.js": "/pet-store/static/js/180.2e2c9824.chunk.js",
     "static/js/763.36cd7b39.chunk.js": "/pet-store/static/js/763.36cd7b39.chunk.js",
@@ -25,12 +25,12 @@
     "static/media/slick.ttf": "/pet-store/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/pet-store/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/pet-store/index.html",
-    "main.d21644a4.css.map": "/pet-store/static/css/main.d21644a4.css.map",
-    "main.6c945f00.js.map": "/pet-store/static/js/main.6c945f00.js.map",
+    "main.2400eb37.css.map": "/pet-store/static/css/main.2400eb37.css.map",
+    "main.b203ec00.js.map": "/pet-store/static/js/main.b203ec00.js.map",
     "41.96697ac5.chunk.css.map": "/pet-store/static/css/41.96697ac5.chunk.css.map",
     "41.a90d6f08.chunk.js.map": "/pet-store/static/js/41.a90d6f08.chunk.js.map",
     "244.a0765a5d.chunk.css.map": "/pet-store/static/css/244.a0765a5d.chunk.css.map",
-    "244.8338599c.chunk.js.map": "/pet-store/static/js/244.8338599c.chunk.js.map",
+    "244.01e43b58.chunk.js.map": "/pet-store/static/js/244.01e43b58.chunk.js.map",
     "511.6dcbaf51.chunk.css.map": "/pet-store/static/css/511.6dcbaf51.chunk.css.map",
     "511.fcd255fb.chunk.js.map": "/pet-store/static/js/511.fcd255fb.chunk.js.map",
     "905.579f1180.chunk.css.map": "/pet-store/static/css/905.579f1180.chunk.css.map",
@@ -39,15 +39,15 @@
     "600.28c6686c.chunk.js.map": "/pet-store/static/js/600.28c6686c.chunk.js.map",
     "396.27af358d.chunk.css.map": "/pet-store/static/css/396.27af358d.chunk.css.map",
     "396.aa17684d.chunk.js.map": "/pet-store/static/js/396.aa17684d.chunk.js.map",
-    "925.777a1521.chunk.css.map": "/pet-store/static/css/925.777a1521.chunk.css.map",
-    "925.32dba60d.chunk.js.map": "/pet-store/static/js/925.32dba60d.chunk.js.map",
+    "203.883c3fed.chunk.css.map": "/pet-store/static/css/203.883c3fed.chunk.css.map",
+    "203.ab94dd66.chunk.js.map": "/pet-store/static/js/203.ab94dd66.chunk.js.map",
     "180.44f0e8ce.chunk.css.map": "/pet-store/static/css/180.44f0e8ce.chunk.css.map",
     "180.2e2c9824.chunk.js.map": "/pet-store/static/js/180.2e2c9824.chunk.js.map",
     "763.36cd7b39.chunk.js.map": "/pet-store/static/js/763.36cd7b39.chunk.js.map",
     "692.b5101568.chunk.js.map": "/pet-store/static/js/692.b5101568.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d21644a4.css",
-    "static/js/main.6c945f00.js"
+    "static/css/main.2400eb37.css",
+    "static/js/main.b203ec00.js"
   ]
 }

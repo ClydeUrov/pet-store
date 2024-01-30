@@ -106,7 +106,7 @@ section {
 }
 
 .cartList {
-  padding: 8px 28px;
+  padding: 8px 10px;
   overflow-y: auto;
   margin-right: 3px;
 
@@ -237,4 +237,10 @@ section {
     font-weight: 600;
     font-family: 'Lato', sans-serif;
   }
+}
+
+.title {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 36px;
 }

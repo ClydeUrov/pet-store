@@ -197,7 +197,8 @@ async function updateWishListAPI() {
   const LSList = getWishListLS().map((el) => el.id);
 
   if (!LSList.length) {
-    await clearAllWishList();
+    // something going wrong!
+    // await clearAllWishList();
   } else {
     await refillWishList(LSList);
   }

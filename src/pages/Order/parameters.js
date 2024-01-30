@@ -26,6 +26,7 @@ export const contactInformation = [
     label: "Email",
     width: "380px",
     required: true,
+    disabled: true,
   },
 ];
 

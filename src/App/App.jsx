@@ -12,7 +12,6 @@ import "./App.module.scss";
 import { AdminPrivateRoute, PrivateRoute } from "../helpers/routs/PrivateRoute";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import Favorites from "../pages/Favorites/Favorites";
-import UserProfile from "../components/AdminFolder/Users/UserProfile";
 import Users from "../components/AdminFolder/Users/Users";
 import AdminContentRoute from "../helpers/routs/AdminContentRoute";
 import UpdateProduct from "../components/AdminFolder/ContentFolder/Products/CreateUpdateProduct/UpdateProduct";
@@ -78,7 +77,6 @@ const App = () => {
         >
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
-          <Route path="users/:userId" element={<UserProfile />} />
           <Route path="account" element={<AdminProfile />} />
           <Route path="settings" element={<Constants />} />
           <Route path=":contentName" element={<AdminContentRoute />} />
