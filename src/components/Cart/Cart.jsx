@@ -62,7 +62,9 @@ const Cart = ({ user, toggleModal, setModalState, productsQuantity }) => {
         }));
 
       if (dataForBack.length > 0) {
-        await userActions.postCarts(dataForBack);
+        await userActions.postCarts(dataForBack).catch((err) => 
+          err.response ? console.log(err.response.data.message) : console.log(err.message)
+        )
       }
     }
       
@@ -131,7 +133,7 @@ const Cart = ({ user, toggleModal, setModalState, productsQuantity }) => {
             <p>Total:</p>{" "}
             <p>{constants[1].value} {totalAmount.toFixed(2)}</p>
           </div>
-          <button onClick={() => user ? (navigate("order"), toggleModal()) : setModalState(3) } >
+          <button onClick={() => user  ? (localProducts.length > 0 && navigate("order"), toggleModal()) : setModalState(3) } >
             Checkout
           </button>
         </div>

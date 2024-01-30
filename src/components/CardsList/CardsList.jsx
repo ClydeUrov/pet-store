@@ -11,6 +11,8 @@ const CardsList = ({setPage}) => {
   const cards = useSelector(selectCards) || {};
   const { content } = cards || {};
 
+  console.log(cards.number, cards.totalElements, cards.size);
+
   return (
     <>
       {content ? (
