@@ -12,7 +12,7 @@ const AdminPage = () => {
         <LeftSide />
 
         <div>
-          <Suspense fallback={<Loader />}>
+          <Suspense>
             <Outlet />
           </Suspense>
         </div>

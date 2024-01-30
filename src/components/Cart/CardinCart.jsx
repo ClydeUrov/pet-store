@@ -30,11 +30,7 @@ const CardinCart = ({ item, constants, setCarts, navigate, user, CalculateTotalA
             localStorage.setItem("cart", JSON.stringify(updatedCart));
             await setCarts((prevCarts) => prevCarts.filter(item => item.product.id !== currentItemId));
             await userAction.deleteCart(currentItemId);
-            
-            console.log(`Item ${currentItemId} deleted successfully`);
-
-            
-            // setCarts(updatedCart);
+            CalculateTotalAmount(updatedCart);
           }
         } catch (error) {
           console.error("Error deleting items from cart:", error);
@@ -81,6 +77,7 @@ const CardinCart = ({ item, constants, setCarts, navigate, user, CalculateTotalA
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       CartAddEventPublish({ action: '-', id: [itemId] });
       setCarts(updatedCart);
+      CalculateTotalAmount(updatedCart);
     }
   };
 

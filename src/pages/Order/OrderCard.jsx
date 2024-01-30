@@ -19,7 +19,7 @@ const OrderCard = ({item, constants}) => {
         )}
       </div>
       <div className={css.body}>
-        <p>{item.product.name}</p>
+        <p>{item.product.name.length > 38 ? `${item.product.name.slice(0, 38)}...` : item.product.name}</p>
         <div className={css.cardPriceBox}>
           <p className={css.cardPrice + " " + (item.product.priceWithDiscount ? css.product_price_with_discount : "")}>
             {constants[1].value}{' '}
@@ -27,13 +27,12 @@ const OrderCard = ({item, constants}) => {
             <span style={{color:"black"}}> x {item.quantity}</span>
           </p>
           
-          
           <span className={css.totalValue}>
-            {item.product.priceWithDiscount && (
+            {/* {item.product.priceWithDiscount && (
               <span className={css.cardPriceNot}>
                 {constants[1].value} {item.product.price * item.quantity}
               </span>
-            )}
+            )} */}
             {" "}{constants[1].value} {totalCart.toFixed(2)}
           </span>
         </div>

@@ -14,7 +14,7 @@ const ProductCards = ({
   setPage,
   dispatch,
   setPrevLength,
-  setUpdateProduct
+  setUpdateProduct,
 }) => {
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
@@ -23,14 +23,22 @@ const ProductCards = ({
 
   const handleConfirmDeletion = async () => {
     try {
-      await toast.promise(dispatch(deleteCard(deleteItemId)),{
+      await toast.promise(dispatch(deleteCard(deleteItemId)), {
         pending: "Deletion in process",
-        error: "The product was not deleted"
-      }
-      );
-      setPrevLength(allCards.content.length - 1);
+        error: (error) => {
+          if (error.code === 402) {
+            return "The product is contained in the cart/wishlist/order and cannot be deleted";
+          } else {
+            return "The product was not deleted";
+          }
+        },
+      });
+      // setPrevLength(allCards.content.length - 1);
     } catch (err) {
-      console.error("Error deleting card:", err.response?.data?.message || err.message);
+      console.error(
+        "Error deleting card:",
+        err.response?.data?.message || err.message
+      );
       alert("An error occurred while deleting the product. Please try again.");
     }
     setDeleteModal(false);
@@ -74,7 +82,9 @@ const ProductCards = ({
           <div>{item.newArrival ? "Yes" : "No"}</div>
           <div>{item.notAvailable ? "Out of stock" : "In stock"}</div>
           <div>
-            <p onClick={() => setUpdateProduct(item)} ><MdOutlineEdit /></p>
+            <p onClick={() => setUpdateProduct(item)}>
+              <MdOutlineEdit />
+            </p>
             <AiOutlineDelete
               onClick={() => {
                 setDeleteItemId(item.id);
