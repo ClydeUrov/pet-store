@@ -53,6 +53,7 @@ function FavoriteItem({
       </span>
       <div className={styles.buttton_cont}>
         <button
+          disabled={notAvailable}
           className={
             !notAvailable && !isLoading
               ? styles.avaible_btn

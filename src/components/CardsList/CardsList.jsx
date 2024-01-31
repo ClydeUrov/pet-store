@@ -24,8 +24,6 @@ const CardsList = ({ setPage }) => {
     }
   }, [wishList.length]);
 
-  console.log(cards.number, cards.totalElements, cards.size);
-
   return (
     <>
       {content ? (

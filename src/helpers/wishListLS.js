@@ -16,8 +16,6 @@ async function handleAddOrDeleteItemWishList(item, favoriteItems, setFunction) {
   if (!!favoriteItems.find((i) => i.id === item.id)?.id) {
     try {
       const corrWishList = favoriteItems.filter((i) => i.id !== item.id);
-      console.log("WISH LIST LS", favoriteItems);
-      console.log("WISH LIST LS", corrWishList);
 
       setWishListLS(corrWishList);
       setFunction(corrWishList);
