@@ -15,7 +15,8 @@ import {
   emptyWishList,
   smthInWishList,
 } from "../../helpers/events/LoginLogout";
-import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
+import { getWishListLS } from "../../helpers/wishListLS";
+import Loader from "../../components/Loader/Loader";
 
 const Homepage = () => {
   const [slidesPerView, setSlidesPerView] = useState(
@@ -68,29 +69,7 @@ const Homepage = () => {
     brands.content.length === 0 ||
     !wishList
   ) {
-    return;
-  }
-
-  async function handleChangeFavorites(item) {
-    if (!!wishList.find((i) => i.id === item.id)?.id) {
-      try {
-        const corrWishList = wishList.filter((i) => i.id !== item.id);
-
-        setWishListLS(corrWishList);
-        setWishList(corrWishList);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        const corrWishList = [...wishList, item];
-
-        setWishListLS(corrWishList);
-        setWishList(corrWishList);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    return <Loader />;
   }
 
   return (
@@ -99,7 +78,7 @@ const Homepage = () => {
         <MainSliderForCategories items={mainCategories.content} />
         <div className={css.three_swipers}>
           <SliderForHomepage
-            onChangeFavorites={handleChangeFavorites}
+            onChangeFavorites={setWishList}
             favoriteItems={wishList}
             items={cardsOnSale.content}
             title="Your Pet Will Love These"
@@ -108,7 +87,7 @@ const Homepage = () => {
           />
 
           <SliderForHomepage
-            onChangeFavorites={handleChangeFavorites}
+            onChangeFavorites={setWishList}
             favoriteItems={wishList}
             items={cardsOnSale.content}
             title="On Sale"

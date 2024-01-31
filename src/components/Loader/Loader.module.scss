@@ -1,9 +1,15 @@
-@import '..//../variables.scss';
+@import "..//../variables.scss";
 
 .spinner {
-    position: absolute;
-    z-index: 10;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  height: fit-content;
+  width: fit-content;
+}
+
+.wrapper {
+  min-height: 36dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18dvh 0;
+}

@@ -131,28 +131,23 @@
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  color: #1b1b1b;
   border: none;
   background-color: transparent;
   outline-color: transparent;
-
-  &.full {
-    color: $main-color;
-  }
-}
-.notLoading {
   cursor: pointer;
 }
-
-.isLoading {
-  cursor: not-allowed;
+.empty {
+  color: #1b1b1b;
+  &:hover {
+    color: $hover-color;
+  }
 }
 
-.favoriteBox:hover {
-  color: $hover-color;
-}
-.favoriteBox:focus {
-  color: $focus-color;
+.full {
+  color: $main-color;
+  &:hover {
+    color: $hover-color;
+  }
 }
 
 .cardDescription {
