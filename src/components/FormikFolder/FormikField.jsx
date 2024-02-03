@@ -142,7 +142,7 @@ const FormikField = (props) => {
                 {passwordShow ? <MdOutlineVisibility size={24} /> : <MdOutlineVisibilityOff size={24} />}
               </button>
             )}
-            <ErrorMessage name={name} component="p" className={css.error} />
+            <ErrorMessage name={name} component="p" className="error-message" />
           </>
         )}
       </div>

@@ -27,8 +27,6 @@ function deleteOneItemWishList(id) {
   });
 }
 
-// wishList.actions.js:31 
-// DELETE https://online-zoo-store-backend-web-service.onrender.com/api/v1/wish-lists/items 401 (Unauthorized)
 function clearAllWishList() {
   return axios.delete(`${baseURL}wish-lists/items/all`, {
     headers: { Authorization: "Bearer " + getAccessToken() },

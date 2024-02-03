@@ -7,17 +7,12 @@ import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import OrderCard from "./OrderCard";
 import { getUser } from "../../helpers/user.actions";
 import { schemaForOrder } from "../../helpers/schemes";
+import { InfoToast } from "../../components/Toasters/CustomToasters";
 
 const Order = () => {
   const localProducts = JSON.parse(localStorage.getItem("cart"));
   const user = getUser();
   const { constants } = useConstants();
-
-  const handleSubmit = async (values) => {
-    // const productIds = localProducts.map((item) => item.product.id)
-    // values.products = productIds;
-    console.log("values", values);
-  };
 
   function CalculateTotalAmount() {
     const totalWithDiscount = localProducts.reduce((acc, item) => {
@@ -37,7 +32,20 @@ const Order = () => {
     };
   }
 
-  const { totalWithDiscount, totalWithoutDiscount } = localProducts.length > 0 && CalculateTotalAmount();
+  const { totalWithDiscount, totalWithoutDiscount } =
+    localProducts.length > 0 && CalculateTotalAmount();
+
+  const handleSubmit = async (values) => {
+    // const productIds = localProducts.map((item) => item.product.id)
+    // values.products = productIds;
+    values.totalPrice =
+      totalWithDiscount === totalWithoutDiscount
+        ? totalWithoutDiscount.toFixed(2)
+        : totalWithDiscount;
+    values.productIds = localProducts.map((item) => item.product.id);
+    console.log("values", values);
+    InfoToast("Order successfully confirmed! Please, check your email. ")
+  };
 
   return (
     <div className={css.content}>
@@ -47,22 +55,21 @@ const Order = () => {
           initialValues={{
             firstName: user.firstName,
             lastName: user.lastName,
-            phoneNumber: '+',
+            phoneNumber: "+",
             email: user.email,
-            city: undefined,
-            postalCode: undefined,
-            houseNumber: undefined,
-            apartment: undefined,
-            deliveryOption: undefined,
-            comment: "",
+            city: '',
+            postalCode: '',
+            houseNumber: '',
+            apartment: '',
+            deliveryOption: '',
+            deliveryBy: '',
+            comment: '',
           }}
           onSubmit={handleSubmit}
         >
           {({ values, setFieldValue }) => (
             <Form className={css.form}>
-              <h1 className={css.title}>
-                Placing an order
-              </h1>
+              <h1 className={css.title}>Placing an order</h1>
               <section>
                 <h2>Contact information</h2>
                 <div className={css.product}>
@@ -116,7 +123,6 @@ const Order = () => {
                         id="courierDelivery"
                       />
                       <label htmlFor="novaPoshta">Courier Delivery</label>
-                      <ErrorMessage name="deliveryBy" component="p" className={css.error} />
                     </div>
                   </div>
                 )}
@@ -128,7 +134,6 @@ const Order = () => {
                     id="ukrPoshta"
                   />
                   <label htmlFor="ukrPoshta">Ukr Poshta</label>
-                  <ErrorMessage name="deliveryOption" component="p" className={css.error} />
                 </div>
                 {values.deliveryOption === "ukrPoshta" && (
                   <div style={{ marginLeft: "18px" }}>
@@ -149,10 +154,19 @@ const Order = () => {
                         id="courierDelivery"
                       />
                       <label htmlFor="ukrPoshta">Courier Delivery</label>
-                      <ErrorMessage name="deliveryBy" component="p" className={css.error} />
                     </div>
                   </div>
                 )}
+                <ErrorMessage
+                  name="deliveryOption"
+                  component="p"
+                  className={css.error}
+                />
+                <ErrorMessage
+                  name="deliveryBy"
+                  component="p"
+                  className={css.error}
+                />
                 <div className={css.addressBlock}>
                   {address.map((field) => (
                     <FormikField
@@ -183,8 +197,12 @@ const Order = () => {
                     id="byCash"
                   />
                   <label htmlFor="byCash">By cash</label>
-                  <ErrorMessage name="payment" component="p" className={css.error} />
                 </div>
+                <ErrorMessage
+                  name="payment"
+                  component="p"
+                  className={css.error}
+                />
                 <div className={css.commentContainer}>
                   <label htmlFor="comment" className={css.label}>
                     Add comment to the order
@@ -196,20 +214,13 @@ const Order = () => {
                     placeholder="Enter text"
                     className={css.textarea}
                   />
-                  <ErrorMessage name="comment" component="p" className={css.error} />
                 </div>
               </section>
               <div style={{ marginTop: "40px" }}>
-                <button type="submit" >Create</button>
-                {/* <button type="submit" onClick={() => handleSubmit(values)}>Submit</button> */}
-                {/* <Button
-                  type="submit"
-                  text={"Confirm order"}
-                  onClickHandler={() => handleSubmit()}
-                  buttonSize="small"
-                /> */}
+                <button type="submit" className={css.submitButton}>
+                  Confirm order
+                </button>
               </div>
-              {/* <button type="submit" >Submit</button>  */}
             </Form>
           )}
         </Formik>
@@ -240,7 +251,9 @@ const Order = () => {
                   {totalWithDiscount.toFixed(2)}
                 </>
               )
-            ) : (0)}
+            ) : (
+              0
+            )}
           </p>
         </div>
       </div>

@@ -71,18 +71,18 @@ const CreateUpdate = ({
             success: "Created successfully",
           }
         );
-        console.log(response)
+        // console.log(response)
         let newItem = { ...response };
 
         if (field.image) {
-          console.log(field.image)
+          // console.log(field.image)
           const formData = new FormData();
           formData.append("image", field.image);
           const imageResponse = await adminActions.create(
             `${action}/${response.id}/image`,
             formData
           );
-          console.log(imageResponse)
+          // console.log(imageResponse)
           newItem = { ...newItem, image: imageResponse };
         }
         await setCharacteristics((prevCharacteristics) => [

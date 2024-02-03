@@ -152,6 +152,7 @@ const Header = () => {
         ))}
     </ul>
   );
+  console.log("user", user);
 
   return (
     <>

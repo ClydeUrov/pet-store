@@ -26,7 +26,7 @@ const ChangeStatus = ({ onConfirm, status }) => {
   );
 };
 
-const UserTable = ({ allUsers, setPage, adminAction }) => {
+const UserTable = ({ allUsers, setPage, adminAction, fetchUsers }) => {
   const [isModal, setModal] = useState(false);
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState("");
@@ -38,6 +38,7 @@ const UserTable = ({ allUsers, setPage, adminAction }) => {
           selected.status === "ACTIVE" ? "BLOCKED" : "ACTIVE"
         }`
       )
+      .then(() => fetchUsers())
       .catch((e) => {
         e.response ? setError(e.response.data.message) : setError(e.message);
       });

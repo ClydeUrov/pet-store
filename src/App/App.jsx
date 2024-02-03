@@ -10,7 +10,6 @@ import ProductPage from "../pages/ProductPage/ProductPage";
 import { Layout } from "../components/Layout/Layout";
 import "./App.module.scss";
 import { AdminPrivateRoute, PrivateRoute } from "../helpers/routs/PrivateRoute";
-import AdminPage from "../pages/AdminPage/AdminPage";
 import Favorites from "../pages/Favorites/Favorites";
 import Users from "../components/AdminFolder/Users/Users";
 import AdminContentRoute from "../helpers/routs/AdminContentRoute";
@@ -19,6 +18,7 @@ import CreateProduct from "../components/AdminFolder/ContentFolder/Products/Crea
 import Constants from "../components/AdminFolder/ContentFolder/Constants/Constants";
 import Order from "../pages/Order/Order";
 import { CloseButtonIcon } from "../components/Toasters/CustomToasters.js";
+import AdminPage from "../pages/AdminPage/AdminPage.jsx";
 
 const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
 const UserAccount = lazy(() =>
@@ -71,19 +71,34 @@ const App = () => {
           <Route path="/*" element={<Error />} />
         </Route>
 
-        <Route
-          path="/admin"
-          element={<AdminPrivateRoute component={<AdminPage />} />}
-        >
-          <Route path="orders" element={<Orders />} />
-          <Route path="users" element={<Users />} />
-          <Route path="account" element={<AdminProfile />} />
-          <Route path="settings" element={<Constants />} />
-          <Route path=":contentName" element={<AdminContentRoute />} />
-          <Route path="products/create" element={<CreateProduct />} />
+        <Route path="/admin" element={<AdminPrivateRoute component={<AdminPage />} />}>
+          <Route
+            path="orders"
+            element={<AdminPrivateRoute component={<Orders />} />}
+          />
+          <Route
+            path="users"
+            element={<AdminPrivateRoute component={<Users />} />}
+          />
+          <Route
+            path="account"
+            element={<AdminPrivateRoute component={<AdminProfile />} />}
+          />
+          <Route
+            path="settings"
+            element={<AdminPrivateRoute component={<Constants />} />}
+          />
+          <Route
+            path=":contentName"
+            element={<AdminPrivateRoute component={<AdminContentRoute />} />}
+          />
+          <Route
+            path="products/create"
+            element={<AdminPrivateRoute component={<CreateProduct />} />}
+          />
           <Route
             path="products/update/:productId"
-            element={<UpdateProduct />}
+            element={<AdminPrivateRoute component={<UpdateProduct />} />}
           />
         </Route>
       </Routes>

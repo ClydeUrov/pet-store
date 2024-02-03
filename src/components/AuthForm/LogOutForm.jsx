@@ -1,30 +1,32 @@
 import css from "./AuthForm.module.scss";
-import { useUserActions } from "../../helpers/user.actions";
+import { getUser, useUserActions } from "../../helpers/user.actions";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LogOutForm = () => {
   const [error, setError] = useState("");
   const userAction = useUserActions();
   const [isLoading, setIsLoading] = useState(false);
+  const user = getUser();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    try {
-      setIsLoading(true);
-      await userAction.logout();
-    } catch (err) {
-      err.response
-        ? setError(err.response.data.message)
-        : setError(err.message);
-    } finally {
-      setIsLoading(false);
+    if (user) {
+      try {
+        setIsLoading(true);
+        await userAction.logout();
+      } catch (err) {
+        err.response
+          ? setError(err.response.data.message)
+          : setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      navigate("/");
     }
+    
   };
-  //   await userAction.logout().catch((err) => {
-  //     err.response
-  //       ? setError(err.response.data.message)
-  //       : setError(err.message);
-  //   });
-  // };
 
   return (
     <>
