@@ -2,7 +2,7 @@
   "name": "pet-store",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vvolk-valeria.github.io/pet-store/",
+  "homepage": "https://clydeurov.github.io/pet-store/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.6",
     "@testing-library/jest-dom": "^5.16.5",

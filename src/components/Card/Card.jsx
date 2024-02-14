@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Button from "../CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
+import { InfoToast } from "../Toasters/CustomToasters";
 
 const Card = ({ item, favoriteItems, onChangeFavorites }) => {
   const { constants } = useConstants();
@@ -47,6 +48,7 @@ const Card = ({ item, favoriteItems, onChangeFavorites }) => {
       localStorage.setItem('cart', JSON.stringify(newCart));
 
       CartAddEventPublish({ action: '+', id: [item.id] });
+      InfoToast("Product successfully added to cart!")
     }
   }
 

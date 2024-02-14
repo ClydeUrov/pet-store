@@ -42,7 +42,7 @@ const LeftSide = () => {
   return (
     <div>
       <NavLink to="/" className={css.logo}>
-        <img src={constants[0]?.value.filePath} alt={constants[0]?.key} />
+        {constants[0].value?.filePath && <img src={constants[0].value.filePath} alt={constants[0]?.key} />}
       </NavLink>
       <div className={css.list}>
         {navItems.map(({ href, text }) => (

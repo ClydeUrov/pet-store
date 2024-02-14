@@ -152,6 +152,7 @@ const Header = () => {
         ))}
     </ul>
   );
+  console.log("user", user);
 
   return (
     <>
@@ -159,7 +160,7 @@ const Header = () => {
         <div className={styles.navbar}>
           <div className={styles.menu}>
             <NavLink to="/" className={styles.logo}>
-              <img src={constants[0].value.filePath} alt={constants[0]?.key} />
+              {constants[0].value?.filePath && <img src={constants[0].value.filePath} alt={constants[0]?.key} />}
             </NavLink>
             <div
               className={styles.catalogue}

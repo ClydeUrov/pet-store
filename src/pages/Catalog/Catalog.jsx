@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styles from '../../App/App.module.scss'
 import css from './Catalog.module.scss'
 import { useDispatch, useSelector } from 'react-redux';
@@ -52,9 +52,13 @@ const Catalog = () => {
       .then(setMaxPrice)
   }, [])
 
+  const getAllCardsCallback = useCallback(() => {
+    dispatch(getAllCards({ page, urlCategory, selected, sortMethod, notAvailable, price, maxPrice }));
+  }, [dispatch, page, urlCategory, selected, sortMethod, notAvailable, price, maxPrice]);
+
   useEffect(() => {
-      dispatch(getAllCards({ page, urlCategory, selected, sortMethod, notAvailable, price, maxPrice }));
-  }, [dispatch, page, selected, sortMethod, notAvailable, urlCategory, price, maxPrice]);
+    getAllCardsCallback();
+  }, [getAllCardsCallback]);
 
   return (
     <section className={styles.section}>

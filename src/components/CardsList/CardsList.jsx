@@ -3,15 +3,13 @@ import Card from '../Card/Card'
 import styles from './CardsList.module.scss'
 import { selectCards } from '../../redux/cards/selectors';
 import { useSelector } from 'react-redux';
-import Loader from '../Loader/Loader';
 import Pagination from '../Pagination/Pagination';
+import { RotatingLines } from 'react-loader-spinner';
 
 
 const CardsList = ({setPage}) => {
   const cards = useSelector(selectCards) || {};
   const { content } = cards || {};
-
-  console.log(cards.number, cards.totalElements, cards.size);
 
   return (
     <>
@@ -31,8 +29,14 @@ const CardsList = ({setPage}) => {
           />
         </div>
       ) : (
-        <div style={{margin: "100px"}}>
-          <Loader />
+        <div style={{margin: "80px 200px"}}>
+          <RotatingLines
+            strokeColor="#ffad4d"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="96"
+            visible={true}
+          />
         </div>
       )}
     </>

@@ -3,6 +3,7 @@ import css from "./Cart.module.scss";
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useUserActions } from "../../helpers/user.actions";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
+import { InfoToast } from "../Toasters/CustomToasters";
 
 const CardinCart = ({ item, constants, setCarts, navigate, user, CalculateTotalAmount }) => {
   const userAction = useUserActions();
@@ -79,6 +80,7 @@ const CardinCart = ({ item, constants, setCarts, navigate, user, CalculateTotalA
       setCarts(updatedCart);
       CalculateTotalAmount(updatedCart);
     }
+    InfoToast("Product removed from cart")
   };
 
   return (
