@@ -215,7 +215,8 @@ function setUserData(data) {
     })
   );
 
-  if (data.cart.items.length > 0) {
+
+  if (data.cart?.items?.length > 0) {
     let carts = [];
     let ids = [];
     const localProducts = JSON.parse(localStorage.getItem("cart")) || [];
