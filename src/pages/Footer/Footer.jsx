@@ -16,12 +16,12 @@ const Footer = () => {
         <div className="footer-info">
           <div className="logo-column">
             <Link className="logo-container" to="/">
-              {constants && constants.length && constants[0].value !== null && constants[0].value?.filePath ? (
-                <img
-                  src={constants[0].value.filePath}
-                  alt={constants[0]?.key}
-                />
-              ) : ""}
+            {constants && constants.length && constants[0].value && constants[0].value !== null && constants[0].value?.filePath ? (
+              <img
+                src={constants[0].value.filePath}
+                alt={constants[0]?.key}
+              />
+            ) : ""}
             </Link>
             <ul>
               <li>Kyiv, Illienko Street, 36</li>

@@ -161,12 +161,12 @@ const Header = () => {
         <div className={styles.navbar}>
           <div className={styles.menu}>
             <NavLink to="/" className={styles.logo}>
-              {constants && constants.length && constants[0].value !== null && constants[0].value?.filePath ? (
-                <img
-                  src={constants[0].value.filePath}
-                  alt={constants[0]?.key}
-                />
-              ) : ""}
+            {constants && constants.length && constants[0].value && constants[0].value !== null && constants[0].value?.filePath ? (
+              <img
+                src={constants[0].value.filePath}
+                alt={constants[0]?.key}
+              />
+            ) : ""}
             </NavLink>
             <div
               className={styles.catalogue}
