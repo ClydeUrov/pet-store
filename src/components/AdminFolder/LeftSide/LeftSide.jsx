@@ -44,12 +44,12 @@ const LeftSide = () => {
   return (
     <div>
       <NavLink to="/" className={css.logo}>
-        {constants && constants.length && constants[0].value !== null && constants[0].value?.filePath ? (
-          <img
-            src={constants[0].value.filePath}
-            alt={constants[0]?.key}
-          />
-        ) : ""}
+      {constants && constants.length && constants[0].value && constants[0].value !== null && constants[0].value?.filePath ? (
+        <img
+          src={constants[0].value.filePath}
+          alt={constants[0]?.key}
+        />
+      ) : ""}
       </NavLink>
       <div className={css.list}>
         {navItems.map(({ href, text }) => (
