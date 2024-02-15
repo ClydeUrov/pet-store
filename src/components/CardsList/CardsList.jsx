@@ -3,13 +3,13 @@ import Card from "../Card/Card";
 import styles from "./CardsList.module.scss";
 import { selectCards } from "../../redux/cards/selectors";
 import { useSelector } from "react-redux";
-import Loader from "../Loader/Loader";
 import Pagination from "../Pagination/Pagination";
-import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
+import { getWishListLS } from "../../helpers/wishListLS";
 import {
   emptyWishList,
   smthInWishList,
 } from "../../helpers/events/LoginLogout";
+import { RotatingLines } from "react-loader-spinner";
 
 const CardsList = ({ setPage }) => {
   const cards = useSelector(selectCards) || {};
