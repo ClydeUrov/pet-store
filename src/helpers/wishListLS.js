@@ -1,4 +1,9 @@
-export { getWishListLS, setWishListLS, handleAddOrDeleteItemWishList };
+export {
+  getWishListLS,
+  setWishListLS,
+  handleAddOrDeleteItemWishList,
+  deleteOneItemFromWishListLS,
+};
 
 const wishList = "wishList";
 
@@ -32,4 +37,10 @@ async function handleAddOrDeleteItemWishList(item, favoriteItems, setFunction) {
       console.log(error);
     }
   }
+}
+
+function deleteOneItemFromWishListLS(item) {
+  const dataLS = getWishListLS();
+  const corrWishList = dataLS.filter((el) => el.id !== item.id);
+  setWishListLS(corrWishList);
 }
