@@ -42,6 +42,7 @@ function useUserActions() {
         },
       })
       .then((res) => {
+        console.log("res", res, dataInStorage);
         // Registration the account in the store
         if (res.status === 200)
           localStorage.setItem(
@@ -149,7 +150,7 @@ function useAdminActions() {
   };
 
   return {
-    users: () => sendRequest("get", "users"),
+    users: (page) => sendRequest("get", `users?pageNumber=${page}`),
     create: (path, data) => sendRequest("post", path, data),
     update: (path, data) => sendRequest("put", path, data),
     deleteAction: (path) => sendRequest("delete", path),
@@ -214,7 +215,8 @@ function setUserData(data) {
     })
   );
 
-  if (data.cart.items.length > 0) {
+
+  if (data.cart?.items?.length > 0) {
     let carts = [];
     let ids = [];
     const localProducts = JSON.parse(localStorage.getItem("cart")) || [];

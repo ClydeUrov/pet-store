@@ -49,7 +49,15 @@ const CardsList = ({ setPage }) => {
           />
         </div>
       ) : (
-        <Loader />
+        <div style={{ margin: "80px 200px" }}>
+          <RotatingLines
+            strokeColor="#ffad4d"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="96"
+            visible={true}
+          />
+        </div>
       )}
     </>
   );

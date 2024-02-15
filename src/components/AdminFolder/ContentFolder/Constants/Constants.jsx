@@ -20,7 +20,6 @@ const Constants = () => {
   const adminActions = useAdminActions();
 
   useEffect(() => {
-    console.log(191);
     setLoading(true);
     axiosService.get(`/constants`)
       .then((resp) => {

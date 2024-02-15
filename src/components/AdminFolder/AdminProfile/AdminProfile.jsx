@@ -5,10 +5,11 @@ import FormikField from "../../FormikFolder/FormikField";
 import { schemaAdminInformation, schemaAdminPassword } from "../../../helpers/schemes";
 import { GoPencil } from "react-icons/go";
 import { getUser, useUserActions } from "../../../helpers/user.actions";
+import { toast } from "react-toastify";
 
 const AdminProfile = () => {
   const user = getUser();
-  const userAction = useUserActions();
+  const { editProfile, editPassword } = useUserActions();
   const [error, setError] = useState('');
   const [editState, setEditState] = useState({
     personalInfo: true,
@@ -28,28 +29,55 @@ const AdminProfile = () => {
   };
 
   const handleSubmit = async (formData, formName) => {
+    console.log(formData, formName);
     if (!editState.personalInfo) {
-      const userInfo = {
-        name: formData.name,
-        surname: formData.surname,
-      };
-      await userAction
-        .editProfile(userInfo)
-        .then()
-        .catch((e) => {
-          e.response ? setError(e.response.data.message) : setError(e.message)
-        })
+      try {
+        await toast.promise(
+          editProfile(
+            {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+            },
+            {
+              ...user,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+            }
+          ),
+          {
+            pending: "Personal information changing in progress",
+            success: "Personal information was changed",
+            error: "Personal information not changed, try again",
+          }
+        );
+      } catch (err) {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError(err.message);
+        }
+      }
     } else {
-      const passwordInfo = {
-        password: formData.password,
-        confirm: formData.confirm,
-      };
-      await userAction
-        .editPassword(passwordInfo)
-        .then()
-        .catch((e) => {
-          e.response ? setError(e.response.data.message) : setError(e.message)
-        })
+      try {
+        await toast.promise(
+          editPassword({
+            email: user.email,
+            currentPassword: formData.currentPassword,
+            newPassword: formData.newPassword,
+          }),
+          {
+            pending: "Password changing in progress",
+            success: "Password was changed",
+            error: "Password not change, try again",
+          }
+        );
+      } catch (err) {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError(err.message);
+        }
+      }
     }
 
     toggleEditState(formName);
@@ -64,27 +92,27 @@ const AdminProfile = () => {
       <Formik
         validationSchema={schemaAdminInformation}
         initialValues={{
-          surname: user.lastName,
+          lastName: user.lastName,
           email: user.email,
-          name: user.firstName,
+          firstName: user.firstName,
         }}
         onSubmit={handleSubmit}
       >
         {(form) => (
           <Form className={css.form}>
             <FormikField
-              name="name"
+              name="firstName"
               type="text"
-              label="Name"
+              label="First name"
               width="276px"
               onChange={(e) => {form.handleChange(e)}}
               disabled={editState.personalInfo}
               required
             />
             <FormikField
-              name="surname"
+              name="lastName"
               type="text"
-              label="Surname"
+              label="Last name"
               width="276px"
               onChange={(e) => {form.handleChange(e)}}
               disabled={editState.personalInfo}
@@ -92,7 +120,8 @@ const AdminProfile = () => {
             />
             <FormikField
               name="email"
-              type="unstyled"
+              type="text"
+              disabled="true"
               label="E-mail"
               width="276px"
               value={user.email}
@@ -125,9 +154,9 @@ const AdminProfile = () => {
       <Formik
         validationSchema={schemaAdminPassword}
         initialValues={{
-          password: "",
+          currentPassword: "",
+          newPassword: "",
           confirm: "",
-          editEnabled: false,
         }}
         onSubmit={(values, form) => handleSubmit(values, 'passwordInfo', form)}
       >
@@ -135,20 +164,11 @@ const AdminProfile = () => {
           <Form className={css.form}>
             <h3 style={{marginBottom:"20px"}}>Your password</h3>
             <FormikField
-              name="password"
+              name="currentPassword"
               type="password"
-              label="Password"
+              label="Current password"
               width="276px"
-              value={form.values.password}
-              disabled={editState.passwordInfo}
-              required
-            />
-            <FormikField
-              name="confirm"
-              type="password"
-              label="Confirm password"
-              width="276px"
-              value={form.values.confirm}
+              // value={form.values.currentPassword}
               disabled={editState.passwordInfo}
               required
             />
@@ -163,14 +183,34 @@ const AdminProfile = () => {
                 <GoPencil size={20} style={{marginLeft: "5px"}} />
               </button>
             ) : (
-              <div className={css.submitForm}>
-                <button type="submit" className={css.button} disabled={form.isSubmitting}>
-                  Confirm
-                </button>
-                <button type="button" onClick={() => handleCancel(form, 'passwordInfo')} className={css.button}>
-                  Cancel
-                </button>
-              </div>
+              <>
+                <FormikField
+                  name="newPassword"
+                  type="password"
+                  label="New password"
+                  width="276px"
+                  // value={form.values.newPassword}
+                  disabled={editState.passwordInfo}
+                  required
+                />
+                <FormikField
+                  name="confirm"
+                  type="password"
+                  label="Confirm new password"
+                  width="276px"
+                  // value={form.values.confirm}
+                  disabled={editState.passwordInfo}
+                  required
+                />
+                <div className={css.submitForm}>
+                  <button type="submit" className={css.button} disabled={form.isSubmitting}>
+                    Confirm
+                  </button>
+                  <button type="button" onClick={() => handleCancel(form, 'passwordInfo')} className={css.button}>
+                    Cancel
+                  </button>
+                </div>
+              </>
             )}
           </Form>
         )}

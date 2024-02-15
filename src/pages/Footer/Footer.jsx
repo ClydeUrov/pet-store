@@ -7,13 +7,20 @@ import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
 const Footer = () => {
   const { constants } = useConstants();
+
+  console.log(constants);
   return (
     <footer className="footer">
       <div className="footer-all">
         <div className="footer-info">
           <div className="logo-column">
             <Link className="logo-container" to="/">
-              <img src={constants[0].value.filePath} alt={constants[0].key} />
+            {constants && constants.length && constants[0].value && constants[0].value !== null && constants[0].value?.filePath ? (
+              <img
+                src={constants[0].value.filePath}
+                alt={constants[0]?.key}
+              />
+            ) : ""}
             </Link>
             <ul>
               <li>Kyiv, Illienko Street, 36</li>
