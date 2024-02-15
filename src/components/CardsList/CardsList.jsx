@@ -1,23 +1,43 @@
-import React from 'react'
-import Card from '../Card/Card'
-import styles from './CardsList.module.scss'
-import { selectCards } from '../../redux/cards/selectors';
-import { useSelector } from 'react-redux';
-import Pagination from '../Pagination/Pagination';
-import { RotatingLines } from 'react-loader-spinner';
+import React, { useEffect, useState } from "react";
+import Card from "../Card/Card";
+import styles from "./CardsList.module.scss";
+import { selectCards } from "../../redux/cards/selectors";
+import { useSelector } from "react-redux";
+import Pagination from "../Pagination/Pagination";
+import { getWishListLS } from "../../helpers/wishListLS";
+import {
+  emptyWishList,
+  smthInWishList,
+} from "../../helpers/events/LoginLogout";
+import { RotatingLines } from "react-loader-spinner";
 
-
-const CardsList = ({setPage}) => {
+const CardsList = ({ setPage }) => {
   const cards = useSelector(selectCards) || {};
   const { content } = cards || {};
+  const [wishList, setWishList] = useState(getWishListLS());
+
+  useEffect(() => {
+    if (wishList.length === 1) {
+      smthInWishList();
+    } else if (wishList.length === 0) {
+      emptyWishList();
+    }
+  }, [wishList.length]);
 
   return (
     <>
       {content ? (
         <div>
-          <ul className={styles.list} >
-            {content.map(item => {
-              return <Card key={item.id} item={item} />;
+          <ul className={styles.list}>
+            {content.map((item) => {
+              return (
+                <Card
+                  key={item.id}
+                  item={item}
+                  favoriteItems={wishList}
+                  onChangeFavorites={setWishList}
+                />
+              );
             })}
           </ul>
           <Pagination
@@ -29,7 +49,7 @@ const CardsList = ({setPage}) => {
           />
         </div>
       ) : (
-        <div style={{margin: "80px 200px"}}>
+        <div style={{ margin: "80px 200px" }}>
           <RotatingLines
             strokeColor="#ffad4d"
             strokeWidth="5"
@@ -40,7 +60,7 @@ const CardsList = ({setPage}) => {
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
 export default CardsList;

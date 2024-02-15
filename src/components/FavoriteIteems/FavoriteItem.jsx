@@ -3,7 +3,6 @@ import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import styles from "./FavoriteItem.module.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
-import { getUser } from "../../helpers/user.actions";
 
 function FavoriteItem({
   price,
@@ -54,6 +53,7 @@ function FavoriteItem({
       </span>
       <div className={styles.buttton_cont}>
         <button
+          disabled={notAvailable}
           className={
             !notAvailable && !isLoading
               ? styles.avaible_btn

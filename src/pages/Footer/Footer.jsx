@@ -1,10 +1,9 @@
-import React from 'react'
-import './Footer.scss'
-import { Link } from 'react-router-dom'
-import { AiOutlineFacebook, AiOutlineInstagram } from 'react-icons/ai';
-import { LiaTwitterSquare } from 'react-icons/lia';
-import { useConstants } from '../../helpers/routs/ConstantsProvider';
-
+import React from "react";
+import "./Footer.scss";
+import { Link } from "react-router-dom";
+import { AiOutlineFacebook, AiOutlineInstagram } from "react-icons/ai";
+import { LiaTwitterSquare } from "react-icons/lia";
+import { useConstants } from "../../helpers/routs/ConstantsProvider";
 
 const Footer = () => {
   const { constants } = useConstants();
@@ -40,7 +39,7 @@ const Footer = () => {
                 <Link to="/signup">Account</Link>
               </li>
               <li>
-                <Link to="/favourites">WishList</Link>
+                <Link to="/favorites">WishList</Link>
               </li>
               <li>
                 <Link to="/cart">Cart</Link>
@@ -66,26 +65,36 @@ const Footer = () => {
           <div className="footer-column">
             <ul className="footer-social">
               {/* Додайте посилання на соцмережі */}
-              <li className="footer-social-item"><a className="footer-social-link"
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <AiOutlineFacebook size={24} />
-              </a></li>
-              <li className="footer-social-item"><a className="footer-social-link"
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-              ><AiOutlineInstagram size={24} />
-              </a></li>
-              <li className="footer-social-item"><a className="footer-social-link"
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <LiaTwitterSquare size={26} />
-              </a></li>
+              <li className="footer-social-item">
+                <a
+                  className="footer-social-link"
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <AiOutlineFacebook size={24} />
+                </a>
+              </li>
+              <li className="footer-social-item">
+                <a
+                  className="footer-social-link"
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <AiOutlineInstagram size={24} />
+                </a>
+              </li>
+              <li className="footer-social-item">
+                <a
+                  className="footer-social-link"
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <LiaTwitterSquare size={26} />
+                </a>
+              </li>
 
               {/* Додайте більше посилань на соцмережі */}
             </ul>
@@ -94,7 +103,7 @@ const Footer = () => {
         <p className="reserved">ALL RIGHTS RESERVED (C) PAWSOME 2023</p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -29,7 +29,10 @@ import {
 } from "../../helpers/events/LoginLogout";
 import { getOnSale } from "../../redux/cards/operations";
 import Loader from "../../components/Loader/Loader";
-import { getWishListLS, setWishListLS } from "../../helpers/wishListLS";
+import {
+  getWishListLS,
+  handleAddOrDeleteItemWishList,
+} from "../../helpers/wishListLS";
 
 const ProductPage = () => {
   const [showAboutPage, setShowAboutPage] = useState(true);
@@ -47,7 +50,6 @@ const ProductPage = () => {
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [favoriteIsLoading, setFavoriteIsLoading] = useState(false);
   const { content: cardsOnSale } = useSelector(selectOnSale);
   const [quantityOfItemToAddInCart, setQuantityOfItemToAddInCart] = useState(1);
 
@@ -122,27 +124,7 @@ const ProductPage = () => {
   }
 
   async function handleAddOrDeleteFavorite(item) {
-    if (!!favoriteItems.find((i) => i.id === item.id)?.id) {
-      try {
-        const corrWishList = favoriteItems.filter((i) => i.id !== item.id);
-
-        setWishListLS(corrWishList);
-        setFavoriteItems(corrWishList);
-        setIsFavorite(false);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        const corrWishList = [...favoriteItems, item];
-
-        setWishListLS(corrWishList);
-        setFavoriteItems(corrWishList);
-        setIsFavorite(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    await handleAddOrDeleteItemWishList(item, favoriteItems, setFavoriteItems);
   }
 
   function handleSetStarRating(e) {
@@ -242,9 +224,8 @@ const ProductPage = () => {
               />
               <button
                 onClick={() => handleAddOrDeleteFavorite(product)}
-                disabled={favoriteIsLoading}
                 className={`${css.favourite_icon} ${isFavorite && css.full} ${
-                  favoriteIsLoading ? css.notAllowed : css.allowed
+                  css.allowed
                 }`}
               >
                 {!isFavorite ? (
@@ -304,7 +285,7 @@ const ProductPage = () => {
 
         <SliderForHomepage
           favoriteItems={favoriteItems}
-          onChangeFavorites={handleAddOrDeleteFavorite}
+          onChangeFavorites={setFavoriteItems}
           onClick={handlerClickOnSaleItem}
           items={cardsOnSale}
           title="On Sale"

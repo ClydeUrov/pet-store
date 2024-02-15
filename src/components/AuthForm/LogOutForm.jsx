@@ -1,6 +1,7 @@
 import css from "./AuthForm.module.scss";
 import { getUser, useUserActions } from "../../helpers/user.actions";
 import { useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 
 const LogOutForm = () => {
@@ -25,7 +26,6 @@ const LogOutForm = () => {
     } else {
       navigate("/");
     }
-    
   };
 
   return (
@@ -44,6 +44,16 @@ const LogOutForm = () => {
         onClick={handleSubmit}
         disabled={isLoading}
       >
+        {isLoading && (
+          <RotatingLines
+            strokeColor="#ffffff"
+            strokeWidth="2"
+            animationDuration="0.75"
+            width="40"
+            // height="0.5"
+            visible={true}
+          />
+        )}
         Confirm
       </button>
     </>

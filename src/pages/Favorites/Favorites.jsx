@@ -96,7 +96,7 @@ function Favorites() {
     }
   }
   const AddToCart = (item) => {
-    if (user?.role !== "CLIENT") return;
+    if (user?.role === "ADMIN") return;
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const isItemInCart = existingCart.some(

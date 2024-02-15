@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Card.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
@@ -8,49 +8,57 @@ import Button from "../CustomButton/Button";
 import { useConstants } from "../../helpers/routs/ConstantsProvider";
 import { CartAddEventPublish } from "../../helpers/events/CartEvent";
 import { InfoToast } from "../Toasters/CustomToasters";
+import { handleAddOrDeleteItemWishList } from "../../helpers/wishListLS";
 
 const Card = ({ item, favoriteItems, onChangeFavorites }) => {
   const { constants } = useConstants();
   const [isLoadingWishList, setIsLoadingWishList] = useState(false);
 
-  const isFavorite = favoriteItems?.find((i) => i.id === item.id) ? true : false;
-
+  const isFavorite = favoriteItems?.find((i) => i.id === item.id)
+    ? true
+    : false;
   const handleAddOrDeleteFavorite = async () => {
     try {
-      setIsLoadingWishList(true);
-      await onChangeFavorites(item);
+      await handleAddOrDeleteItemWishList(
+        item,
+        favoriteItems,
+        onChangeFavorites
+      );
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoadingWishList(false);
     }
   };
 
   const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    const isItemInCart = existingCart.some((cartItem) => cartItem.product.id === item.id);
-  
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const isItemInCart = existingCart.some(
+      (cartItem) => cartItem.product.id === item.id
+    );
+
     if (!isItemInCart) {
       const data = {
         product: {
           id: item.id,
           name: item.name,
           price: item.price,
-          ...(item.priceWithDiscount && { priceWithDiscount: item.priceWithDiscount }),
+          ...(item.priceWithDiscount && {
+            priceWithDiscount: item.priceWithDiscount,
+          }),
           mainImage: { filePath: item.mainImage.filePath },
         },
         quantity: 1,
       };
-  
-      const newCart = [...existingCart, data];
-  
-      localStorage.setItem('cart', JSON.stringify(newCart));
 
-      CartAddEventPublish({ action: '+', id: [item.id] });
-      InfoToast("Product successfully added to cart!")
+      const newCart = [...existingCart, data];
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      CartAddEventPublish({ action: "+", id: [item.id] });
+      CartAddEventPublish({ action: "+", id: [item.id] });
+      InfoToast("Product successfully added to cart!");
     }
-  }
+  };
 
   return (
     <li className={styles.item}>
@@ -111,23 +119,21 @@ const Card = ({ item, favoriteItems, onChangeFavorites }) => {
           )}
         </div>
         <div className={styles.cardButtons}>
-          <Button 
-            text={"Add to cart"} 
-            onClickHandler={() => handleAddToCart()} 
-            isDisabled={item.notAvailable} 
+          <Button
+            text={"Add to cart"}
+            onClickHandler={() => handleAddToCart()}
+            isDisabled={item.notAvailable}
           />
 
           <button
             type="button"
             onClick={handleAddOrDeleteFavorite}
-            className={`${styles.favoriteBox} ${isFavorite && styles.full} ${
-              isLoadingWishList ? styles.isLoading : styles.notLoading
-            }`}
+            className={`${styles.favoriteBox}`}
           >
             {!isFavorite ? (
-              <AiOutlineHeart size={44} />
+              <AiOutlineHeart size={44} className={styles.empty} />
             ) : (
-              <AiFillHeart size={44} />
+              <AiFillHeart size={44} className={styles.full} />
             )}
           </button>
         </div>
