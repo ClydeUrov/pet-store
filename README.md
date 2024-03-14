@@ -3,6 +3,9 @@
 Link to site, under development:
 https://clydeurov.github.io/
 
+Link on figma with admin page:
+https://www.figma.com/file/hRnxEdJUZIZ9Q04oKQSYSC/ZooShop?type=design&node-id=2619-9791&mode=design&t=rR7ykgjWZ0AjRwSz-0
+
 
 # React project for react course
 
